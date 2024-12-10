@@ -10,17 +10,27 @@ import type { Blueprint } from '../../types';
 import { Page } from './page/builder';
 import { FormClient } from './form-client';
 import { createTestBrowserFormService } from '../../context';
+import { success } from '@atj/common';
 
 describe('Page-set submission', () => {
   it('stores session data for valid page data', async () => {
     const session = createTestSession();
-    const result = await submitPage(defaultFormConfig, {
-      pattern: session.form.patterns['page-set-1'],
-      session,
-      data: {
-        'input-1': 'test',
+    const result = await submitPage(
+      {
+        config: defaultFormConfig,
+        getDocument: () =>
+          Promise.resolve(
+            success({ id: 'id', data: new Uint8Array(), path: '', fields: {} })
+          ),
       },
-    });
+      {
+        pattern: session.form.patterns['page-set-1'],
+        session,
+        data: {
+          'input-1': 'test',
+        },
+      }
+    );
     expect(result).toEqual({
       data: {
         session: {
@@ -46,13 +56,22 @@ describe('Page-set submission', () => {
 
   it('stores session data for invalid page data', async () => {
     const session = createTestSession();
-    const result = await submitPage(defaultFormConfig, {
-      pattern: session.form.patterns['page-set-1'],
-      session,
-      data: {
-        'input-1': '',
+    const result = await submitPage(
+      {
+        config: defaultFormConfig,
+        getDocument: () =>
+          Promise.resolve(
+            success({ id: 'id', data: new Uint8Array(), path: '', fields: {} })
+          ),
       },
-    });
+      {
+        pattern: session.form.patterns['page-set-1'],
+        session,
+        data: {
+          'input-1': '',
+        },
+      }
+    );
     expect(result).toEqual({
       data: {
         session: {
@@ -83,26 +102,39 @@ describe('Page-set submission', () => {
 
   it('terminates on the last page', async () => {
     const session = createTestSession();
-    const result = await submitPage(defaultFormConfig, {
-      pattern: session.form.patterns['page-set-1'],
-      session: {
-        ...session,
-        route: {
-          url: '#',
-          params: {
-            page: '2',
+    const result = await submitPage(
+      {
+        config: defaultFormConfig,
+        getDocument: () =>
+          Promise.resolve(
+            success({ id: 'id', data: new Uint8Array(), path: '', fields: {} })
+          ),
+      },
+      {
+        pattern: session.form.patterns['page-set-1'],
+        session: {
+          ...session,
+          route: {
+            url: '#',
+            params: {
+              page: '1',
+            },
           },
         },
-      },
-      data: {},
-    });
+        data: {
+          'input-2': 'test',
+        },
+      }
+    );
     expect(result).toEqual({
       data: {
         session: {
           ...session,
           data: {
             errors: {},
-            values: {},
+            values: {
+              'input-2': 'test',
+            },
           },
           route: {
             url: '#',
