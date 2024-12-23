@@ -89,6 +89,7 @@ export type PageProps = PatternProps<{
   type: 'page';
   title: string;
   rules: PageRule[];
+  ruleTargetOptions: { value: string; label: string }[];
 }>;
 
 export type RadioGroupProps = PatternProps<{

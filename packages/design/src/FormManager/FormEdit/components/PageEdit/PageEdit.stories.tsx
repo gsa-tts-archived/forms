@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { within } from '@testing-library/react';
 
-import { createThreePageFormWithPageRules } from '../../../test-form.js';
-import { createPatternEditStoryMeta } from './common/story-helper.js';
-import { PageEdit } from './PageEdit.js';
+import { createThreePageFormWithPageRules } from '../../../../test-form.js';
+import { createPatternEditStoryMeta } from '../common/story-helper.js';
+import { PageEdit } from './index.js';
 
 const blueprint = createThreePageFormWithPageRules();
 

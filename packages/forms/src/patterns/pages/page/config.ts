@@ -10,6 +10,7 @@ const ruleSchema = z.object({
     value: z.string(),
   }),
   next: z.string(),
+  alertMessage: z.string().optional(),
 });
 export type PageRule = z.infer<typeof ruleSchema>;
 
