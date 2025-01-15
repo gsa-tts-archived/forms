@@ -1,4 +1,9 @@
-const migrationsDirectory = path.resolve(__dirname, './migrations');
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const migrationsDirectory = resolve(
+  dirname(fileURLToPath(import.meta.url), './migrations')
+);
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -22,7 +27,7 @@ export default {
       filename: './dev.sqlite3',
     },
   },
-  staging: {
+  demo: {
     client: 'postgresql',
     connection: {
       database: 'my_db',

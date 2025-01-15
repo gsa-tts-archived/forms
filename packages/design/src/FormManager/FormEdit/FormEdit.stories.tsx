@@ -22,7 +22,12 @@ const meta: Meta<typeof FormEdit> = {
           context={createTestFormManagerContext()}
           session={createTestSession({
             form: createOnePageTwoPatternTestForm(),
-            routeParams: 'page=0',
+            route: {
+              params: {
+                page: '0',
+              },
+              url: '#',
+            },
           })}
         >
           <Story {...args} />
@@ -55,12 +60,14 @@ export const FormEditAddPattern: StoryObj<typeof FormEdit> = {
     await userEvent.click(canvas.getByText('Pattern 1'));
     //await userEvent.selectOptions(select, 'Text input');
 
-    select.forEach(async element => {
-      await userEvent.click(element);
-    });
+    await Promise.all(
+      select.map(async element => {
+        return await userEvent.click(element);
+      })
+    );
 
     const finalCount = (await canvas.findAllByRole('textbox')).length;
-    expect(finalCount).toBeGreaterThan(initialCount);
+    await expect(finalCount).toBeGreaterThan(initialCount);
   },
 };
 
@@ -82,9 +89,13 @@ const editFieldLabel = async (
   await userEvent.type(input, updatedLabel);
   //await userEvent.click(canvas.getByText('Add Element'));
 
-  select.forEach(async element => {
-    await userEvent.click(element);
-  });
+  await Promise.all(
+    select.map(async element => {
+      return await userEvent.click(element);
+    })
+  );
+
+  await userEvent.click(canvas.getByText(/save and close/i));
 
   waitFor(
     async () => {
@@ -95,26 +106,24 @@ const editFieldLabel = async (
   );
 };
 
-// This test only works in a real browser, not via JSDOM as we use it.
-/*
 export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const grabber = await canvas.getAllByText(':::')[0];
+    const grabber = canvas.getAllByRole('button')[3];
     await grabber.focus();
 
     // Enter reordering mode with the spacebar
     await userEvent.type(grabber, ' ');
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 1000));
 
     // Press the arrow down, to move the first pattern to the second position
     await userEvent.type(grabber, '[ArrowDown]');
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 1000));
 
     // Press the spacebar to exit reordering mode
     await userEvent.type(grabber, ' ');
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise(r => setTimeout(r, 1000));
 
     // Pattern 1 should be after pattern 2 in the document
     const pattern1 = canvas.getByText('Pattern 1');
@@ -124,4 +133,3 @@ export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
     );
   },
 };
-*/

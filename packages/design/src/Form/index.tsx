@@ -6,11 +6,13 @@ import {
   applyPromptResponse,
   createPrompt,
   type FormConfig,
+  type FormRoute,
   type FormSession,
   type PatternProps,
   type Prompt,
   type PromptComponent,
 } from '@atj/forms';
+import { renderPromptComponents } from './form-common.js';
 
 export type FormUIContext = {
   config: FormConfig;
@@ -26,7 +28,8 @@ export type ComponentForPattern<T extends PatternProps = PatternProps> = Record<
 export type PatternComponent<T extends PatternProps = PatternProps<unknown>> =
   React.ComponentType<
     T & {
-      children?: React.ReactNode;
+      context: FormUIContext;
+      childComponents?: PromptComponent[];
     }
   >;
 
@@ -54,6 +57,17 @@ const usePrompt = (
     setPrompt(prompt);
   };
   return { prompt, setPrompt, updatePrompt };
+};
+
+const getRouteUrl = (route?: FormRoute) => {
+  if (!route) {
+    return '';
+  } else {
+    const queryString = new URLSearchParams(
+      route.params as Record<string, string>
+    ).toString();
+    return `${route.url}?${queryString}`;
+  }
 };
 
 export default function Form({
@@ -84,14 +98,6 @@ export default function Form({
 
   const formMethods = useForm<Record<string, string>>({});
 
-  /**
-   * Regenerate the prompt whenever the form changes.
-  const allFormData = formMethods.watch();
-  useEffect(() => {
-    updatePrompt(allFormData);
-  }, [allFormData]);
-  */
-
   return (
     <FormProvider {...formMethods}>
       <div className="preview grid-container">
@@ -100,15 +106,31 @@ export default function Form({
             {!isPreview ? (
               <form
                 className="usa-form margin-bottom-3 maxw-full"
-                onSubmit={formMethods.handleSubmit(async data => {
-                  updatePrompt(data);
-                  if (onSubmit) {
-                    console.log('Submitting form...');
-                    onSubmit(data);
-                  } else {
-                    console.warn('Skipping form submission...');
-                  }
-                })}
+                encType="multipart/form-data"
+                onSubmit={
+                  onSubmit
+                    ? formMethods.handleSubmit(async (data, event) => {
+                        const submitEvent = event?.nativeEvent as
+                          | SubmitEvent
+                          | undefined;
+                        if (submitEvent === undefined) {
+                          console.error(
+                            "Can't handle submission without event"
+                          );
+                          return;
+                        }
+                        const action = (
+                          submitEvent.submitter as HTMLButtonElement
+                        )?.value;
+                        updatePrompt(data);
+                        console.log('Submitting form...');
+                        onSubmit({ ...data, action });
+                      })
+                    : undefined
+                }
+                method="POST"
+                action={getRouteUrl(session.route)}
+                aria-label={session.form.summary.title || 'Form'}
               >
                 <FormContents context={context} prompt={prompt} />
               </form>
@@ -133,119 +155,9 @@ const FormContents = ({
 }) => {
   return (
     <>
-      {false && (
-        <fieldset className="usa-fieldset width-full">
-          <legend className="usa-legend text-bold">
-            Request to Change Name
-          </legend>
-          <div className="usa-form-group">
-            <div className="usa-form-group">
-              <fieldset className="usa-fieldset width-full">
-                <legend className="usa-legend text-bold text-uppercase line-height-body-4">
-                  County where you live
-                </legend>
-                <label className="usa-label">Name of your county *</label>
-                <input
-                  className="usa-input"
-                  id="input-users1_address_line_one"
-                  name="users1_address_line_one"
-                  type="text"
-                  aria-describedby="input-message-users1_address_line_one"
-                  value=""
-                />
-              </fieldset>
-            </div>
-          </div>
-
-          <div className="usa-form-group">
-            <div className="usa-form-group">
-              <fieldset className="usa-fieldset width-full">
-                <legend className="usa-legend text-bold text-uppercase line-height-body-4">
-                  Your current name
-                </legend>
-                <label className="usa-label">First name *</label>
-                <input
-                  className="usa-input"
-                  id="input-users1_first_name"
-                  name="users1_first_name"
-                  type="text"
-                  aria-describedby="input-message-users1_first_name"
-                  value=""
-                />
-                <label className="usa-label">Middle name *</label>
-                <input
-                  className="usa-input"
-                  id="input-users1_middle_name"
-                  name="users1_middle_name"
-                  type="text"
-                  aria-describedby="input-message-users1_middle_name"
-                  value=""
-                />
-                <label className="usa-label">Last name *</label>
-                <input
-                  className="usa-input"
-                  id="input-users1_last_name"
-                  name="users1_last_name"
-                  type="text"
-                  aria-describedby="input-message-users1_last_name"
-                  value=""
-                />
-              </fieldset>
-              <fieldset className="usa-fieldset width-full">
-                <p>
-                  To ask the court to change your name, you must fill out this
-                  form, and:
-                </p>
-                <ul>
-                  <li>
-                    Attach a certified copy of your birth certificate and a copy
-                    of your photo ID, and
-                  </li>
-                  <li>
-                    File your form and attachements in the same county where you
-                    live.
-                  </li>
-                </ul>
-              </fieldset>
-            </div>
-          </div>
-        </fieldset>
-      )}
-
       <fieldset className="usa-fieldset width-full">
-        {prompt.components.map((component, index) => {
-          return (
-            <PromptComponent
-              key={index}
-              context={context}
-              component={component}
-            />
-          );
-        })}
+        {renderPromptComponents(context, prompt.components)};
       </fieldset>
     </>
-  );
-};
-
-const PromptComponent = ({
-  context,
-  component,
-}: {
-  context: FormUIContext;
-  component: PromptComponent;
-}) => {
-  const Component = context.components[component.props.type];
-  return (
-    <Component {...component.props}>
-      {component.children?.map((childPromptComponent, index) => {
-        return (
-          <PromptComponent
-            key={index}
-            context={context}
-            component={childPromptComponent}
-          />
-        );
-      })}
-    </Component>
   );
 };

@@ -16,6 +16,10 @@ import type {
   SecretsVault,
 } from '../types.js';
 
+/**
+ * Provides an implementation of the SecretsVault interface leveraging
+ * AWS Systems Manager Parameter Store to manage secrets securely.
+ */
 export class AWSParameterStoreSecretsVault implements SecretsVault {
   client: SSMClient;
 
@@ -55,26 +59,32 @@ export class AWSParameterStoreSecretsVault implements SecretsVault {
   }
 
   async getSecrets(keys: SecretKey[]) {
-    try {
-      const response = await this.client.send(
-        new GetParametersCommand({
-          Names: keys,
-          WithDecryption: true,
-        })
-      );
-      const values: { [key: SecretKey]: SecretValue } = {};
-      if (response.Parameters) {
-        for (const parameter of response.Parameters) {
-          if (parameter.Name && parameter.Value) {
-            values[parameter.Name] = parameter.Value;
+    const chunkSize = 10;
+    const values: { [key: SecretKey]: SecretValue } = {};
+
+    for (let i = 0; i < keys.length; i += chunkSize) {
+      const chunk = keys.slice(i, i + chunkSize);
+      try {
+        const response = await this.client.send(
+          new GetParametersCommand({
+            Names: chunk,
+            WithDecryption: true,
+          })
+        );
+        if (response.Parameters) {
+          for (const parameter of response.Parameters) {
+            if (parameter.Name && parameter.Value) {
+              values[parameter.Name] = parameter.Value;
+            }
           }
         }
+      } catch (error) {
+        console.error('Error getting parameters:', error);
+        throw error;
       }
-      return values;
-    } catch (error) {
-      console.error('Error getting parameters:', error);
-      throw error;
     }
+
+    return values;
   }
 
   async setSecret(key: SecretKey, value: SecretValue) {
