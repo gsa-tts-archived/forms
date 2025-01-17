@@ -11,8 +11,14 @@ import styles from '../../../../Form/components/PageSet/PageMenu/pageMenuStyles.
 import { DraggableList } from '../PreviewSequencePattern/DraggableList.js';
 import { useFormManagerStore } from '../../../store.js';
 import { PageMenuProps } from '../../../../Form/components/PageSet/PageMenu/PageMenu.js';
+import { renderEditPromptComponents } from '../../../manager-common.js';
+import ActionBar from '../../../../Form/ActionBar/index.js';
 
-const PageSetEdit: PatternEditComponent<PageSetProps> = ({ previewProps }) => {
+const PageSetEdit: PatternEditComponent<PageSetProps> = ({
+  context,
+  previewProps,
+  childComponents,
+}) => {
   return (
     <div className="grid-row">
       <nav className="tablet:grid-col-3 tablet:padding-y-3 tablet:padding-right-4">
@@ -22,7 +28,8 @@ const PageSetEdit: PatternEditComponent<PageSetProps> = ({ previewProps }) => {
         className="tablet:grid-col-9 tablet:padding-left-4 padding-left-0 padding-bottom-3 padding-top-3 tablet:border-left tablet:border-base-lighter contentWrapper"
         aria-live="polite"
       >
-        {previewProps.children}
+        {renderEditPromptComponents(context, childComponents)}
+        <ActionBar actions={previewProps.actions} />
       </div>
     </div>
   );

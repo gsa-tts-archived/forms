@@ -20,7 +20,7 @@ jobs:
       - name: Read node version from `.nvmrc` file
         id: nvmrc
         shell: bash
-        run: echo ::set-output name=NODE_VERSION::$(cat .nvmrc)
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
 
       - name: Install required node.js version
         uses: actions/setup-node@v3
@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -49,6 +49,11 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.4"
 
       - name: Initialize Terraform CDK configuration
         shell: bash

@@ -49,6 +49,7 @@ describe('Page prompt', () => {
             type: 'page',
             title: 'Page 1',
             rules: [],
+            ruleTargetOptions: [],
           },
           children: [
             {
@@ -62,6 +63,7 @@ describe('Page prompt', () => {
                   type: 'custom',
                   message: 'Required',
                 },
+                value: undefined,
               },
               children: [],
             },

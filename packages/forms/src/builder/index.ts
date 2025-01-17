@@ -26,6 +26,11 @@ import { type PageSetPattern } from '../patterns/pages/page-set/config.js';
 import type { Blueprint, FormSummary } from '../types.js';
 import type { FormRoute } from '../route-data.js';
 
+/**
+ * Constructs and manipulates a Blueprint object for forms. A Blueprint
+ * defines the structure of a form. The `BlueprintBuilder` provides methods to dynamically
+ * modify pages, patterns, field sets, and documents within a hierarchical form structure.
+ */
 export class BlueprintBuilder {
   bp: Blueprint;
 

@@ -54,6 +54,9 @@ export abstract class PatternBuilder<P extends Pattern> {
   }
 }
 
+/**
+ * Retrieves a specific pattern from the given blueprint using its unique identifier.
+ */
 export const getPattern = <T extends Pattern = Pattern>(
   form: Blueprint,
   id: PatternId
@@ -61,6 +64,10 @@ export const getPattern = <T extends Pattern = Pattern>(
   return form.patterns[id] as T;
 };
 
+/**
+ * Retrieves a pattern of a specific type safely from a blueprint form.
+ * Validates if the pattern exists and if its type matches the specified type.
+ */
 export const getPatternSafely = <P extends Pattern>(opts: {
   type: string;
   form: Blueprint;
@@ -78,6 +85,10 @@ export const getPatternSafely = <P extends Pattern>(opts: {
   return r.success(pattern as P);
 };
 
+/**
+ * Updates the `patterns` property of a given Blueprint object by adding or replacing
+ * a Pattern object with the specified ID.
+ */
 export const updatePattern = (form: Blueprint, pattern: Pattern): Blueprint => {
   return {
     ...form,
@@ -110,6 +121,9 @@ export type FormConfig<T extends Pattern = Pattern, PatternOutput = unknown> = {
   patterns: Record<string, PatternConfig<T, PatternOutput>>;
 };
 
+/**
+ * Constructs a map from an array of patterns, using each pattern's `id` as the key.
+ */
 export const getPatternMap = (patterns: Pattern[]) => {
   return Object.fromEntries(
     patterns.map(pattern => {
@@ -118,6 +132,9 @@ export const getPatternMap = (patterns: Pattern[]) => {
   );
 };
 
+/**
+ * Retrieves the pattern configuration for a specified element type from the given form configuration.
+ */
 export const getPatternConfig = (
   config: FormConfig,
   elementType: Pattern['type']
@@ -125,6 +142,9 @@ export const getPatternConfig = (
   return config.patterns[elementType];
 };
 
+/**
+ * Validates a given value against a specified pattern using the provided pattern configuration.
+ */
 export const validatePattern = (
   patternConfig: PatternConfig,
   pattern: Pattern,
@@ -155,6 +175,11 @@ const aggregateValuesByPrefix = (
   return aggregatedValues;
 };
 
+/**
+ * Processes and aggregates values and errors for a given pattern and its children within a session.
+ * This function ensures that user input is parsed and validated per pattern configuration and
+ * recursively handles child patterns within the associated form.
+ */
 export const aggregatePatternSessionValues = (
   config: FormConfig,
   form: Blueprint,
@@ -194,6 +219,10 @@ export const aggregatePatternSessionValues = (
   return result;
 };
 
+/**
+ * Retrieves the first pattern from a form blueprint based on the specified configuration
+ * and the provided or default starting pattern.
+ */
 export const getFirstPattern = (
   config: FormConfig,
   form: Blueprint,
@@ -210,6 +239,10 @@ export const getFirstPattern = (
   return getFirstPattern(config, form, children[0]);
 };
 
+/**
+ * Updates a specific pattern in a form blueprint by parsing the provided form data and
+ * applying the updated pattern configuration to the form.
+ */
 export const updatePatternFromFormData = (
   config: FormConfig,
   form: Blueprint,
@@ -231,8 +264,14 @@ export const updatePatternFromFormData = (
   };
 };
 
+/**
+ * Generates a unique identifier string using the `crypto.randomUUID` method.
+ */
 export const generatePatternId = () => crypto.randomUUID();
 
+/**
+ * Generates a default pattern object based on the provided configuration and pattern type.
+ */
 export const createDefaultPattern = (
   config: FormConfig,
   patternType: string
@@ -244,6 +283,9 @@ export const createDefaultPattern = (
   };
 };
 
+/**
+ * Creates a new pattern instance based on the provided configuration, pattern type, config data, and optionally a pattern ID.
+ */
 export const createPattern = <T extends Pattern>(
   config: FormConfig,
   patternType: keyof FormConfig['patterns'],
@@ -263,6 +305,9 @@ export const createPattern = <T extends Pattern>(
   } as T);
 };
 
+/**
+ * A function that removes a child pattern from a given pattern within a configuration.
+ */
 export const removeChildPattern = (
   config: FormConfig,
   pattern: Pattern,

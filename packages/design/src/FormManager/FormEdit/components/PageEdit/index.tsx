@@ -13,7 +13,7 @@ import { PatternEditForm } from '../common/PatternEditForm.js';
 import { usePatternEditFormContext } from '../common/hooks.js';
 import { PatternPreviewSequence } from '../PreviewSequencePattern/index.js';
 import styles from '../../formEditStyles.module.css';
-import type { FormManagerContext } from 'FormManager/index.js';
+import type { FormManagerContext } from '../../../index.js';
 
 export const PageEdit: PatternEditComponent<PageProps> = props => {
   const [editingRule, setEditingRule] = useState<
@@ -38,17 +38,19 @@ export const PageEdit: PatternEditComponent<PageProps> = props => {
         editingRule={editingRule}
       />
       {/* I can't get the pattern here. hmmmm */}
-      <PatternEditForm
-        pattern={props.pattern}
-        editComponent={
-          <RuleEdit
-            context={props.context}
-            ruleTargetOptions={props.previewProps.ruleTargetOptions}
-            previewProps={props.previewProps}
-            editingRule={editingRule}
-          />
-        }
-      ></PatternEditForm>
+      {props.focus?.pattern && (
+        <PatternEditForm
+          pattern={props.focus.pattern}
+          editComponent={
+            <RuleEdit
+              context={props.context}
+              ruleTargetOptions={props.previewProps.ruleTargetOptions}
+              previewProps={props.previewProps}
+              editingRule={editingRule}
+            />
+          }
+        ></PatternEditForm>
+      )}
 
       {!editingRule && (
         <>
@@ -84,7 +86,7 @@ const RuleEdit = (props: {
   return props.previewProps.rules.map(
     (rule, index) =>
       rule === props.editingRule && (
-        <div>
+        <div key={index}>
           <CustomRuleInfoAlert />
           <div
             className="border-base padding-2 margin-top-2"
@@ -147,6 +149,7 @@ const RuleEditList = (props: {
       </div>
       {props.previewProps.rules.map((rule, index) => (
         <EditRuleRow
+          key={index}
           context={props.context}
           setEditRule={props.setEditRule}
           rule={rule}
