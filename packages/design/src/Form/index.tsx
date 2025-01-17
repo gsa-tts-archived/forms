@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   applyPromptResponse,
   createPrompt,
+  FormService,
   type FormConfig,
   type FormRoute,
   type FormSession,
@@ -13,11 +14,15 @@ import {
   type PromptComponent,
 } from '@atj/forms';
 import { renderPromptComponents } from './form-common.js';
+// import { getFormSession } from '../../../forms/dist/types/services/get-form-session.js';
+// import { getFormSession } from '../../../forms/dist/types/repository/get-form-session.js';
 
 export type FormUIContext = {
   config: FormConfig;
   components: ComponentForPattern;
   uswdsRoot: `${string}/`;
+  service?: FormService;
+  // sessionId?: string;
 };
 
 export type ComponentForPattern<T extends PatternProps = PatternProps> = Record<
@@ -59,6 +64,15 @@ const usePrompt = (
   return { prompt, setPrompt, updatePrompt };
 };
 
+// const updateSession = (session: FormSession, data: Record<string, string>) => {
+//   const newSession = await context.service.submitForm(
+//     session.form.id,
+//     data.id,
+//     session.form.blueprint
+//   );
+//   return newSession;
+// };
+
 const getRouteUrl = (route?: FormRoute) => {
   if (!route) {
     return '';
@@ -75,11 +89,13 @@ export default function Form({
   session,
   onSubmit,
   isPreview, // ideally this should be removed. just here now for the FFP demo
+  sessionId,
 }: {
   context: FormUIContext;
   session: FormSession;
   onSubmit?: (data: Record<string, string>) => void;
   isPreview?: boolean;
+  sessionId?: string;
 }) {
   const initialPrompt = createPrompt(context.config, session, {
     validate: false,
@@ -108,26 +124,70 @@ export default function Form({
                 className="usa-form margin-bottom-3 maxw-full"
                 encType="multipart/form-data"
                 onSubmit={
-                  onSubmit
-                    ? formMethods.handleSubmit(async (data, event) => {
-                        const submitEvent = event?.nativeEvent as
-                          | SubmitEvent
-                          | undefined;
-                        if (submitEvent === undefined) {
-                          console.error(
-                            "Can't handle submission without event"
-                          );
-                          return;
-                        }
-                        const action = (
-                          submitEvent.submitter as HTMLButtonElement
-                        )?.value;
-                        updatePrompt(data);
-                        console.log('Submitting form...');
-                        onSubmit({ ...data, action });
-                      })
-                    : undefined
-                }
+                  onSubmit ? formMethods.handleSubmit(async (data, event) => {
+                  const submitEvent = event?.nativeEvent as
+                    | SubmitEvent
+                    | undefined;
+                  if (submitEvent === undefined) {
+                    console.error("Can't handle submission without event");
+                    return;
+                  }
+                  const action = (submitEvent.submitter as HTMLButtonElement)
+                    ?.value;
+                  if (!context.service) {
+                    console.error("Service is undefined");
+                    return;
+                  }
+                  // const sessionId = window.localStorage.getItem('form_session_id');
+                  // if (!sessionId) {
+                  //   console.error("Form session id not found");
+                  //   return;
+                  // }
+
+                  // const formSession = await getFormSession(
+                  //   context.service.context,
+                  //   {
+                  //     formId: session.form.id,
+                  //     formRoute: session.route,
+                  //     sessionId,
+                  //   }
+                  // );
+                  // if (!formSession.success) {
+                  //   console.error("Form session not found");
+                  //   return;
+                  // }
+                  // const session = await context.service.getFormSession({
+                  //   formId,
+                  //   formRoute,
+                  //   sessionId,
+                  // });
+
+                  // const formData = {
+                  //   ...data,
+                  //   action,
+                  // };
+
+                  const newSessionResult = await context.service.submitForm(
+                    sessionId,
+                    data.id,
+                    data,
+                    session.route,
+                  );
+
+                  if (!newSessionResult.success) {
+                    console.error("Submission failed", newSessionResult.error);
+                    return;
+                  }
+                  const prompt = createPrompt(context.config, newSessionResult.data.session, {
+                    validate: true,
+                  });
+                  const promptAsRecord: Record<string, string> = {
+                    ...prompt,
+                    components: JSON.stringify(prompt.components)
+                  };
+                  updatePrompt(promptAsRecord);
+                  onSubmit({ ...data, action }); // DO WE NEED THIS?
+                }) : undefined}
                 method="POST"
                 action={getRouteUrl(session.route)}
                 aria-label={session.form.summary.title || 'Form'}

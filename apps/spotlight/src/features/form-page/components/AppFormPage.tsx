@@ -64,6 +64,7 @@ const AppFormRoute = () => {
           onSubmit={data => {
             actions.onSubmitForm({ formId: id, data });
           }}
+          sessionId={formSessionResponse.sessionId}
         />
       )}
     </>

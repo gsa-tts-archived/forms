@@ -1,54 +1,37 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { type PageSetProps } from '@atj/forms';
-
-import { FormManagerProvider } from '../../../FormManager/store.js';
+import { FormProvider, useForm } from 'react-hook-form';
 import {
-  createTestFormManagerContext,
+  createTestFormContext,
   createTestSession,
-  createTwoPatternTestForm,
+  createTwoPageTwoPatternTestForm,
 } from '../../../test-form.js';
+import Form from '../../index.js';
 
-import PageSet from './PageSet.js';
-
-const meta: Meta<typeof PageSet> = {
+const meta: Meta<typeof Form> = {
   title: 'patterns/PageSet',
-  component: PageSet,
+  component: Form,
   decorators: [
-    (Story, args) => (
-      <MemoryRouter initialEntries={['/']}>
-        <FormManagerProvider
-          context={createTestFormManagerContext()}
-          session={createTestSession({ form: createTwoPatternTestForm() })}
-        >
-          <Story {...args} />
-        </FormManagerProvider>
-      </MemoryRouter>
-    ),
+    (Story, args) => {
+      const formMethods = useForm<Record<string, string>>();
+      return (
+        <MemoryRouter initialEntries={['/']}>
+          <FormProvider {...formMethods}>
+            <Story {...args} />
+          </FormProvider>
+        </MemoryRouter>
+      );
+    },
   ],
   tags: ['autodocs'],
 };
 
 export default meta;
 
-export const Basic = {
+export const Basic: StoryObj<typeof Form> = {
   args: {
-    _patternId: 'test-id',
-    type: 'page-set',
-    pages: [
-      {
-        title: 'First page',
-        selected: false,
-        url: '#/?page=0',
-      },
-      {
-        title: 'Second page',
-        selected: true,
-        url: '#/?page=0',
-      },
-    ],
-    actions: [],
-  } satisfies PageSetProps,
-} satisfies StoryObj<typeof PageSet>;
+    context: createTestFormContext(),
+    session: createTestSession({ form: createTwoPageTwoPatternTestForm() }),
+  },
+};
