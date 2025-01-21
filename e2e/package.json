@@ -5,11 +5,14 @@
   "scripts": {
     "dev": "tsc -w",
     "test:storybook": "test-storybook",
-    "test": "export E2E_ENDPOINT=http://localhost:4321; pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0"
+    "test:dev": "pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0",
+    "test": "pnpm playwright test"
   },
   "devDependencies": {
     "@storybook/test-runner": "^0.19.1",
-    "path-to-regexp": "^8.2.0"
+    "dotenv": "^16.4.7",
+    "path-to-regexp": "^8.2.0",
+    "playwright": "1.48.1"
   },
   "dependencies": {
     "@gsa-tts/forms-common": "workspace:*"
