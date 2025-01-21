@@ -51,6 +51,7 @@ export type FormManagerContext = PatternLessFormManagerContext & {
   config: FormConfig;
   components: ComponentForPattern;
   editComponents: EditComponentForPattern;
+  service: FormService;
 };
 
 type FormManagerProps = {

@@ -18,19 +18,6 @@ export type PromptResponse = {
   data: Record<string, string>;
 };
 
-export const applyPromptResponse = (
-  config: FormConfig,
-  session: FormSession,
-  response: PromptResponse
-): Result<FormSession> => {
-  const { errors, values } = parsePromptResponse(session, config, response);
-  const newSession = updateSession(session, values, errors);
-  return {
-    success: true,
-    data: newSession,
-  };
-};
-
 const parsePromptResponse = (
   session: FormSession,
   config: FormConfig,

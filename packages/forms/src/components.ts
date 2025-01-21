@@ -211,6 +211,10 @@ export type Prompt = {
   components: PromptComponent[];
 };
 
+export const emptyPrompt: Prompt = {
+  components: [],
+};
+
 export const createPrompt = (
   config: FormConfig,
   session: FormSession,

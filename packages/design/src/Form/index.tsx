@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import {
-  applyPromptResponse,
   createPrompt,
+  emptyPrompt,
   FormService,
   type FormConfig,
   type FormRoute,
@@ -21,7 +21,7 @@ export type FormUIContext = {
   config: FormConfig;
   components: ComponentForPattern;
   uswdsRoot: `${string}/`;
-  service?: FormService;
+  service: FormService;
   // sessionId?: string;
 };
 
@@ -39,29 +39,53 @@ export type PatternComponent<T extends PatternProps = PatternProps<unknown>> =
   >;
 
 const usePrompt = (
-  initialPrompt: Prompt,
+  service: FormService,
   config: FormConfig,
-  session: FormSession
+  sessionDetails: {
+    formId: string;
+    formRoute: FormRoute;
+    sessionId?: string;
+  }
 ) => {
-  const [prompt, _setPrompt] = useState<Prompt>(initialPrompt);
+  const [prompt, _setPrompt] = useState<Prompt>(emptyPrompt);
   const setPrompt = (newPrompt: Prompt) => {
     if (!deepEqual(newPrompt, prompt)) {
       _setPrompt(newPrompt);
     }
   };
-  const updatePrompt = (data: Record<string, string>) => {
-    const result = applyPromptResponse(config, session, {
-      action: 'submit',
-      data,
-    });
-    if (!result.success) {
-      console.warn('Error applying prompt response...', result.error);
+  const submitFormData = async (formData: Record<string, string>) => {
+    const newSessionResult = await service.submitForm(
+      sessionDetails.sessionId,
+      sessionDetails.formId,
+      formData,
+      sessionDetails.formRoute
+    );
+    if (!newSessionResult.success) {
+      console.error('Submission failed', newSessionResult.error);
       return;
     }
-    const prompt = createPrompt(config, result.data, { validate: true });
+    const prompt = createPrompt(config, newSessionResult.data.session, {
+      validate: true,
+    });
     setPrompt(prompt);
   };
-  return { prompt, setPrompt, updatePrompt };
+
+  // So the preview view can update the session, regen the prompt.
+  // This feels smelly.
+  useEffect(() => {
+    service.getFormSession(sessionDetails).then(newSessionResult => {
+      if (!newSessionResult.success) {
+        console.error('Error getting session', newSessionResult.error);
+        return;
+      }
+      const initialPrompt = createPrompt(config, newSessionResult.data.data, {
+        validate: true,
+      });
+      setPrompt(initialPrompt);
+    });
+  }, [sessionDetails]);
+
+  return { prompt, setPrompt, submitFormData };
 };
 
 // const updateSession = (session: FormSession, data: Record<string, string>) => {
@@ -89,28 +113,23 @@ export default function Form({
   session,
   onSubmit,
   isPreview, // ideally this should be removed. just here now for the FFP demo
-  sessionId,
+  sessionDetails,
 }: {
   context: FormUIContext;
   session: FormSession;
   onSubmit?: (data: Record<string, string>) => void;
   isPreview?: boolean;
-  sessionId?: string;
+  sessionDetails: {
+    formId: string;
+    formRoute: FormRoute;
+    sessionId?: string;
+  };
 }) {
-  const initialPrompt = createPrompt(context.config, session, {
-    validate: false,
-  });
-  const { prompt, setPrompt, updatePrompt } = usePrompt(
-    initialPrompt,
+  const { prompt, submitFormData } = usePrompt(
+    context.service,
     context.config,
-    session
+    sessionDetails
   );
-
-  // So the preview view can update the session, regen the prompt.
-  // This feels smelly.
-  useEffect(() => {
-    setPrompt(initialPrompt);
-  }, [initialPrompt]);
 
   const formMethods = useForm<Record<string, string>>({});
 
@@ -124,70 +143,31 @@ export default function Form({
                 className="usa-form margin-bottom-3 maxw-full"
                 encType="multipart/form-data"
                 onSubmit={
-                  onSubmit ? formMethods.handleSubmit(async (data, event) => {
-                  const submitEvent = event?.nativeEvent as
-                    | SubmitEvent
-                    | undefined;
-                  if (submitEvent === undefined) {
-                    console.error("Can't handle submission without event");
-                    return;
-                  }
-                  const action = (submitEvent.submitter as HTMLButtonElement)
-                    ?.value;
-                  if (!context.service) {
-                    console.error("Service is undefined");
-                    return;
-                  }
-                  // const sessionId = window.localStorage.getItem('form_session_id');
-                  // if (!sessionId) {
-                  //   console.error("Form session id not found");
-                  //   return;
-                  // }
-
-                  // const formSession = await getFormSession(
-                  //   context.service.context,
-                  //   {
-                  //     formId: session.form.id,
-                  //     formRoute: session.route,
-                  //     sessionId,
-                  //   }
-                  // );
-                  // if (!formSession.success) {
-                  //   console.error("Form session not found");
-                  //   return;
-                  // }
-                  // const session = await context.service.getFormSession({
-                  //   formId,
-                  //   formRoute,
-                  //   sessionId,
-                  // });
-
-                  // const formData = {
-                  //   ...data,
-                  //   action,
-                  // };
-
-                  const newSessionResult = await context.service.submitForm(
-                    sessionId,
-                    data.id,
-                    data,
-                    session.route,
-                  );
-
-                  if (!newSessionResult.success) {
-                    console.error("Submission failed", newSessionResult.error);
-                    return;
-                  }
-                  const prompt = createPrompt(context.config, newSessionResult.data.session, {
-                    validate: true,
-                  });
-                  const promptAsRecord: Record<string, string> = {
-                    ...prompt,
-                    components: JSON.stringify(prompt.components)
-                  };
-                  updatePrompt(promptAsRecord);
-                  onSubmit({ ...data, action }); // DO WE NEED THIS?
-                }) : undefined}
+                  onSubmit
+                    ? formMethods.handleSubmit(async (formData, event) => {
+                        const submitEvent = event?.nativeEvent as
+                          | SubmitEvent
+                          | undefined;
+                        if (submitEvent === undefined) {
+                          console.error(
+                            "Can't handle submission without event"
+                          );
+                          return;
+                        }
+                        if (!context.service) {
+                          console.error('Service is undefined');
+                          return;
+                        }
+                        await submitFormData(formData);
+                        /*
+                        const action = (
+                          submitEvent.submitter as HTMLButtonElement
+                        )?.value;
+                        onSubmit({ ...data, action }); // DO WE NEED THIS?
+                        */
+                      })
+                    : undefined
+                }
                 method="POST"
                 action={getRouteUrl(session.route)}
                 aria-label={session.form.summary.title || 'Form'}

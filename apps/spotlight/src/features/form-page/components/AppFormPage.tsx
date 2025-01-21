@@ -25,7 +25,7 @@ export const AppFormPage = () => {
 };
 
 const AppFormRoute = () => {
-  const { actions, formSessionResponse } = useFormPageStore();
+  const { actions, formRoute, formSessionResponse } = useFormPageStore();
   const { id } = useParams();
   const location = useLocation();
   const ctx = getAppContext();
@@ -58,13 +58,17 @@ const AppFormRoute = () => {
           context={{
             config: defaultFormConfig,
             components: defaultPatternComponents,
+            service: ctx.formService,
             uswdsRoot: ctx.uswdsRoot,
           }}
-          session={formSessionResponse.formSession}
+          sessionDetails={{
+            formId: id,
+            formRoute: formRoute,
+            sessionId: formSessionResponse.sessionId,
+          }}
           onSubmit={data => {
             actions.onSubmitForm({ formId: id, data });
           }}
-          sessionId={formSessionResponse.sessionId}
         />
       )}
     </>

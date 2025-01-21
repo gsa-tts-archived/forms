@@ -15,11 +15,6 @@ export const onSubmitForm: OnSubmitForm = async (ctx, opts) => {
     console.error("Can't submit data. Form session not loaded");
     return;
   }
-  /*const newSession = applyPromptResponse(
-                    config,
-                    session,
-                    response
-                  );*/
   const submission = await ctx.config.formService.submitForm(
     opts.sessionId,
     opts.formId,
@@ -27,7 +22,7 @@ export const onSubmitForm: OnSubmitForm = async (ctx, opts) => {
     state.formSessionResponse.formSession.route
   );
   if (submission.success) {
-    for (const document of submission.data.documents || []) {
+    for (const document of submission.data.attachments || []) {
       downloadPdfDocument(document.fileName, document.data);
     }
     ctx.setState({
