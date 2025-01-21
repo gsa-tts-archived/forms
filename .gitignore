@@ -21,6 +21,7 @@ NOTES.md
 tsconfig.tsbuildinfo
 *storybook.log
 packages/form-service
+/e2e/.auth/
 /e2e/test-results/
 /e2e/playwright-report/
 /e2e/blob-report/
