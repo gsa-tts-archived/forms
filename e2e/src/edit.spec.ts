@@ -106,7 +106,7 @@ test('Drag-and-drop pages via mouse interaction', async ({ context, page }) => {
   const pageTitles = preparePageTitles(obj.patterns);
 
   await page.goto(`${BASE_URL}`);
-  await page.getByRole('link', { name: 'Edit' }).click();
+  await page.getByRole('link', { name: 'Edit' }).first().click();
   const buttonText = 'Move this item';
 
   await testPage.checkFirstUrl('?page=');
