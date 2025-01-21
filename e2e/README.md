@@ -1,4 +1,19 @@
 # End-to-end and interaction testing
+
+These tests run separately form the main test suite due to the time it takes to run them. They are designed to primarily run in CI, but it's suggested to do periodic spot checks during development.
+
+To run the tests, run `pnpm test` in this directory.
+
+## Developing tests
+The easiest way to develop tests is to run Playwright in UI mode. This is available by running the following command from this directory.
+
+```bash
+pnpm test:dev
+```
+
+**Caveat**: this assumes that you have a dev server running and that the application is being served at http://localhost:4321. When Playwright starts in UI mode, it does not start the dev server for you, nor does it run the setup task to store the pre-authenticated session. It will, however, give you the ability to run individual tests, along with providing a watch mode, logging, and an inspector for help with element selection. The UI will open automatically at `http://localhost:8080`.
+
+
 E2E testing runs in a docker container. There is a shell script (`./scripts/end-to-end.sh`) that provides configuration to automate several Docker-related commands. 
 
 Parameters:
