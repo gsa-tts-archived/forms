@@ -13,7 +13,7 @@ export const richTextConfig: PatternConfig<RichTextPattern> = {
   displayName: 'Rich Text',
   iconPath: 'richtext-icon.svg',
   initial: {
-    text: 'Rich text...',
+    text: '',
   },
   parseConfigData: obj => safeZodParseFormErrors(configSchema, obj),
   getChildren() {
