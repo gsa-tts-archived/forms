@@ -2,6 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import { GuidedFormCreation, Create } from '../../packages/design/src/FormManager/routes';
 import { BASE_URL } from './constants';
 import { pathToRegexp } from 'path-to-regexp';
+import { enLocale as message } from '@atj/common';
 
 type FormImportFixture = {
   formUrl: string;
@@ -25,8 +26,6 @@ const test = base.extend<FormImportFixture>({
   },
 });
 
-// Start with imported PDF
-// Manipulate page title
 // Format imported text as h2 using rich text editor
 // Move component between pages.
 // Navigate to new page.
@@ -51,15 +50,19 @@ test.describe('Import form from a provided sample', () => {
     await expect(page.getByRole('link', { name: 'My awesome form page' })).toBeVisible();
   });
 
-  test('Format description in rich text editor', async ({ page, formUrl }) => {
+  test('Add a rich text component and format text', async ({ page, formUrl }) => {
+    const editorText = 'This is some text entered in the rich text editor';
     await page.goto(formUrl);
+    await page.locator('.usa-sidenav').first().waitFor();
+    const menuButton = page.getByRole('button', { name: 'Question', exact: true });
+    await menuButton.click();
+    await page.getByRole('button', { name: message.patterns.richText.displayName }).click();
+    const editor = page.locator('div[contenteditable="true"]');
+    await editor.fill(editorText);
+    await page.getByRole('button', { name: 'Heading', exact: true }).click();
+    await page.getByRole('button', { name: 'Save and Close', exact: true }).click();
+    expect(page.getByRole('heading', { name: editorText })).toBeDefined();
   });
-
-  // test('Submit generated form', async ({ page, formUrl }) => {
-  //   await page.goto(formUrl);
-  //   await page.getByRole('button', { name: 'Submit' }).click();
-  //   await expect(page.getByText('Submission Successful')).toBeVisible();
-  // });
 });
 
 // const addQuestions = async (page: Page) => {
