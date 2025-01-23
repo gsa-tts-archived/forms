@@ -71,8 +71,8 @@ export class AwsCdkStack extends cdk.Stack {
       {
         sourceConfiguration: {
           imageRepository: {
-            imageIdentifier: `my-docker-repo: ${dockerImageTag.valueAsString}`,
-            imageRepositoryType: 'ECR',
+            imageIdentifier: `ghcr.io/gsa-tts/forms:${dockerImageTag.valueAsString}`,
+            imageRepositoryType: 'ECR_PUBLIC',
           },
           authenticationConfiguration: {
             accessRoleArn: appRunnerRole.roleArn,

@@ -1,7 +1,6 @@
 import { App, TerraformStack } from 'cdktf';
 import { Construct } from 'constructs';
 
-import { AwsProvider } from '../../.gen/providers/aws/provider';
 import { CloudfoundryProvider } from '../../.gen/providers/cloudfoundry/provider';
 
 import { withBackend } from './backend';
@@ -35,10 +34,6 @@ class AppStack extends TerraformStack {
   constructor(scope: Construct, id: string, gitCommitHash: string) {
     super(scope, id);
 
-    new AwsProvider(this, 'AWS', {
-      region: 'us-east-2',
-    });
-
     const cfUsername = new DataAwsSsmParameter(
       this,
       `${id}-cloudfoundry-username`,
@@ -62,7 +57,10 @@ class AppStack extends TerraformStack {
     });
 
     new CloudGovSpace(this, id, gitCommitHash);
-    new CloudFormationStack(this, id);
+    new CloudFormationStack(this, `${id}-cloudformation-stack`, {
+      environment: id,
+      dockerImageTag: 'server-doj:main',
+    });
 
     //new Docassemble(this, `${id}-docassemble`);
     //new FormService(this, `${id}-rest-api`);
