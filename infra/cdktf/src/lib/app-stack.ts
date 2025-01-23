@@ -7,6 +7,7 @@ import { CloudfoundryProvider } from '../../.gen/providers/cloudfoundry/provider
 import { withBackend } from './backend';
 import { CloudGovSpace } from './cloud.gov/space';
 import { DataAwsSsmParameter } from '../../.gen/providers/aws/data-aws-ssm-parameter';
+import { CloudFormationStack } from './cloudformation-stack';
 
 /**
  * Register an application stack and translates the IaC to a template format via the `synth` function.
@@ -61,6 +62,7 @@ class AppStack extends TerraformStack {
     });
 
     new CloudGovSpace(this, id, gitCommitHash);
+    new CloudFormationStack(this, id);
 
     //new Docassemble(this, `${id}-docassemble`);
     //new FormService(this, `${id}-rest-api`);

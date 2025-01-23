@@ -1,6 +1,6 @@
 {
-  "name": "aws-cdk",
-  "version": "0.1.0",
+  "name": "@atj/aws-cdk",
+  "version": "1.0.0",
   "bin": {
     "aws-cdk": "bin/aws-cdk.js"
   },
@@ -8,7 +8,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "synth": "cdk synth --output AwsCdkStack"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
