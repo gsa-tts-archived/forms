@@ -14,9 +14,9 @@ export class AwsCdkStack extends cdk.Stack {
       description: 'The environment for the stack (e.g., dev, prod)',
     });
 
-    const dockerImageTag = new cdk.CfnParameter(this, 'DockerImageTag', {
+    const dockerImagePath = new cdk.CfnParameter(this, 'DockerImagePath', {
       type: 'String',
-      description: 'The Docker image tag for the App Runner service',
+      description: 'The Docker image url for the App Runner service',
     });
 
     // Create a VPC for the RDS instance
@@ -71,7 +71,7 @@ export class AwsCdkStack extends cdk.Stack {
       {
         sourceConfiguration: {
           imageRepository: {
-            imageIdentifier: `ghcr.io/gsa-tts/forms:${dockerImageTag.valueAsString}`,
+            imageIdentifier: dockerImagePath.valueAsString,
             imageRepositoryType: 'ECR_PUBLIC',
           },
           authenticationConfiguration: {

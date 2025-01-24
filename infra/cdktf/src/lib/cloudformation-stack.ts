@@ -1,33 +1,34 @@
-import { readFileSync } from 'fs';
 import * as path from 'path';
 import { Construct } from 'constructs';
-import { TerraformStack } from 'cdktf';
 import { CloudformationStack } from '../../.gen/providers/aws/cloudformation-stack';
 import { AwsProvider } from '../../.gen/providers/aws/provider';
 
-const relativePath = '../../../aws-cdk/cdk.out/AwsCdkStack.template.json';
+const relativePath = '../../../aws-cdk/AwsCdkStack/AwsCdkStack.template.json';
 
-export class CloudFormationStack extends TerraformStack {
+interface FormsCloudformationStackProps {
+  environment: string;
+  dockerImageTag: string;
+  provider: AwsProvider;
+}
+
+export class FormsCloudformationStack extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    props: { environment: string; dockerImageTag: string }
+    { environment, dockerImageTag, provider }: FormsCloudformationStackProps
   ) {
     super(scope, id);
 
-    const awsProvider = new AwsProvider(this, 'AWS', {
-      region: 'us-east-2',
-    });
-
     const absPath = path.resolve(__dirname, relativePath);
-    new CloudformationStack(this, 'CloudFormationStack', {
+    new CloudformationStack(this, id, {
       name: id,
-      templateBody: readFileSync(absPath, 'utf8'),
-      provider: awsProvider,
+      templateBody: `$\{file("${absPath}")}`,
+      provider: provider,
       parameters: {
-        Environment: props.environment,
-        DockerImageTag: props.dockerImageTag,
+        Environment: environment,
+        DockerImagePath: `ghcr.io/gsa-tts/forms/server-doj:${dockerImageTag}`,
       },
+      capabilities: ['CAPABILITY_IAM'],
     });
   }
 }

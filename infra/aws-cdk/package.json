@@ -1,5 +1,5 @@
 {
-  "name": "@atj/aws-cdk",
+  "name": "@atj/infra-aws-cdk",
   "version": "1.0.0",
   "bin": {
     "aws-cdk": "bin/aws-cdk.js"

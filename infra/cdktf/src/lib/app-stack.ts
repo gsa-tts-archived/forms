@@ -6,17 +6,15 @@ import { CloudfoundryProvider } from '../../.gen/providers/cloudfoundry/provider
 import { withBackend } from './backend';
 import { CloudGovSpace } from './cloud.gov/space';
 import { DataAwsSsmParameter } from '../../.gen/providers/aws/data-aws-ssm-parameter';
-import { CloudFormationStack } from './cloudformation-stack';
+import { FormsCloudformationStack } from './cloudformation-stack';
+import { AwsProvider } from '../../.gen/providers/aws/provider';
 
 /**
  * Register an application stack and translates the IaC to a template format via the `synth` function.
  */
-export const registerAppStack = (
-  stackPrefix: string,
-  gitCommitHash: string
-) => {
+export const registerAppStack = (stackPrefix: string, gitRef: string) => {
   const app = new App();
-  const stack = new AppStack(app, stackPrefix, gitCommitHash);
+  const stack = new AppStack(app, stackPrefix, gitRef);
   withBackend(stack, stackPrefix);
   app.synth();
 };
@@ -31,7 +29,7 @@ export const registerAppStack = (
  * - Instantiates a CloudGovSpace resource with the provided git commit hash identifier.
  */
 class AppStack extends TerraformStack {
-  constructor(scope: Construct, id: string, gitCommitHash: string) {
+  constructor(scope: Construct, id: string, gitRef: string) {
     super(scope, id);
 
     const cfUsername = new DataAwsSsmParameter(
@@ -49,6 +47,11 @@ class AppStack extends TerraformStack {
       }
     );
 
+    // Ensure the AWS provider is configured
+    const awsProvider = new AwsProvider(this, 'AWS', {
+      region: 'us-east-2',
+    });
+
     new CloudfoundryProvider(this, 'cloud-gov', {
       apiUrl: 'https://api.fr.cloud.gov',
       appLogsMax: 30,
@@ -56,10 +59,13 @@ class AppStack extends TerraformStack {
       password: cfPassword.value,
     });
 
-    new CloudGovSpace(this, id, gitCommitHash);
-    new CloudFormationStack(this, `${id}-cloudformation-stack`, {
+    new CloudGovSpace(this, id, gitRef);
+
+    // Pass the provider to the FormsCloudformationStack
+    new FormsCloudformationStack(this, `${id}-cloudformation-stack`, {
       environment: id,
-      dockerImageTag: 'server-doj:main',
+      dockerImageTag: gitRef,
+      provider: awsProvider,
     });
 
     //new Docassemble(this, `${id}-docassemble`);
