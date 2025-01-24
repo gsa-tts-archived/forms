@@ -52,6 +52,21 @@ test.describe('Import form from a provided sample', () => {
     await page.keyboard.press('Enter');
     await expect(page.getByText('Name:')).toBeVisible();
   });
+
+  test('Delete a question/pattern', async ({ page, formUrl }) => {
+    // Deleting a pattern asks the user to confirm. The user needs to accept the message
+    // before the component is deleted, so we need to listen for the event here and accept
+    // in order for the test to pass.
+    page.on('dialog', async (dialog) => {
+      await dialog.accept();
+    });
+
+    await page.goto(`${formUrl}?page=2`);
+    const pattern = page.getByText('(state) (docket number) United States');
+    await pattern.click();
+    await page.getByRole('button', { name: 'Delete this pattern' }).click();
+    await expect(pattern).not.toBeVisible();
+  });
 });
 
 // const addQuestions = async (page: Page) => {
