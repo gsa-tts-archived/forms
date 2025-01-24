@@ -1,30 +1,5 @@
-import { test as base, expect } from '@playwright/test';
-import { GuidedFormCreation, Create } from '../../packages/design/src/FormManager/routes';
-import { BASE_URL } from './constants';
-import { pathToRegexp } from 'path-to-regexp';
+import { test, expect } from './fixtures/import-file.fixture';
 import { enLocale as message } from '@atj/common';
-
-type FormImportFixture = {
-  formUrl: string;
-};
-
-const test = base.extend<FormImportFixture>({
-  formUrl: async ({ page }, use) => {
-    const { regexp } = pathToRegexp(Create.path);
-    await page.goto(`${BASE_URL}/${GuidedFormCreation.getUrl()}`);
-    await page.getByText('Or use an example file,').click();
-    await page.getByRole('button', { name: 'sample-documents/doj-pardon-' }).click();
-
-    await page.waitForURL((url) => {
-      const pagePath = url.hash.startsWith('#') ? url.hash.substring(1) : url.pathname;
-      return regexp.test(pagePath);
-    });
-
-    // the 'use' is the key for making this fixture available to other tests.
-    const generatedFormUrl = page.url();
-    await use(generatedFormUrl);
-  },
-});
 
 // Format imported text as h2 using rich text editor
 // Move component between pages.
