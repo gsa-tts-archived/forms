@@ -6,8 +6,9 @@ import { CloudfoundryProvider } from '../../.gen/providers/cloudfoundry/provider
 import { withBackend } from './backend';
 import { CloudGovSpace } from './cloud.gov/space';
 import { DataAwsSsmParameter } from '../../.gen/providers/aws/data-aws-ssm-parameter';
-import { FormsCloudformationStack } from './cloudformation-stack';
+import { FormsCloudformationStack } from './aws/cloudformation-stack';
 import { AwsProvider } from '../../.gen/providers/aws/provider';
+import { AppEcrImageRepository } from './aws/ecr';
 
 /**
  * Register an application stack and translates the IaC to a template format via the `synth` function.
@@ -61,9 +62,19 @@ class AppStack extends TerraformStack {
 
     new CloudGovSpace(this, id, gitRef);
 
+    // Create an ECR repository so we can deploy to App Runner via Cloudformation.
+    // For now, we'll use the server-doj app image for testing, and rely on it
+    // being built and pushed to the ECR repository by the CI/CD pipeline.
+    const repo = new AppEcrImageRepository(
+      this,
+      `${id}-image-server-doj`,
+      awsProvider
+    );
+
     // Pass the provider to the FormsCloudformationStack
     new FormsCloudformationStack(this, `${id}-cloudformation-stack`, {
       environment: id,
+      ecrRepositoryUrl: repo.repositoryUrl,
       dockerImageTag: gitRef,
       provider: awsProvider,
     });

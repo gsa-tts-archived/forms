@@ -1,9 +1,10 @@
-import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import * as rds from 'aws-cdk-lib/aws-rds';
-import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as cdk from 'aws-cdk-lib';
 import * as apprunner from 'aws-cdk-lib/aws-apprunner';
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as rds from 'aws-cdk-lib/aws-rds';
+import * as changeCase from 'change-case';
 
 export class AwsCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -37,19 +38,20 @@ export class AwsCdkStack extends cdk.Stack {
     );
 
     // Create the RDS instance
+    const databaseName = `${changeCase.snakeCase(environment.valueAsString)}_database`;
     const rdsInstance = new rds.DatabaseInstance(this, 'RdsInstance', {
       engine: rds.DatabaseInstanceEngine.postgres({
-        version: rds.PostgresEngineVersion.VER_13_3,
+        version: rds.PostgresEngineVersion.VER_15,
       }),
       vpc,
       securityGroups: [securityGroup],
       instanceType: ec2.InstanceType.of(
-        ec2.InstanceClass.BURSTABLE2,
+        ec2.InstanceClass.BURSTABLE3,
         ec2.InstanceSize.MICRO
       ),
       allocatedStorage: 20,
       maxAllocatedStorage: 100,
-      databaseName: `${environment.valueAsString}_database`,
+      databaseName,
       credentials: rds.Credentials.fromGeneratedSecret('postgres'),
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
@@ -72,7 +74,7 @@ export class AwsCdkStack extends cdk.Stack {
         sourceConfiguration: {
           imageRepository: {
             imageIdentifier: dockerImagePath.valueAsString,
-            imageRepositoryType: 'ECR_PUBLIC',
+            imageRepositoryType: 'ECR',
           },
           authenticationConfiguration: {
             accessRoleArn: appRunnerRole.roleArn,
