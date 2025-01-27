@@ -205,6 +205,9 @@ importers:
 
   infra/aws-cdk:
     dependencies:
+      '@atj/infra-core':
+        specifier: workspace:*
+        version: link:../core
       aws-cdk-lib:
         specifier: 2.176.0
         version: 2.176.0(constructs@10.4.2)
