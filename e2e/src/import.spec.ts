@@ -1,8 +1,6 @@
 import { test, expect } from './fixtures/import-file.fixture.js';
 import { FormCreatePage } from './models/form-create-page.js';
 
-// Reorder pages via drag and drop
-
 test.describe('Import form from a provided sample', () => {
   test('Verify the form import was successful', async ({ page, formUrl }) => {
     const formPage = new FormCreatePage(page);
@@ -48,8 +46,14 @@ test.describe('Import form from a provided sample', () => {
   });
 
   test('Reorder pages via drag and drop', async ({ page, formUrl }) => {
+    const getPageMenuLinks = (links: (SVGElement | HTMLElement)[]) => links.map((link) => link.textContent?.trim() || '');
     const formPage = new FormCreatePage(page);
     await formPage.navigateTo(formUrl);
-    await page.waitForTimeout(1000);
+    const menuSelector = 'ul.add-list-reset a';
+    const startOrder = await page.$$eval(menuSelector, getPageMenuLinks);
+    await formPage.moveListItem('Move this item', startOrder);
+    const endOrder = await page.$$eval(menuSelector, getPageMenuLinks);
+
+    expect(startOrder).not.toEqual(endOrder);
   });
 });
