@@ -13,7 +13,7 @@ test.describe('Import form from a provided sample', () => {
   test('Edit page title', async ({ page, formUrl }) => {
     const formPage = new FormCreatePage(page);
     await formPage.navigateTo(formUrl);
-    await formPage.editPageTitle('0 *', 'My awesome form page');
+    await formPage.editPageTitle('Pardon Application *', 'My awesome form page');
   });
 
   test('Add a rich text component and format text', async ({ page, formUrl }) => {
@@ -25,25 +25,31 @@ test.describe('Import form from a provided sample', () => {
 
   test('Move question to another page', async ({ page, formUrl }) => {
     const formPage = new FormCreatePage(page);
-    const destinationPage = '1';
-    await formPage.navigateTo(`${formUrl}?page=2`);
-    await formPage.moveQuestionToPage(destinationPage);
+    const destinationPage = 'Charge Details';
+    await formPage.navigateTo(`${formUrl}?page=8`);
+    await formPage.moveQuestionToPage('Race', destinationPage);
     await expect(page.getByText('Element moved successfully.')).toBeVisible();
-    await formPage.navigateTo(`${formUrl}?page=${destinationPage}`);
+    await formPage.navigateTo(`${formUrl}?page=4`);
     await formPage.keyboardEnter();
     expect(page.getByText('Name:')).toBeDefined();
   });
 
   test('Delete a question/pattern', async ({ page, formUrl }) => {
     const formPage = new FormCreatePage(page);
-    await formPage.navigateTo(`${formUrl}?page=2`);
+    await formPage.navigateTo(`${formUrl}?page=11`);
     await formPage.confirmDialog();
-    await formPage.deletePattern('(state) (docket number) United States');
+    await formPage.deletePattern('Page 3 of 4');
   });
 
   test('Add a new page with a package download component', async ({ page, formUrl }) => {
     const formPage = new FormCreatePage(page);
     await formPage.navigateTo(formUrl);
     await formPage.addPageWithPackageDownload('Download your documents');
+  });
+
+  test('Reorder pages via drag and drop', async ({ page, formUrl }) => {
+    const formPage = new FormCreatePage(page);
+    await formPage.navigateTo(formUrl);
+    await page.waitForTimeout(1000);
   });
 });

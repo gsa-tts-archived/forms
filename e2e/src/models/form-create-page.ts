@@ -45,8 +45,8 @@ export class FormCreatePage {
     ).toBeDefined();
   }
 
-  async moveQuestionToPage(destinationPage: string) {
-    await this.page.getByText('Name:').click();
+  async moveQuestionToPage(text: string, destinationPage: string) {
+    await this.page.getByText(text).click();
     await this.page.getByRole('button', { name: 'Move questions' }).click();
     await this.page.getByLabel('Page:').selectOption(destinationPage);
     await this.page.getByLabel('Position:').selectOption('top');
@@ -88,5 +88,20 @@ export class FormCreatePage {
     await expect(
       this.page.getByRole('button', { name: 'Download PDF' })
     ).toBeVisible();
+  }
+
+  async moveListItem(buttonText: string, pageTitles: string[]) {
+    const handle = this.page
+      .locator('li')
+      .filter({ hasText: `${buttonText}${pageTitles[0]}` })
+      .getByRole('button');
+    await handle.hover();
+    await this.page.mouse.down();
+    const nextElement = this.page
+      .locator('li')
+      .filter({ hasText: `${buttonText}${pageTitles[1]}` })
+      .getByRole('button');
+    await nextElement.hover();
+    await this.page.mouse.up();
   }
 }
