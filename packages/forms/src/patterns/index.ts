@@ -6,6 +6,7 @@ import { checkboxConfig } from './checkbox.js';
 import { dateOfBirthConfig } from './date-of-birth/date-of-birth.js';
 import { emailInputConfig } from './email-input/email-input.js';
 import { fieldsetConfig } from './fieldset/index.js';
+import { repeaterConfig } from './repeater/index.js';
 import { formSummaryConfig } from './form-summary.js';
 import { genderIdConfig } from './gender-id/gender-id.js';
 import { inputConfig } from './input/index.js';
@@ -19,6 +20,7 @@ import { richTextConfig } from './rich-text.js';
 import { selectDropdownConfig } from './select-dropdown/select-dropdown.js';
 import { sequenceConfig } from './sequence.js';
 import { socialSecurityNumberConfig } from './social-security-number/social-security-number.js';
+import { textAreaConfig } from './text-area/text-area.js';
 
 // This configuration reflects what a user of this library would provide for
 // their usage scenarios. For now, keep here in the form service until we
@@ -38,12 +40,14 @@ export const defaultFormConfig: FormConfig = {
     page: pageConfig,
     'page-set': pageSetConfig,
     paragraph: paragraphConfig,
+    repeater: repeaterConfig,
     'phone-number': phoneNumberConfig,
     'radio-group': radioGroupConfig,
     'rich-text': richTextConfig,
     'select-dropdown': selectDropdownConfig,
     'social-security-number': socialSecurityNumberConfig,
     sequence: sequenceConfig,
+    'text-area': textAreaConfig,
   },
 } as const;
 
@@ -68,6 +72,8 @@ export { type PageSetPattern } from './pages/page-set/config.js';
 export * from './paragraph.js';
 export * from './phone-number/phone-number.js';
 export * from './radio-group.js';
+export * from './repeater/index.js';
 export * from './select-dropdown/select-dropdown.js';
 export * from './social-security-number/social-security-number.js';
 export * from './sequence.js';
+export * from './text-area/text-area.js';

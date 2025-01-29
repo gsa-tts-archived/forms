@@ -30,6 +30,13 @@ export const en = {
       displayName: 'Short answer',
       maxLength: 'Maximum length',
     },
+    textarea: {
+      ...defaults,
+      displayName: 'Long answer',
+      maxLength: 'Maximum length',
+      hintLabel: 'Hint Text (optional)',
+      hint: 'The more specific you can be, the better. Use the space below and/or attach additional pages.',
+    },
     packageDownload: {
       ...defaults,
       displayName: 'Package download',
@@ -98,6 +105,11 @@ export const en = {
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
       preferNotToAnswerTextLabel:
         'Prefer not to share my gender identity checkbox label',
+    },
+    repeater: {
+      ...defaults,
+      displayName: 'Repeatable Group',
+      errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
   },
 };
