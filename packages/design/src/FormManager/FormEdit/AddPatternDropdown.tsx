@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { defaultFormConfig, type PatternConfig } from '@gsa-tts/forms-core';
 import { useFormManagerStore } from '../store.js';
 import styles from './formEditStyles.module.css';
+import addressIcon from './images/address-icon.svg';
 import attachmentIcon from './images/page-icon.svg';
 import blockIcon from './images/block-icon.svg';
 import checkboxIcon from './images/checkbox-icon.svg';
@@ -23,6 +24,7 @@ import classNames from 'classnames';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const icons: Record<string, string | any> = {
+  'address-icon.svg': addressIcon,
   'attachment-icon.svg': attachmentIcon,
   'block-icon.svg': blockIcon,
   'checkbox-icon.svg': checkboxIcon,
@@ -129,6 +131,7 @@ const sidebarPatterns: DropdownPattern[] = [
   ['rich-text', defaultFormConfig.patterns['rich-text']],
   ['select-dropdown', defaultFormConfig.patterns['select-dropdown']],
   ['attachment', defaultFormConfig.patterns['attachment']],
+  ['address', defaultFormConfig.patterns['address']],
   [
     'social-security-number',
     defaultFormConfig.patterns['social-security-number'],
