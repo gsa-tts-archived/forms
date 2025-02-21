@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 
-import { Success } from '@atj/common';
+import { Success } from '@gsa-tts/forms-common';
 
 import { type DocumentFieldMap } from '../index.js';
 import { fillPDF } from '../pdf/index.js';
@@ -23,7 +23,7 @@ describe('DOJ Pardon Attorney Office - Marijuana pardon application form', () =>
     await builder.addDocument({
       name: '',
       data: await loadSamplePDF(
-        'doj-pardon-marijuana/application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
+        'doj-pardon-marijuana/demo-application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
       ),
     });
 
@@ -48,7 +48,7 @@ describe('DOJ Pardon Attorney Office - Marijuana pardon application form', () =>
   */
   test('produces valid PDF from imported PDF', async () => {
     const pdfBytes = await loadSamplePDF(
-      'doj-pardon-marijuana/application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
+      'doj-pardon-marijuana/demo-application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
     );
     const result = (await fillPDF(pdfBytes, {
       Gender: {

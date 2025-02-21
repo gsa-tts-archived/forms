@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { defaultFormConfig, type PatternConfig } from '@atj/forms';
+import { defaultFormConfig, type PatternConfig } from '@gsa-tts/forms-core';
 import { useFormManagerStore } from '../store.js';
 import styles from './formEditStyles.module.css';
 import attachmentIcon from './images/page-icon.svg';
@@ -121,6 +121,7 @@ const sidebarPatterns: DropdownPattern[] = [
   ['form-summary', defaultFormConfig.patterns['form-summary']],
   ['gender-id', defaultFormConfig.patterns['gender-id']],
   ['input', defaultFormConfig.patterns['input']],
+  ['text-area', defaultFormConfig.patterns['text-area']],
   ['package-download', defaultFormConfig.patterns['package-download']],
   ['paragraph', defaultFormConfig.patterns['paragraph']],
   ['phone-number', defaultFormConfig.patterns['phone-number']],

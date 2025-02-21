@@ -1,13 +1,13 @@
 {
   "name": "10x-forms",
   "version": "1.0.0",
-  "description": "Test bed for Access to Justice platform tooling.",
+  "description": "10x Forms Platform",
   "type": "module",
   "main": "index.js",
   "license": "CC0",
   "packageManager": "pnpm@9.8.0",
   "scripts": {
-    "build": "turbo run build --filter=!@atj/infra-cdktf",
+    "build": "turbo run build --filter=!@gsa-tts/forms-infra-cdktf",
     "clean": "turbo run clean",
     "clean:modules": "find $(git rev-parse --show-toplevel) -name 'node_modules' -type d -prune -exec rm -rf '{}' +",
     "clean:dist": "find $(git rev-parse --show-toplevel) -name 'dist' -type d -prune -exec rm -rf '{}' +",
@@ -25,7 +25,7 @@
     "pre-commit": "pnpm format"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.1",
+    "@playwright/test": "^1.50.0",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",

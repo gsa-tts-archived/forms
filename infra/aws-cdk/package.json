@@ -1,5 +1,5 @@
 {
-  "name": "@atj/infra-aws-cdk",
+  "name": "@gsa-tts/infra-aws-cdk",
   "version": "1.0.0",
   "bin": {
     "aws-cdk": "bin/aws-cdk.js"
@@ -21,7 +21,7 @@
     "typescript": "~5.6.3"
   },
   "dependencies": {
-    "@atj/infra-core": "workspace:*",
+    "@gsa-tts/forms-infra-core": "workspace:*",
     "aws-cdk-lib": "2.176.0",
     "change-case": "^5.4.4",
     "constructs": "^10.0.0"
