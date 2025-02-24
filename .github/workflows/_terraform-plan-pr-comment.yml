@@ -69,14 +69,12 @@ jobs:
       - name: Generate Terraform CDK provider constructs
         shell: bash
         working-directory: infra/cdktf
-        run: |
-          pnpm --filter @gsa-tts/forms-infra-cdktf build:get
+        run: pnpm --filter @gsa-tts/forms-infra-cdktf build:get
 
       - name: Build Terraform configuration
         shell: bash
         working-directory: infra/cdktf
-        run: |
-          pnpm --filter @gsa-tts/forms-infra-cdktf build
+        run: pnpm turbo run --filter @gsa-tts/forms-infra-cdktf build
 
       - name: Get Terraform stack name
         id: get_stack_name
