@@ -22,6 +22,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@gsa-tts/forms-infra-aws-cdk": "workspace:*",
     "@aws-sdk/client-ssm": "^3.624.0",
     "cdktf": "^0.20.8",
     "cdktf-cli": "^0.20.8",

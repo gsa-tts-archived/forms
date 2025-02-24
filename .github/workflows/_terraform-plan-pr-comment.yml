@@ -57,13 +57,6 @@ jobs:
         with:
           terraform_version: "1.10.4"
 
-      - name: Initialize Terraform CDK configuration
-        shell: bash
-        working-directory: infra/cdktf
-        run: |
-          pnpm cdktf get
-          pnpm build:tsc
-
       - name: Install CloudFoundry CLI
         run: |
           curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | sudo tar -zx --directory=/usr/local/bin
@@ -73,10 +66,12 @@ jobs:
         run: |
           cf api https://api.fr.cloud.gov
 
-      - name: Synthesize Terraform configuration
+      - name: Initialize Terraform CDK configuration
+        shell: bash
         working-directory: infra/cdktf
         run: |
-          DEPLOY_ENV=${DEPLOY_ENV} pnpm cdktf synth
+          pnpm --filter @gsa-tts/forms-infra-cdktf build:get
+          pnpm --filter @gsa-tts/forms-infra-cdktf build
 
       - name: Get Terraform stack name
         id: get_stack_name

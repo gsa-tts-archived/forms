@@ -1,15 +1,16 @@
 {
-  "name": "@gsa-tts/infra-aws-cdk",
+  "name": "@gsa-tts/forms-infra-aws-cdk",
   "version": "1.0.0",
   "bin": {
     "aws-cdk": "bin/aws-cdk.js"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "test": "echo 'no tests'",
+    "build": "pnpm build:typescript && pnpm build:synth",
+    "build:typescript": "tsc",
+    "build:synth": "cdk synth --output AwsCdkStack",
     "cdk": "cdk",
-    "synth": "cdk synth --output AwsCdkStack"
+    "test": "echo 'no tests'",
+    "watch": "tsc -w"
   },
   "devDependencies": {
     "@types/node": "22.7.9",
