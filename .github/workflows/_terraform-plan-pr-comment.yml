@@ -55,7 +55,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.10.4"
+          terraform_version: "1.10.5"
 
       - name: Install CloudFoundry CLI
         run: |
@@ -68,12 +68,10 @@ jobs:
 
       - name: Generate Terraform CDK provider constructs
         shell: bash
-        working-directory: infra/cdktf
         run: pnpm --filter @gsa-tts/forms-infra-cdktf build:get
 
       - name: Build Terraform configuration
         shell: bash
-        working-directory: infra/cdktf
         run: pnpm turbo run --filter @gsa-tts/forms-infra-cdktf build
 
       - name: Get Terraform stack name
