@@ -52,11 +52,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.10.5"
-
       - name: Install CloudFoundry CLI
         run: |
           curl -L "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=v8&source=github" | sudo tar -zx --directory=/usr/local/bin

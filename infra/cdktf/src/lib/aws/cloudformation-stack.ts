@@ -33,6 +33,11 @@ export class FormsCloudformationStack extends Construct {
         //DockerImagePath: `ghcr.io/gsa-tts/forms/server-doj:${dockerImageTag}`,
       },
       capabilities: ['CAPABILITY_IAM'],
+      timeouts: {
+        create: '60m',
+        update: '30m',
+        delete: '30m',
+      },
     });
   }
 }
