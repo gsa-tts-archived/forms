@@ -74,6 +74,12 @@ jobs:
         shell: bash
         run: pnpm turbo run --filter @gsa-tts/forms-infra-cdktf build
 
+      - name: Build Terraform configuration - MANUAL TEST
+        shell: bash
+        run: |
+          pnpm --filter @gsa-tts/forms-infra-aws-cdk build
+          pnpm --filter @gsa-tts/forms-infra-cdktf build
+
       - name: Get Terraform stack name
         id: get_stack_name
         working-directory: infra/cdktf

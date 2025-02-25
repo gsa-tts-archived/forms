@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "types": "src/index.ts",
   "scripts": {
-    "build": "pnpm build:tsc && pnpm build:synth",
+    "build": "echo $PATH && pnpm build:tsc && pnpm build:synth",
     "build:get": "cdktf get",
     "build:synth": "pnpm build:synth:main && pnpm build:synth:demo",
     "build:synth:local": "DEPLOY_GIT_REF=main DEPLOY_ENV=main cdktf synth",
