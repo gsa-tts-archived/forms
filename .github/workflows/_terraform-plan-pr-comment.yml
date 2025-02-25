@@ -79,6 +79,7 @@ jobs:
         run: |
           pnpm --filter @gsa-tts/forms-infra-aws-cdk build
           pnpm --filter @gsa-tts/forms-infra-cdktf build
+          ls -lR infra/aws-cdk
 
       - name: Get Terraform stack name
         id: get_stack_name
