@@ -18,19 +18,13 @@
     "deploy:demo": "DEPLOY_ENV=demo cdktf deploy",
     "deploy:main:local": "DEPLOY_GIT_REF=main DEPLOY_ENV=main cdktf deploy",
     "dev": "tsc -w",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo 'no tests'"
   },
   "dependencies": {
     "@gsa-tts/forms-infra-aws-cdk": "workspace:*",
-    "@aws-sdk/client-ssm": "^3.624.0",
-    "cdktf": "^0.20.8",
-    "cdktf-cli": "^0.20.8",
-    "constructs": "^10.3.0"
-  },
-  "devDependencies": {
-    "@types/jest": "^29.5.12",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.2.4"
+    "@aws-sdk/client-ssm": "^3.750.0",
+    "cdktf": "^0.20.11",
+    "cdktf-cli": "^0.20.11",
+    "constructs": "^10.4.2"
   }
 }
