@@ -15,7 +15,8 @@ jobs:
     with:
       app-name: server-doj
       tag-name: ${{ github.ref_name }}
-      deploy-key: "${{ github.ref_name == 'main' && 'dev' || 'demo' }}"
+      #deploy-key: "${{ github.ref_name == 'main' && 'dev' || 'demo' }}"
+      deploy-key: dev
 
   deploy:
     needs: [build-image-doj]
