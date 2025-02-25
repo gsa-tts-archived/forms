@@ -4,7 +4,7 @@ import { CloudformationStack } from '../../../.gen/providers/aws/cloudformation-
 import { AwsProvider } from '../../../.gen/providers/aws/provider';
 
 const relativePath =
-  '../../../../aws-cdk/AwsCdkStack/AwsCdkStack.template.json';
+  '../../../../aws-cdk/dist/FormsPlatformStack.template.json';
 
 interface FormsCloudformationStackProps {
   dockerImageTag: string;

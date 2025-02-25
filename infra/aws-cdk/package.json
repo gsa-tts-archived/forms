@@ -7,7 +7,7 @@
   "scripts": {
     "build": "pnpm build:typescript && pnpm build:synth",
     "build:typescript": "tsc",
-    "build:synth": "cdk synth --output AwsCdkStack",
+    "build:synth": "cdk synth --output dist",
     "cdk": "cdk",
     "test": "echo 'no tests'",
     "watch": "tsc -w"
