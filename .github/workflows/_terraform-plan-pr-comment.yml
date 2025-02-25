@@ -74,24 +74,12 @@ jobs:
         shell: bash
         run: pnpm turbo run --filter @gsa-tts/forms-infra-cdktf build
 
-      - name: Build Terraform configuration - MANUAL TEST
-        shell: bash
-        run: |
-          pnpm --filter @gsa-tts/forms-infra-aws-cdk build
-          pnpm --filter @gsa-tts/forms-infra-cdktf build
-          pwd
-          ls -lR infra/aws-cdk
-          ls -al /home/runner/work/forms/forms/infra/aws-cdk/dist/FormsPlatformStack.template.json
-
       - name: Get Terraform stack name
         id: get_stack_name
         working-directory: infra/cdktf
         run: |
           DEPLOY_ENV=${DEPLOY_ENV} pnpm cdktf output --outputs-file outputs.json
           echo "stack_name=$(jq -r 'keys[0]' outputs.json)" >> $GITHUB_OUTPUT
-
-      - name: Debug list files in the directory
-        run: ls -al /home/runner/work/forms/forms/infra/aws-cdk/dist
 
       - name: Generate Terraform plan
         working-directory: infra/cdktf/cdktf.out/stacks/${{ steps.get_stack_name.outputs.stack_name }}
