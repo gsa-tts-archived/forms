@@ -89,7 +89,7 @@ jobs:
           echo '<details><summary>Terraform Plan Output</summary>' > pr-comment.txt
           echo '' >> pr-comment.txt
           echo '```terraform' >> pr-comment.txt
-          terraform show tfplan >> pr-comment.txt
+          terraform show -no-color tfplan >> pr-comment.txt
           echo '```' >> pr-comment.txt
           echo '</details>' >> pr-comment.txt
 
