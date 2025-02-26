@@ -93,4 +93,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           header: terraform-plan
-          path: pr-comment.txt
+          path: infra/cdktf/cdktf.out/stacks/${{ steps.get_stack_name.outputs.stack_name }}/pr-comment.txt
