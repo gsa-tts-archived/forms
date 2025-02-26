@@ -86,7 +86,12 @@ jobs:
         working-directory: infra/cdktf/cdktf.out/stacks/${{ steps.get_stack_name.outputs.stack_name }}
         run: |
           terraform plan -out=tfplan -input=false
-          terraform show tfplan > pr-comment.txt
+          echo '<details><summary>Terraform Plan Output</summary>' > pr-comment.txt
+          echo '' >> pr-comment.txt
+          echo '```terraform' >> pr-comment.txt
+          terraform show tfplan >> pr-comment.txt
+          echo '```' >> pr-comment.txt
+          echo '</details>' >> pr-comment.txt
 
       - name: Add comment to PR with Terraform plan
         uses: marocchino/sticky-pull-request-comment@v2
