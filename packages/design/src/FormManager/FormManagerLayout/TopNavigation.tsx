@@ -180,8 +180,8 @@ const MobileStepIndicator = ({ curPage }: { curPage: NavPage }) => (
         id="options"
         defaultValue={curPage}
       >
-        <option value={NavPage.edit}>Create</option>
-        <option value={NavPage.settings}>Configure</option>
+        <option value={NavPage.edit}>Edit</option>
+        <option value={NavPage.settings}>Settings</option>
         <option value={NavPage.publish}>Publish</option>
       </select>
     </div>
