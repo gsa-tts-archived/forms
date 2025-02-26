@@ -86,10 +86,11 @@ jobs:
         working-directory: infra/cdktf/cdktf.out/stacks/${{ steps.get_stack_name.outputs.stack_name }}
         run: |
           terraform plan -out=tfplan -input=false
-          echo '<details><summary>Terraform Plan Output</summary>' > pr-comment.txt
+          terraform show -no-color tfplan >> tf-plan.txt
+          echo "<details><summary>$(tail -n 1 pr-comment.txt)</summary>" > pr-comment.txt
           echo '' >> pr-comment.txt
           echo '```terraform' >> pr-comment.txt
-          terraform show -no-color tfplan >> pr-comment.txt
+          cat tf-plan.txt >> pr-comment.txt
           echo '```' >> pr-comment.txt
           echo '</details>' >> pr-comment.txt
 
