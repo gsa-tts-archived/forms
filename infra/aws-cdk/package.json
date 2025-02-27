@@ -12,16 +12,12 @@
     "test": "echo 'no tests'",
     "watch": "tsc -w"
   },
-  "devDependencies": {
-    "@types/node": "22.7.9",
-    "aws-cdk": "2.176.0",
-    "ts-node": "^10.9.2",
-    "typescript": "~5.6.3"
-  },
   "dependencies": {
+    "@aws-cdk/aws-apprunner-alpha": "2.181.0-alpha.0",
     "@gsa-tts/forms-infra-core": "workspace:*",
-    "aws-cdk-lib": "2.176.0",
+    "aws-cdk": "2.1001.0",
+    "aws-cdk-lib": "2.181.0",
     "change-case": "^5.4.4",
-    "constructs": "^10.0.0"
+    "constructs": "^10.4.2"
   }
 }
