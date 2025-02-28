@@ -55,6 +55,7 @@ export class FormsPlatformStack extends cdk.Stack {
       generateSecretString: {
         secretStringTemplate: JSON.stringify({ username: 'postgres' }),
         generateStringKey: 'password',
+        excludeCharacters: '/@" ',
       },
     });
 
