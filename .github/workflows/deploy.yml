@@ -15,13 +15,13 @@ jobs:
     with:
       app-name: server-doj
       tag-name: ${{ github.ref_name }}
-      #deploy-key: "${{ github.ref_name == 'main' && 'dev' || 'demo' }}"
-      deploy-key: dev
+      deploy-key: "${{ github.ref_name == 'main' && 'dev' || 'demo' }}"
+      #deploy-key: dev
 
   deploy:
     needs: [build-image-doj]
     uses: ./.github/workflows/_terraform-apply.yml
     secrets: inherit
     with:
-      #deploy-env: ${{ github.ref_name }}
-      deploy-env: main
+      deploy-env: ${{ github.ref_name }}
+      #deploy-env: main
