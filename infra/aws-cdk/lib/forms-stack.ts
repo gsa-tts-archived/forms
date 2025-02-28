@@ -107,7 +107,7 @@ export class FormsPlatformStack extends cdk.Stack {
         this,
         `${id}-observability-configuration`,
         {
-          observabilityConfigurationName: `${id}-observability-configuration`,
+          observabilityConfigurationName: `${id}-obs-conf`,
           traceConfigurationVendor: apprunner.TraceConfigurationVendor.AWSXRAY,
         }
       ),
