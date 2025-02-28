@@ -2,9 +2,13 @@ import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
 import * as apprunner from '@aws-cdk/aws-apprunner-alpha';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as iam from 'aws-cdk-lib/aws-iam';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
 import * as changeCase from 'change-case';
 import { Duration } from 'aws-cdk-lib';
+
+import { getDatabaseSecretKey } from '@gsa-tts/forms-infra-core';
 
 export class FormsPlatformStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -46,28 +50,49 @@ export class FormsPlatformStack extends cdk.Stack {
       'Allow postgres access from App Runner'
     );
 
+    const dbSecret = new secretsmanager.Secret(this, `${id}-rds-secret`, {
+      secretName: getDatabaseSecretKey(environment.valueAsString),
+      generateSecretString: {
+        secretStringTemplate: JSON.stringify({ username: 'postgres' }),
+        generateStringKey: 'password',
+      },
+    });
+
     // RDS database configuration
     const databaseName = `${changeCase.snakeCase(environment.valueAsString)}_database`;
-    new rds.DatabaseInstance(this, `${id}-db`, {
+    const rdsInstance = new rds.DatabaseInstance(this, `${id}-db`, {
+      allocatedStorage: 20,
+      credentials: rds.Credentials.fromSecret(dbSecret),
+      databaseName,
       engine: rds.DatabaseInstanceEngine.postgres({
         version: rds.PostgresEngineVersion.VER_15,
       }),
-      vpc,
-      securityGroups: [rdsSecurityGroup],
       instanceType: ec2.InstanceType.of(
         ec2.InstanceClass.BURSTABLE3,
         ec2.InstanceSize.MICRO
       ),
-      allocatedStorage: 20,
       maxAllocatedStorage: 100,
-      databaseName,
-      credentials: rds.Credentials.fromGeneratedSecret('postgres'),
       removalPolicy: cdk.RemovalPolicy.DESTROY,
+      securityGroups: [rdsSecurityGroup],
+      vpc,
     });
+
+    const appRunnerRole = new iam.Role(this, `${id}-iam-role-app-runner`, {
+      assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
+    });
+    dbSecret.grantRead(appRunnerRole);
 
     const appRunnerService = new apprunner.Service(this, `${id}-app-runner`, {
       source: apprunner.Source.fromEcrPublic({
-        imageConfiguration: { port: 4321 },
+        imageConfiguration: {
+          port: 4321,
+          environmentVariables: {
+            DB_SECRET_ARN: dbSecret.secretArn,
+            DB_HOST: rdsInstance.dbInstanceEndpointAddress,
+            DB_PORT: rdsInstance.dbInstanceEndpointPort,
+            DB_NAME: 'postgres'
+          },
+        },
         imageIdentifier: dockerImagePath.valueAsString,
       }),
       healthCheck: apprunner.HealthCheck.http({
@@ -77,6 +102,7 @@ export class FormsPlatformStack extends cdk.Stack {
         timeout: Duration.seconds(10),
         unhealthyThreshold: 10,
       }),
+      instanceRole: appRunnerRole,
       observabilityConfiguration: new apprunner.ObservabilityConfiguration(
         this,
         `${id}-observability-configuration`,

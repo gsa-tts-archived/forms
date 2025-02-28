@@ -8,3 +8,8 @@ export const getSecretKeys = (env: string) => [
   `/tts-10x-forms-${env}/server-kansas/login.gov/private-key`,
   `/tts-10x-forms-${env}/server-kansas/login.gov/public-key`,
 ];
+
+const secretPrefix = (env: string) => `/tts-10x-forms-${env}`;
+
+export const getDatabaseSecretKey = (env: string) =>
+  `/${secretPrefix(env)}/database`;

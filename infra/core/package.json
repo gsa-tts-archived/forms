@@ -13,9 +13,10 @@
     "test": "vitest run --coverage"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.758.0",
+    "@aws-sdk/client-ssm": "^3.624.0",
     "@gsa-tts/forms-common": "workspace:*",
     "@gsa-tts/forms-core": "workspace:*",
-    "@aws-sdk/client-ssm": "^3.624.0",
     "zod": "^3.23.8"
   }
 }
