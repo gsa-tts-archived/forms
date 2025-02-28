@@ -19,5 +19,8 @@
     "aws-cdk-lib": "2.181.0",
     "change-case": "^5.4.4",
     "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5"
   }
 }
