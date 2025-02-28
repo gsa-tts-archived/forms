@@ -6,6 +6,7 @@ import { CloudfoundryProvider } from '../../.gen/providers/cloudfoundry/provider
 import { withBackend } from './backend';
 import { CloudGovSpace } from './cloud.gov/space';
 import { DataAwsSsmParameter } from '../../.gen/providers/aws/data-aws-ssm-parameter';
+import { AwsProvider } from '../../.gen/providers/aws/provider';
 
 /**
  * Register an application stack and translates the IaC to a template format via the `synth` function.
@@ -45,6 +46,11 @@ class AppStack extends TerraformStack {
       }
     );
 
+    // Ensure the AWS provider is configured
+    new AwsProvider(this, 'AWS', {
+      region: 'us-east-2',
+    });
+
     new CloudfoundryProvider(this, 'cloud-gov', {
       apiUrl: 'https://api.fr.cloud.gov',
       appLogsMax: 30,
@@ -55,10 +61,6 @@ class AppStack extends TerraformStack {
     new CloudGovSpace(this, id, gitRef);
 
     /*
-    // Ensure the AWS provider is configured
-    const awsProvider = new AwsProvider(this, 'AWS', {
-      region: 'us-east-2',
-    });
 
     // Create an ECR repository so we can deploy to App Runner via Cloudformation.
     // For now, we'll use the server-doj app image for testing, and rely on it
