@@ -53,7 +53,7 @@ export class FormsPlatformStack extends cdk.Stack {
     const dbSecret = new secretsmanager.Secret(this, `${id}-rds-secret`, {
       secretName: getDatabaseSecretKey(environment.valueAsString),
       generateSecretString: {
-        secretStringTemplate: JSON.stringify({ username: 'postgres' }),
+        secretStringTemplate: JSON.stringify({ username: 'postgres',  }),
         generateStringKey: 'password',
         excludeCharacters: '/@" ',
       },
@@ -88,11 +88,13 @@ export class FormsPlatformStack extends cdk.Stack {
         imageConfiguration: {
           port: 4321,
           environmentVariables: {
-            DB_SECRET_ARN: dbSecret.secretArn,
             DB_HOST: rdsInstance.dbInstanceEndpointAddress,
             DB_PORT: rdsInstance.dbInstanceEndpointPort,
             DB_NAME: 'postgres'
           },
+          environmentSecrets: {
+            DB_SECRET_ARN: apprunner.Secret.fromSecretsManager(dbSecret),
+          }
         },
         imageIdentifier: dockerImagePath.valueAsString,
       }),
