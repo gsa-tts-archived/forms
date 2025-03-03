@@ -2,6 +2,8 @@
 
 .dropdownMenu {
   min-width: 315px;
+  max-height: 19.688rem;
+  overflow-y: auto;
 }
 
 .dropdownMenu:active,
