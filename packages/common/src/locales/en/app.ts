@@ -18,6 +18,7 @@ export const en = {
     checkbox: {
       ...defaults,
       displayName: 'Checkbox',
+      fieldLabel: 'Question text',
       hintLabel: 'Hint Text (optional)',
       hint: '',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
