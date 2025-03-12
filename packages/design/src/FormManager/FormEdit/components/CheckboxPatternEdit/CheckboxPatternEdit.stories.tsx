@@ -3,9 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { type CheckboxPattern } from '@gsa-tts/forms-core';
 
 import CheckboxPatternEdit from './index.js';
-import {
-  createPatternEditStoryMeta,
-} from '../common/story-helper.js';
+import { createPatternEditStoryMeta } from '../common/story-helper.js';
 import FormEdit from '../../index.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import { expect, userEvent } from '@storybook/test';
@@ -16,7 +14,7 @@ const pattern: CheckboxPattern = {
   type: 'checkbox',
   data: {
     label: message.patterns.checkbox.displayName,
-    hint: "",
+    hint: '',
     required: false,
     options: [
       { label: 'Option 1', id: 'option-1' },
@@ -63,9 +61,7 @@ export const Basic: StoryObj<typeof FormEdit> = {
       await canvas.findByDisplayValue(updatedLabel)
     ).toBeInTheDocument();
 
-    await expect(
-      await canvas.findByDisplayValue('Yes')
-    ).toBeVisible();
+    await expect(await canvas.findByDisplayValue('Yes')).toBeVisible();
   },
 };
 
