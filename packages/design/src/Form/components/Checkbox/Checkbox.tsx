@@ -7,18 +7,33 @@ import { type PatternComponent } from '../../../Form/index.js';
 
 export const CheckboxPattern: PatternComponent<CheckboxProps> = props => {
   const { register } = useFormContext();
+  const hintId = `hint-${props.id}`;
   return (
-    <div className="usa-checkbox">
-      <input
-        id={props.id}
-        type="checkbox"
-        className="usa-checkbox__input"
-        defaultChecked={props.defaultChecked}
-        {...register(props.id)}
-      />
-      <label className="usa-checkbox__label" htmlFor={props.id}>
-        {props.label}
-      </label>
+    <div className="usa-fieldset padding-top-2">
+      <label className="usa-label">{props.label}</label>
+      {props.hint && (
+        <div className="usa-hint" id={hintId}>
+          {props.hint}
+        </div>
+      )}
+      {props.options.map((option, index) => {
+        const id = option.id;
+        return (
+          <div key={index} className="usa-checkbox">
+            <input
+              className="usa-checkbox__input"
+              type="checkbox"
+              id={`input-${id}`}
+              {...register(`${id}`)}
+              value={id}
+              defaultChecked={option.defaultChecked}
+            />
+            <label htmlFor={`input-${id}`} className="usa-checkbox__label">
+              {option.label}
+            </label>
+          </div>
+        );
+      })}
     </div>
   );
 };

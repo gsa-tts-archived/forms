@@ -30,6 +30,7 @@ export const Default = {
     type: 'radio-group',
     groupId: 'radio-group-1',
     legend: 'This is a multiple choice question',
+    hint: '',
     options: [
       {
         id: 'option-1',

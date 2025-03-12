@@ -18,6 +18,8 @@ export const en = {
     checkbox: {
       ...defaults,
       displayName: 'Checkbox',
+      hintLabel: 'Hint Text (optional)',
+      hint: '',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
     fieldset: {
@@ -57,14 +59,18 @@ export const en = {
     },
     radioGroup: {
       ...defaults,
-      displayName: 'Multiple choice question label',
-      fieldLabel: 'Multiple choice question label',
+      displayName: 'Question text',
+      fieldLabel: 'Question text',
+      hintLabel: 'Hint Text (optional)',
+      hint: '',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
     selectDropdown: {
       ...defaults,
-      displayName: 'Dropdown label',
-      fieldLabel: 'Dropdown label',
+      displayName: 'Question text',
+      fieldLabel: 'Question text',
+      hintLabel: 'Hint Text (optional)',
+      hint: '',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
     dateOfBirth: {

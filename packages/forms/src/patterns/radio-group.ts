@@ -14,6 +14,8 @@ import { safeZodParseFormErrors } from '../util/zod.js';
 
 const configSchema = z.object({
   label: z.string().min(1),
+  hint: z.string().optional(),
+  required: z.boolean(),
   options: z
     .object({
       id: z.string().regex(/^[A-Za-z][A-Za-z0-9\-_:.]*$/, 'Invalid Option ID'),
@@ -32,10 +34,12 @@ export const radioGroupConfig: PatternConfig<RadioGroupPattern, PatternOutput> =
     iconPath: 'radio-options-icon.svg',
     initial: {
       label: 'Multiple choice question label',
+      hint: '',
       options: [
         { id: 'option-1', label: 'Option 1' },
         { id: 'option-2', label: 'Option 2' },
       ],
+      required: false,
     },
     parseUserInput: (pattern, input: unknown) => {
       // FIXME: Not sure why we're sometimes getting a string here, and sometimes
@@ -97,6 +101,7 @@ export const radioGroupConfig: PatternConfig<RadioGroupPattern, PatternOutput> =
           type: 'radio-group',
           groupId: pattern.id,
           legend: pattern.data.label,
+          hint: pattern.data.hint,
           options: pattern.data.options.map(option => {
             const optionId = createId(pattern.id, option.id);
             return {
@@ -106,6 +111,7 @@ export const radioGroupConfig: PatternConfig<RadioGroupPattern, PatternOutput> =
               defaultChecked: sessionValue === optionId,
             };
           }),
+          required: pattern.data.required,
           ...extraAttributes,
         } as RadioGroupProps,
         children: [],
