@@ -72,10 +72,6 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
       }
     }
 
-    console.group('checkbox/createPrompt');
-    console.log(pattern);
-    console.groupEnd();
-
     return {
       props: {
         _patternId: pattern.id,
