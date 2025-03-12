@@ -45,5 +45,6 @@ export const Default = {
         defaultChecked: false,
       },
     ],
+    required: false,
   },
 } satisfies StoryObj<typeof RadioGroupPattern>;
