@@ -2,7 +2,7 @@ import * as z from 'zod';
 
 import { type SelectDropdownProps } from '../../components.js';
 import { type Pattern, type PatternConfig } from '../../pattern.js';
-import { getFormSessionValue } from '../../session.js';
+import { getFormSessionError, getFormSessionValue } from '../../session.js';
 import {
   safeZodParseFormErrors,
   safeZodParseToFormError,
@@ -91,9 +91,8 @@ export const selectDropdownConfig: PatternConfig<
   },
 
   createPrompt(_, session, pattern, options) {
-    const extraAttributes: Record<string, any> = {};
     const sessionValue = getFormSessionValue(session, pattern.id);
-    const error = session.data.errors[pattern.id];
+    const sessionError = getFormSessionError(session, pattern.id);
 
     return {
       props: {
@@ -110,8 +109,7 @@ export const selectDropdownConfig: PatternConfig<
         }),
         required: pattern.data.required,
         value: sessionValue,
-        error,
-        ...extraAttributes,
+        error: sessionError,
       } as SelectDropdownProps,
       children: [],
     };

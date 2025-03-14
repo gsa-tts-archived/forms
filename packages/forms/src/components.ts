@@ -50,10 +50,8 @@ export type AddressFieldProps = {
 
 export type AddressComponentProps = PatternProps<{
   type: 'address';
-  errors?: {
-    physical?: FormError;
-    mailing?: FormError;
-  };
+  error?: FormError;
+  value?: any;
   legend?: string;
   required?: boolean;
   addMailingAddress?: boolean;
@@ -121,6 +119,7 @@ export type CheckboxProps = PatternProps<{
     label: string;
     defaultChecked: boolean;
   }[];
+  error?: FormError;
 }>;
 
 export type PageSetProps = PatternProps<{
@@ -160,6 +159,7 @@ export type SelectDropdownProps = PatternProps<{
   hint?: string;
   required: boolean;
   error?: FormError;
+  value?: string;
 }>;
 
 export type DateOfBirthProps = PatternProps<{
@@ -198,8 +198,8 @@ export type NameProps = PatternProps<{
   givenNameHint: string;
   familyNameHint: string;
   required?: boolean;
-  errors?: FormErrors;
-  values?: {
+  error?: FormError;
+  value?: {
     givenName?: string;
     middleName?: string;
     familyName?: string;
@@ -233,7 +233,9 @@ export type GenderIdProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
-  value: string;
+  value: {
+    gender: string;
+  };
   preferNotToAnswerText?: string;
   preferNotToAnswerChecked?: boolean;
 }>;

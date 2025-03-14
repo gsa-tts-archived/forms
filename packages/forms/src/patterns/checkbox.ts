@@ -1,16 +1,13 @@
 import * as z from 'zod';
 
 import { Result } from '@gsa-tts/forms-common';
-
 import {
   type Pattern,
   type PatternConfig,
-  validatePattern,
 } from '../pattern.js';
-import { type CheckboxProps } from '../components.js';
 import { type FormError } from '../error.js';
-
-import { getFormSessionValue } from '../session.js';
+import { type CheckboxProps } from '../components.js';
+import { getFormSessionError, getFormSessionValue } from '../session.js';
 import {
   safeZodParseFormErrors,
   safeZodParseToFormError,
@@ -59,18 +56,8 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
     return [];
   },
   createPrompt(_, session, pattern, options) {
-    const extraAttributes: Record<string, any> = {};
     const sessionValue = getFormSessionValue(session, pattern.id);
-    if (options.validate) {
-      const isValidResult = validatePattern(
-        checkboxConfig,
-        pattern,
-        sessionValue
-      );
-      if (!isValidResult.success) {
-        extraAttributes['error'] = isValidResult.error;
-      }
-    }
+    const sessionError = getFormSessionError(session, pattern.id);
 
     return {
       props: {
@@ -90,7 +77,7 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
           };
         }),
         required: pattern.data.required,
-        ...extraAttributes,
+        error: sessionError,
       } as CheckboxProps,
       children: [],
     };
