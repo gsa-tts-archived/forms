@@ -40,22 +40,6 @@ export class FormsPlatformStack extends cdk.Stack {
       vpc.vpcDefaultSecurityGroup
     );
 
-    // Explicitly remove inbound and outbound rules.
-    // This is an alternative to the cdk.json setting:
-    //  "@aws-cdk/aws-ec2:restrictDefaultSecurityGroup": true
-    defaultSecurityGroup.addEgressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.allTraffic(),
-      'Remove all egress traffic',
-      false
-    );
-    defaultSecurityGroup.addIngressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.allTraffic(),
-      'Remove all ingress traffic',
-      false
-    );
-
     // Security group for RDS
     const rdsSecurityGroup = new ec2.SecurityGroup(this, `${id}-rds-sg`, {
       vpc,
