@@ -146,6 +146,7 @@ export type RadioGroupProps = PatternProps<{
     label: string;
     defaultChecked: boolean;
   }[];
+  error?: FormError;
 }>;
 
 export type SelectDropdownProps = PatternProps<{

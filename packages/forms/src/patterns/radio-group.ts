@@ -91,7 +91,6 @@ export const radioGroupConfig: PatternConfig<RadioGroupPattern, PatternOutput> =
               id: optionId,
               name: pattern.id,
               label: option.label,
-              defaultChecked: sessionValue === optionId,
             };
           }),
           required: pattern.data.required,

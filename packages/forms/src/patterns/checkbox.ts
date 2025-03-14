@@ -7,7 +7,6 @@ import { type CheckboxProps } from '../components.js';
 import { getFormSessionError, getFormSessionValue } from '../session.js';
 import {
   safeZodParseFormErrors,
-  safeZodParseToFormError,
 } from '../util/zod.js';
 
 const configSchema = z.object({
@@ -43,8 +42,35 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
     options: [{ id: 'option-1', label: 'Option 1' }],
     required: false,
   },
-  parseUserInput: (_, obj) => {
-    return safeZodParseToFormError(PatternOutput, obj);
+  parseUserInput: (pattern, input: unknown) => {
+    // FIXME: Not sure why we're sometimes getting a string here, and sometimes
+    // the expected object. Workaround, by accepting both.
+    if (typeof input === 'string') {
+      return {
+        success: true,
+        data: input,
+      };
+    }
+    const optionId = getSelectedOption(pattern, input);
+    return {
+      success: true,
+      data: optionId || '',
+    };
+    /*
+    if (optionId) {
+      return {
+        success: true,
+        data: optionId,
+      };
+    }
+    return {
+      success: false,
+      error: {
+        type: 'custom',
+        message: `No option selected for radio group: ${pattern.id}. Input: ${input}`,
+      },
+    };
+    */
   },
   parseConfigData: obj => {
     return safeZodParseFormErrors(configSchema, obj);
@@ -97,7 +123,7 @@ const getSelectedOption = (pattern: CheckboxPattern, input: unknown) => {
   }
 };
 
-export const extractOptionId = (
+export const extractCheckboxOptionId = (
   groupId: string,
   inputId: unknown
 ): Result<string, FormError> => {
