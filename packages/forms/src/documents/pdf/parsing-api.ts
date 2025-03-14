@@ -213,7 +213,7 @@ export const processApiResponse = async (json: any): Promise<ParsedPdf> => {
             name: option.name,
             defaultChecked: option.default_checked,
           })),
-          required : false,
+          required: false,
         }
       );
       if (checkboxPattern) {
@@ -267,31 +267,31 @@ export const processApiResponse = async (json: any): Promise<ParsedPdf> => {
     }
 
     if (element.component_type === 'fieldset') {
-        if (element.field.component_type === 'text_input') {
-          const input = element.field;
-          const inputPattern = processPatternData<InputPattern>(
-            defaultFormConfig,
-            parsedPdf,
-            'input',
-            {
-              label: input.label,
-              required: false,
-              initial: '',
-              maxLength: 128,
-            }
-          );
-          if (inputPattern) {
-            fieldsetPatterns.push(inputPattern.id);
-            parsedPdf.outputs[inputPattern.id] = {
-              type: 'TextField',
-              name: input.id,
-              label: input.label,
-              value: '',
-              maxLength: 1024,
-              required: input.required,
-            };
+      if (element.field.component_type === 'text_input') {
+        const input = element.field;
+        const inputPattern = processPatternData<InputPattern>(
+          defaultFormConfig,
+          parsedPdf,
+          'input',
+          {
+            label: input.label,
+            required: false,
+            initial: '',
+            maxLength: 128,
           }
+        );
+        if (inputPattern) {
+          fieldsetPatterns.push(inputPattern.id);
+          parsedPdf.outputs[inputPattern.id] = {
+            type: 'TextField',
+            name: input.id,
+            label: input.label,
+            value: '',
+            maxLength: 1024,
+            required: input.required,
+          };
         }
+      }
     }
 
     // Add fieldset to parsedPdf.patterns and rootSequence

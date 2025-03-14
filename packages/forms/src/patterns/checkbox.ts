@@ -5,9 +5,7 @@ import { type Pattern, type PatternConfig } from '../pattern.js';
 import { type FormError } from '../error.js';
 import { type CheckboxProps } from '../components.js';
 import { getFormSessionError, getFormSessionValue } from '../session.js';
-import {
-  safeZodParseFormErrors,
-} from '../util/zod.js';
+import { safeZodParseFormErrors } from '../util/zod.js';
 
 const configSchema = z.object({
   label: z.string().min(1),
