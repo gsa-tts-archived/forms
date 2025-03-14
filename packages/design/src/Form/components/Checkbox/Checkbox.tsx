@@ -18,9 +18,9 @@ export const CheckboxPattern: PatternComponent<CheckboxProps> = props => {
       >
         <label className="usa-label">{props.label}</label>
         {props.hint && (
-        <div className="usa-hint" id={hintId}>
-          {props.hint}
-        </div>
+          <div className="usa-hint" id={hintId}>
+            {props.hint}
+          </div>
         )}
 
         {props.options.map((option, index) => {

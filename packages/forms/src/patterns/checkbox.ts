@@ -1,10 +1,7 @@
 import * as z from 'zod';
 
 import { Result } from '@gsa-tts/forms-common';
-import {
-  type Pattern,
-  type PatternConfig,
-} from '../pattern.js';
+import { type Pattern, type PatternConfig } from '../pattern.js';
 import { type FormError } from '../error.js';
 import { type CheckboxProps } from '../components.js';
 import { getFormSessionError, getFormSessionValue } from '../session.js';
