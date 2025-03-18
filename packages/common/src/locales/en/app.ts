@@ -122,6 +122,13 @@ export const en = {
       preferNotToAnswerTextLabel:
         'Prefer not to share my gender identity checkbox label',
     },
+    sex: {
+      ...defaults,
+      displayName: 'Sex Input label',
+      fieldLabel: 'Sex Input label',
+      helperTextLabel: 'Helper text',
+      errorTextMustContainChar: 'String must contain at least 1 character(s)',
+    },
     repeater: {
       ...defaults,
       displayName: 'Repeatable Group',
