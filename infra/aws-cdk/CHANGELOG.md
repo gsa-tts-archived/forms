@@ -1,5 +1,11 @@
 # @gsa-tts/forms-infra-aws-cdk
 
+## 0.1.4
+
+### Patch Changes
+
+- Deploy FormsPlatformStack with appropriate parameters
+
 ## 0.1.3
 
 ### Patch Changes
