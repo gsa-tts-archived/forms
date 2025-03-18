@@ -1,5 +1,11 @@
 # @gsa-tts/forms-infra-aws-cdk
 
+## 0.1.3
+
+### Patch Changes
+
+- 697154e: Create AWS CodePipeline CDK stack
+
 ## 0.1.2
 
 ### Patch Changes
