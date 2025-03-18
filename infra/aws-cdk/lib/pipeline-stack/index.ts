@@ -96,7 +96,8 @@ export class FormsPipelineStack extends cdk.Stack {
           privileged: true,
         },
         environmentVariables: {
-          IMAGE_URI: { value: ecrRepo.repository.repositoryUri },
+          TAG_OR_DIGEST: { value: 'latest' },
+          REPO_NAME: { value: ecrRepo.repository.repositoryUri },
           ENVIRONMENT: { value: 'dev' },
         },
         buildSpec: codebuild.BuildSpec.fromObject({
@@ -108,7 +109,7 @@ export class FormsPipelineStack extends cdk.Stack {
             build: {
               commands: [
                 'cd node_modules/@gsa-tts/forms-infra-aws-cdk',
-                'pnpm cdk deploy --ci FormsPlatformStack ----parameters imageUri=${IMAGE_URI} --parameters environment=${ENVIRONMENT}',
+                'pnpm cdk deploy --ci FormsPlatformStack --parameters tagOrDigest=${TAG_OR_DIGEST} --parameters environment=${ENVIRONMENT} --parameters repositoryName=${REPO_NAME}',
               ],
             },
           },
