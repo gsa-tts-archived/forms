@@ -52,7 +52,7 @@ export const Basic = {
   args: {
     _patternId: 'test-id',
     type: 'page-set',
-    links: {pages, pageWindow: pages},
+    links: { pages, pageWindow: pages },
     actions: [],
   } satisfies PageSetProps,
 } satisfies StoryObj<typeof PageSet>;

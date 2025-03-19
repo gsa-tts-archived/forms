@@ -64,7 +64,9 @@ const PageMenuEdit = ({ pages }: PageMenuProps) => {
 
   return (
     <div className={`${styles.sideNavWrapper} position-sticky`}>
-      <div className={`${styles.sideNav} usa-sidenav`}>
+      <div
+        className={`${styles.sideNav} usa-sidenav overflow-y-scroll maxh-viewport`}
+      >
         <DraggableList
           order={pattern.data.pages}
           updateOrder={updatePageOrder}

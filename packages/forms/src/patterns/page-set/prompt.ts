@@ -82,7 +82,7 @@ const getPages = (
     };
   }
 
-  const topPadding = 1;
+  const topPadding = 5;
   const bottomPadding = 5;
   return {
     pages,
