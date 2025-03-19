@@ -13,7 +13,6 @@ export default ({ ctx }: { ctx: AppContext }) => {
       fallback={
         <div>
           There was an unexpected error rendering the form list.
-          <DebugTools />
         </div>
       }
     >
