@@ -123,7 +123,7 @@ importers:
     dependencies:
       '@astrojs/react':
         specifier: ^3.6.1
-        version: 3.6.3(@types/node@22.10.5)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)
+        version: 3.6.3(@types/node@22.10.5)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)
       '@gsa-tts/forms-common':
         specifier: workspace:*
         version: link:../../packages/common
@@ -425,7 +425,7 @@ importers:
         version: 6.6.3
       '@testing-library/react':
         specifier: ^16.0.0
-        version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/deep-equal':
         specifier: ^1.0.4
         version: 1.0.4
@@ -435,6 +435,9 @@ importers:
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.18
+      '@types/react-dom':
+        specifier: ^19.0.4
+        version: 19.0.4(@types/react@18.3.18)
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.18.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0(eslint@8.57.1)(typescript@5.9.0-dev.20250318))(eslint@8.57.1)(typescript@5.9.0-dev.20250318)
@@ -516,7 +519,7 @@ importers:
         version: 9.0.0(astro@5.1.3(@types/node@22.10.5)(jiti@2.4.2)(rollup@4.30.1)(sass-embedded@1.69.5)(terser@5.37.0)(typescript@5.9.0-dev.20250318)(yaml@2.6.1))
       '@astrojs/react':
         specifier: ^4.1.2
-        version: 4.1.2(@types/node@22.10.5)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(jiti@2.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)(yaml@2.6.1)
+        version: 4.1.2(@types/node@22.10.5)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(jiti@2.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)(yaml@2.6.1)
       '@gsa-tts/forms-auth':
         specifier: workspace:^
         version: link:../auth
@@ -3745,10 +3748,10 @@ packages:
   '@types/range-parser@1.2.7':
     resolution: {integrity: sha512-hKormJbkJqzQGhziax5PItDUTMAM9uE2XXQmM37dyd4hVM+5aVl7oVxMVUiVQn2oCQFN/LKCZdvSM0pFRqbSmQ==}
 
-  '@types/react-dom@18.3.5':
-    resolution: {integrity: sha512-P4t6saawp+b/dFrUr2cvkVsfvPguwsxtH6dNIYRllMsefqFzkZk5UIjzyDOv5g1dXIPdG4Sp1yCR4Z6RCUsG/Q==}
+  '@types/react-dom@19.0.4':
+    resolution: {integrity: sha512-4fSQ8vWFkg+TGhePfUzVmat3eC14TXYSsiiDSLI0dVLsrm9gZFABjPy/Qu6TKgl1tq1Bu1yDsuQgY3A3DOjCcg==}
     peerDependencies:
-      '@types/react': ^18.0.0
+      '@types/react': ^19.0.0
 
   '@types/react@18.3.18':
     resolution: {integrity: sha512-t4yC+vtgnkYjNSKlFx1jkAhH8LgTo2N/7Qvi83kdEaUtMDiwpbLAktKDaAMlRcJ5eSxZkH74eEGt1ky31d7kfQ==}
@@ -11433,10 +11436,10 @@ snapshots:
     dependencies:
       prismjs: 1.29.0
 
-  '@astrojs/react@3.6.3(@types/node@22.10.5)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)':
+  '@astrojs/react@3.6.3(@types/node@22.10.5)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)':
     dependencies:
       '@types/react': 18.3.18
-      '@types/react-dom': 18.3.5(@types/react@18.3.18)
+      '@types/react-dom': 19.0.4(@types/react@18.3.18)
       '@vitejs/plugin-react': 4.3.4(vite@5.4.11(@types/node@22.10.5)(sass-embedded@1.69.5)(terser@5.37.0))
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -11453,10 +11456,10 @@ snapshots:
       - supports-color
       - terser
 
-  '@astrojs/react@4.1.2(@types/node@22.10.5)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(jiti@2.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)(yaml@2.6.1)':
+  '@astrojs/react@4.1.2(@types/node@22.10.5)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(jiti@2.4.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(sass-embedded@1.69.5)(terser@5.37.0)(yaml@2.6.1)':
     dependencies:
       '@types/react': 18.3.18
-      '@types/react-dom': 18.3.5(@types/react@18.3.18)
+      '@types/react-dom': 19.0.4(@types/react@18.3.18)
       '@vitejs/plugin-react': 4.3.4(vite@6.2.0(@types/node@22.10.5)(jiti@2.4.2)(sass-embedded@1.69.5)(terser@5.37.0)(yaml@2.6.1))
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -15393,7 +15396,7 @@ snapshots:
       lodash: 4.17.21
       redent: 3.0.0
 
-  '@testing-library/react@16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@testing-library/react@16.1.0(@testing-library/dom@10.4.0)(@types/react-dom@19.0.4(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@testing-library/dom': 10.4.0
@@ -15401,7 +15404,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.18
-      '@types/react-dom': 18.3.5(@types/react@18.3.18)
+      '@types/react-dom': 19.0.4(@types/react@18.3.18)
 
   '@testing-library/user-event@14.5.2(@testing-library/dom@10.4.0)':
     dependencies:
@@ -15758,7 +15761,7 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-dom@18.3.5(@types/react@18.3.18)':
+  '@types/react-dom@19.0.4(@types/react@18.3.18)':
     dependencies:
       '@types/react': 18.3.18
 
