@@ -9,11 +9,13 @@ export class FormsPipelineStack extends cdk.Stack {
     super(scope, id, props);
 
     // Create the ECR repository
+    console.log('Creating ECR repository...');
     const ecrRepo = new ecr_repository.FormsEcrRepository(
       this,
       'FormsEcrRepository'
     );
     // Build CodeBuild Project: Builds & pushes Docker image
+    console.log('Creating CodeBuild project...');
     const dockerBuild = new codebuild.PipelineProject(
       this,
       'FormsBuildProject',
@@ -51,6 +53,7 @@ export class FormsPipelineStack extends cdk.Stack {
     );
 
     // Define the pipeline
+    console.log('Creating CodePipeline pipeline...');
     const pipeline = new codepipeline.Pipeline(this, 'Pipeline', {
       pipelineName: 'FormsBuildImagePipeline',
     });
@@ -59,6 +62,7 @@ export class FormsPipelineStack extends cdk.Stack {
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
     // Pull from GitHub
+    console.log('Adding source stage...');
     pipeline.addStage({
       stageName: 'Source',
       actions: [
@@ -75,6 +79,7 @@ export class FormsPipelineStack extends cdk.Stack {
     });
 
     // Build and publish Docker image
+    console.log('Adding build stage...');
     pipeline.addStage({
       stageName: 'Build',
       actions: [
@@ -87,6 +92,7 @@ export class FormsPipelineStack extends cdk.Stack {
     });
 
     // CodeBuild Project for CDK Synth
+    console.log('Adding deploy stack CodeBuild pipeline project...');
     const deployStack = new codebuild.PipelineProject(
       this,
       'DeployFormsPlatformStackProject',
@@ -104,12 +110,20 @@ export class FormsPipelineStack extends cdk.Stack {
           version: '0.2',
           phases: {
             install: {
-              commands: ['cd server', 'pnpm install'],
+              'runtime-versions': {
+                nodejs: '22',
+              },
+              commands: [
+                'cd server',
+                'npm install -g corepack@latest',
+                'corepack enable && corepack prepare pnpm@latest --activate',
+                'pnpm install',
+              ],
             },
             build: {
               commands: [
                 'cd node_modules/@gsa-tts/forms-infra-aws-cdk',
-                'pnpm cdk deploy --ci FormsPlatformStack --parameters tagOrDigest=${TAG_OR_DIGEST} --parameters environment=${ENVIRONMENT} --parameters repositoryName=${REPO_NAME}',
+                'pnpm cdk deploy --ci FormsPlatformStack --parameters "tagOrDigest=${TAG_OR_DIGEST}" --parameters "environment=${ENVIRONMENT}" --parameters "repositoryName=${REPO_NAME}"',
               ],
             },
           },
@@ -122,6 +136,7 @@ export class FormsPipelineStack extends cdk.Stack {
     );
 
     // Build Stage (Synth)
+    console.log('Adding Deploy stage...');
     pipeline.addStage({
       stageName: 'Deploy',
       actions: [

@@ -1,5 +1,53 @@
 # @gsa-tts/forms-infra-cdktf
 
+## 0.1.10
+
+### Patch Changes
+
+- Include node types
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.10
+
+## 0.1.9
+
+### Patch Changes
+
+- Use standard cdk.out output dir
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.9
+
+## 0.1.8
+
+### Patch Changes
+
+- Include lib directory
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.8
+
+## 0.1.7
+
+### Patch Changes
+
+- Include tsconfig and src in package
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.7
+
+## 0.1.6
+
+### Patch Changes
+
+- Include entire bin directory in package
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.6
+
+## 0.1.5
+
+### Patch Changes
+
+- Include CDK config in package
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

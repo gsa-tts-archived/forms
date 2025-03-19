@@ -27,6 +27,7 @@ export class FormsEcrRepository extends Construct {
     }
 
     // Grant AppRunner read access to the ECR repository
+    console.log('Granting AppRunner read access to the ECR repository');
     this.repository.grantPull(new iam.ServicePrincipal('build.apprunner.amazonaws.com'));
   }
 }
