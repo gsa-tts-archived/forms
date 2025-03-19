@@ -33,22 +33,26 @@ const meta: Meta<typeof PageSet> = {
 
 export default meta;
 
+const pages = [
+  {
+    title: 'First page',
+    selected: false,
+    url: '#/?page=0',
+    active: false,
+  },
+  {
+    title: 'Second page',
+    selected: true,
+    url: '#/?page=0',
+    active: true,
+  },
+];
+
 export const Basic = {
   args: {
     _patternId: 'test-id',
     type: 'page-set',
-    pages: [
-      {
-        title: 'First page',
-        selected: false,
-        url: '#/?page=0',
-      },
-      {
-        title: 'Second page',
-        selected: true,
-        url: '#/?page=0',
-      },
-    ],
+    links: {pages, pageWindow: pages},
     actions: [],
   } satisfies PageSetProps,
 } satisfies StoryObj<typeof PageSet>;

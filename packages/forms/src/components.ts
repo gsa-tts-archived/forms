@@ -117,7 +117,15 @@ export type CheckboxProps = PatternProps<{
 
 export type PageSetProps = PatternProps<{
   type: 'page-set';
-  pages: { title: string; selected: boolean; url: string }[];
+  links: {
+    pages: { title: string; selected: boolean; url: string; active: boolean }[];
+    pageWindow: {
+      title: string;
+      selected: boolean;
+      url?: string;
+      active: boolean;
+    }[];
+  };
   actions: PromptAction[];
 }>;
 

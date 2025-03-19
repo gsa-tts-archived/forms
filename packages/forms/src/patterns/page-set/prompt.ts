@@ -41,28 +41,56 @@ export const createPrompt: CreatePrompt<PageSetPattern> = (
     pageIndex: activePage,
     pattern,
   });
+  const links = getPages(pattern, session, activePage);
   return {
     props: {
       _patternId: pattern.id,
       type: 'page-set',
       actions,
-      pages: pattern.data.pages.map((patternId, index) => {
-        const childPattern = getPattern(session.form, patternId) as PagePattern;
-        if (childPattern.type !== 'page') {
-          throw new Error('Page set children must be pages');
-        }
-        const params = new URLSearchParams({
-          ...session.route?.params,
-          page: index.toString(),
-        });
-        return {
-          title: childPattern.data.title || 'Untitled',
-          selected: index === activePage,
-          url: session.route?.url + '?' + params.toString(),
-        };
-      }),
+      links,
     } satisfies PageSetProps,
     children,
+  };
+};
+
+const getPages = (
+  pattern: PageSetPattern,
+  session: FormSession,
+  activePage: number | null
+) => {
+  const pages = pattern.data.pages.map((patternId, index) => {
+    const childPattern = getPattern(session.form, patternId) as PagePattern;
+    if (childPattern.type !== 'page') {
+      throw new Error('Page set children must be pages');
+    }
+    const params = new URLSearchParams({
+      ...session.route?.params,
+      page: index.toString(),
+    });
+    return {
+      title: childPattern.data.title || 'Untitled',
+      selected: index === activePage,
+      url: session.route?.url + '?' + params.toString(),
+      active: index <= (activePage || 0),
+    };
+  });
+
+  if (activePage === null) {
+    return {
+      pages,
+      pageWindow: pages,
+    };
+  }
+
+  const topPadding = 1;
+  const bottomPadding = 5;
+  return {
+    pages,
+    // Crop the list of pages to a window around the active page
+    pageWindow: pages.slice(
+      Math.max(activePage - topPadding, 0),
+      Math.min(activePage + bottomPadding + 1, pattern.data.pages.length)
+    ),
   };
 };
 
