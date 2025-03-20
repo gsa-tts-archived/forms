@@ -4,7 +4,6 @@ import { type SelectDropdownPattern } from '@gsa-tts/forms-core';
 
 import { createPatternEditStoryMeta } from '../common/story-helper.js';
 import FormEdit from '../../index.js';
-import CheckboxPatternEdit from '../CheckboxPatternEdit/index.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import { expect, userEvent } from '@storybook/test';
 import { within } from '@testing-library/react';
@@ -73,7 +72,7 @@ export const AddField: StoryObj<typeof FormEdit> = {
 
     await userEvent.click(
       canvas.getByRole('button', {
-        name: /add new/i,
+        name: /add option/i,
       })
     );
 
@@ -83,7 +82,7 @@ export const AddField: StoryObj<typeof FormEdit> = {
   },
 };
 
-export const Error: StoryObj<typeof CheckboxPatternEdit> = {
+export const Error: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
     userEvent.setup();
 
