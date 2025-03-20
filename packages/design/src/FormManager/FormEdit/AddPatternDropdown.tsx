@@ -131,7 +131,6 @@ const sidebarPatterns: DropdownPattern[] = [
   ],
   ['rich-text', defaultFormConfig.patterns['rich-text'], 'Other'],
   ['attachment', defaultFormConfig.patterns['attachment'], 'Other'],
-  ['package-download', defaultFormConfig.patterns['package-download'], 'Other'],
 ] as const;
 
 export const compoundFieldChildPatterns: DropdownPattern[] =

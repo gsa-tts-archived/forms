@@ -139,7 +139,7 @@ const EditComponent = ({
           })}
           htmlFor={fieldId('legend')}
         >
-          Legend Text Element
+          Question Text
           {legend.error ? (
             <span className="usa-error-message" role="alert">
               {legend.error.message}
