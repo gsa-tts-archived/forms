@@ -60,6 +60,7 @@ export const addDocument = async (
 ) => {
   const fields = await getDocumentFieldData(fileDetails.data);
   const json = await context.fetchPdfApiResponse(fileDetails.data);
+  console.log(json)
   const parsedPdf = await processApiResponse(json);
 
   if (parsedPdf) {

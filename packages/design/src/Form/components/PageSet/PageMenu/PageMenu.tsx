@@ -28,7 +28,7 @@ export const PageMenu = ({ pages, pageWindow }: PageMenuProps) => {
             onChange={event => {
               const url = event.target.value;
               if (url) {
-                window.location.assign(url);
+                window.location.href = url;
               }
             }}
           >
@@ -50,12 +50,27 @@ export const PageMenu = ({ pages, pageWindow }: PageMenuProps) => {
             <a className={classNames(styles.usaNavLink)} href={page.url}>
               <span
                 className={classNames({
-                  'text-disabled-lighter': !page.active,
+                  'text-primary': page.active,
                 })}
               >
                 {page.title}
               </span>
             </a>
+            {/*
+            <ul className="usa-sidenav__sublist">
+              <li className="usa-sidenav__item">
+                <a href="javascript:void(0);">Child link</a>
+              </li>
+              <li className="usa-sidenav__item">
+                <a href="javascript:void(0);">Child link</a>
+              </li>
+              <li className="usa-sidenav__item">
+                <a href="javascript:void(0);" className="usa-current">
+                  Child link
+                </a>
+              </li>
+            </ul>
+            */}
           </li>
         ))}
       </ul>

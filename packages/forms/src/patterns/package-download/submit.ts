@@ -10,9 +10,7 @@ import { type PackageDownloadPattern } from './index';
 export const downloadPackageHandler: SubmitHandler<
   PackageDownloadPattern
 > = async (context, opts) => {
-  if (!sessionIsComplete(context.config, opts.session)) {
-    return failure('Form is not complete');
-  }
+
 
   const outputsResult: Result<(FormOutput & { data: Uint8Array })[]> =
     await Promise.all(
@@ -57,6 +55,8 @@ const generateDocumentPackage = async (
   const errors = new Array<string>();
   const documents = new Array<{ fileName: string; data: Uint8Array }>();
   for (const document of outputs) {
+    let { data, ...output } = document;
+    console.log(output);
     const docFieldData = createFormOutputFieldData(document, formData);
     const pdfDocument = await fillPDF(document.data, docFieldData);
     if (!pdfDocument.success) {

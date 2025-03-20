@@ -74,6 +74,7 @@ const getPages = (
       active: index <= (activePage || 0),
     };
   });
+  console.log(JSON.stringify(pages.map(page => page.title)));
 
   if (activePage === null) {
     return {
@@ -82,8 +83,8 @@ const getPages = (
     };
   }
 
-  const topPadding = 1;
-  const bottomPadding = 5;
+  const topPadding = 15;
+  const bottomPadding = 15;
   return {
     pages,
     // Crop the list of pages to a window around the active page

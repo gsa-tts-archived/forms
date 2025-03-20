@@ -92,6 +92,10 @@ const setFormFieldData = (
   fieldName: string,
   fieldValue: any
 ) => {
+  if (fieldValue === undefined) {
+    return;
+  }
+  console.log('**********', fieldName, fieldValue);
   if (fieldType === 'TextField') {
     const field = form.getTextField(fieldName);
     field.setText(fieldValue);
