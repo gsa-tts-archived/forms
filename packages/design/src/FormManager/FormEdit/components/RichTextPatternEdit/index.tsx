@@ -5,7 +5,6 @@ import { EditorContent, useEditor } from '@tiptap/react';
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 
-import { enLocale as message } from '@gsa-tts/forms-common';
 import {
   type PatternId,
   type PatternMap,
