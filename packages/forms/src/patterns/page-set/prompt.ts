@@ -83,15 +83,24 @@ const getPages = (
     };
   }
 
-  const topPadding = 15;
-  const bottomPadding = 15;
+  // Crop the list of pages to a window around the active page
+  let topPadding = Math.min(activePage, 3);
+  const bottomPadding = 10 - topPadding;
+  const pageWindow = pages.slice(
+    Math.max(activePage - topPadding, 0),
+    Math.min(activePage + bottomPadding + 1, pattern.data.pages.length)
+  );
+  // As a shortcut, append the last page.
+  if (activePage < pattern.data.pages.length - 1) {
+    const lastPage = pages[pattern.data.pages.length - 1];
+    pageWindow.push({
+      ...lastPage,
+      title: `... ${lastPage.title}`,
+    });
+  }
   return {
     pages,
-    // Crop the list of pages to a window around the active page
-    pageWindow: pages.slice(
-      Math.max(activePage - topPadding, 0),
-      Math.min(activePage + bottomPadding + 1, pattern.data.pages.length)
-    ),
+    pageWindow,
   };
 };
 

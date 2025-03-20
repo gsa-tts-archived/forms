@@ -21,25 +21,6 @@ export const PageMenu = ({ pages, pageWindow }: PageMenuProps) => {
   return (
     <div className={`${styles.sideNavWrapper} position-sticky`}>
       <ul className={`${styles.sideNav} usa-sidenav`}>
-        <li className="usa-sidenav__item">
-          <select
-            className="usa-select margin-bottom-3"
-            defaultValue={pages.filter(page => page.selected)[0].url}
-            onChange={event => {
-              const url = event.target.value;
-              if (url) {
-                window.location.href = url;
-              }
-            }}
-          >
-            <option value="">- Select page -</option>
-            {pages.map((page, index) => (
-              <option key={index} value={page.url}>
-                {page.title}
-              </option>
-            ))}
-          </select>
-        </li>
         {pageWindow.map((page, index) => (
           <li
             key={index}
