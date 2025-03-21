@@ -56,7 +56,6 @@ const generateDocumentPackage = async (
   const documents = new Array<{ fileName: string; data: Uint8Array }>();
   for (const document of outputs) {
     let { data, ...output } = document;
-    console.log(output);
     const docFieldData = createFormOutputFieldData(document, formData);
     const pdfDocument = await fillPDF(document.data, docFieldData);
     if (!pdfDocument.success) {
