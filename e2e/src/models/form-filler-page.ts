@@ -1,6 +1,4 @@
 import { Locator, Page } from '@playwright/test';
-// import { expect } from '../fixtures/import-file.fixture.js';
-// import { enLocale as message } from '@atj/common';
 
 export class FormFillerPage {
   private readonly page: Page;
