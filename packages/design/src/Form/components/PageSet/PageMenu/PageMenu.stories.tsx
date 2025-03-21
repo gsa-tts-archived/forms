@@ -10,24 +10,27 @@ const meta: Meta<typeof PageMenu> = {
 
 export default meta;
 
-const pages = [
-  {
-    selected: false,
-    title: 'First page',
-    url: '',
-    active: false,
-  },
-  {
-    selected: true,
-    title: 'Second page',
-    url: '',
-    active: true,
-  },
-];
-
 export const Default: StoryObj<typeof PageMenu> = {
   args: {
-    pages,
-    pageWindow: pages,
+    pages: [
+      {
+        selected: false,
+        title: 'First page',
+        url: '',
+        visited: true,
+      },
+      {
+        selected: true,
+        title: 'Second page',
+        url: '',
+        visited: true,
+      },
+      {
+        selected: false,
+        title: 'Third page',
+        url: '',
+        visited: false,
+      },
+    ],
   },
 };

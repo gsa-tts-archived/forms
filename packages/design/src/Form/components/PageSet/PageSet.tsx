@@ -10,15 +10,12 @@ import { renderPromptComponents } from '../../form-common.js';
 import classNames from 'classnames';
 
 const PageSet: PatternComponent<PageSetProps> = props => {
-  const currentPageIndex = props.links.pages.findIndex(page => page.selected);
+  const currentPageIndex = props.pages.findIndex(page => page.selected);
 
   return (
     <div className="grid-row">
       <nav className="tablet:grid-col-3 padding-x-2 tablet:padding-y-3 tablet:padding-right-4 tablet:padding-left-0">
-        <PageMenu
-          pages={props.links.pages}
-          pageWindow={props.links.pageWindow}
-        />
+        <PageMenu pages={props.pages} />
       </nav>
       <div
         className="tablet:grid-col-9 tablet:padding-left-4 padding-left-0 padding-bottom-3 padding-top-3 tablet:border-left tablet:border-base-lighter contentWrapper"
@@ -26,10 +23,10 @@ const PageSet: PatternComponent<PageSetProps> = props => {
       >
         <div className="usa-step-indicator usa-step-indicator--no-labels">
           <ol className="usa-step-indicator__segments">
-            {props.links.pages.map((page, index) => (
+            {props.pages.map((page, index) => (
               <li
                 className={classNames('usa-step-indicator__segment', {
-                  'usa-step-indicator__segment--complete': !page.selected,
+                  'usa-step-indicator__segment--complete': page.visited,
                   'usa-step-indicator__segment--current': page.selected,
                 })}
                 key={index}
@@ -48,11 +45,11 @@ const PageSet: PatternComponent<PageSetProps> = props => {
                   {currentPageIndex + 1}
                 </span>
                 <span className="usa-step-indicator__total-steps">
-                  {` of ${props.links.pages.length}`}
+                  {` of ${props.pages.length}`}
                 </span>
               </span>
               <span className="usa-step-indicator__heading-text">
-                {props.links.pages[currentPageIndex].title}
+                {props.pages[currentPageIndex].title}
               </span>
             </h4>
           </div>

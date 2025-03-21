@@ -47,7 +47,22 @@ export const createPrompt: CreatePrompt<PageSetPattern> = (
       _patternId: pattern.id,
       type: 'page-set',
       actions,
-      links,
+      pages: pattern.data.pages.map((patternId, index) => {
+        const childPattern = getPattern(session.form, patternId) as PagePattern;
+        if (childPattern.type !== 'page') {
+          throw new Error('Page set children must be pages');
+        }
+        const params = new URLSearchParams({
+          ...session.route?.params,
+          page: index.toString(),
+        });
+        return {
+          title: childPattern.data.title || 'Untitled',
+          selected: index === activePage,
+          url: session.route?.url + '?' + params.toString(),
+          visited: index < (activePage || 0),
+        };
+      }),
     } satisfies PageSetProps,
     children,
   };

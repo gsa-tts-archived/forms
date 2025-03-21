@@ -10,8 +10,6 @@ import { type PackageDownloadPattern } from './index';
 export const downloadPackageHandler: SubmitHandler<
   PackageDownloadPattern
 > = async (context, opts) => {
-
-
   const outputsResult: Result<(FormOutput & { data: Uint8Array })[]> =
     await Promise.all(
       opts.session.form.outputs.map(async output => {
