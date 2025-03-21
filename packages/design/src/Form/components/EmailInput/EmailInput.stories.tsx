@@ -16,9 +16,11 @@ const meta: Meta<typeof EmailInputPattern> = {
           },
         });
         return (
-          <FormProvider {...formMethods}>
-            <Story {...args} />
-          </FormProvider>
+          <div className="padding-left-2">
+            <FormProvider {...formMethods}>
+              <Story {...args} />
+            </FormProvider>
+          </div>
         );
       };
       return <FormDecorator />;
@@ -33,15 +35,15 @@ export const Default: StoryObj<typeof EmailInputPattern> = {
   args: {
     emailId: 'email',
     label: 'Email address',
-    required: true,
+    required: false,
   },
 };
 
-export const WithoutRequired: StoryObj<typeof EmailInputPattern> = {
+export const WithRequired: StoryObj<typeof EmailInputPattern> = {
   args: {
     emailId: 'email',
     label: 'Email address',
-    required: false,
+    required: true,
   },
 };
 
@@ -52,7 +54,29 @@ export const WithError: StoryObj<typeof EmailInputPattern> = {
     required: true,
     error: {
       type: 'custom',
-      message: 'This field has an error',
+      message: 'Invalid email format ',
+    },
+  },
+};
+
+export const WithHint: StoryObj<typeof EmailInputPattern> = {
+  args: {
+    emailId: 'email',
+    label: 'Email address',
+    hint: 'Enter an email address without spaces using this format: email@domain.com',
+    required: false,
+  },
+};
+
+export const WithHintAndError: StoryObj<typeof EmailInputPattern> = {
+  args: {
+    emailId: 'email',
+    label: 'Email address',
+    hint: 'Enter an email address without spaces using this format: email@domain.com',
+    required: false,
+    error: {
+      type: 'custom',
+      message: 'Invalid email format',
     },
   },
 };

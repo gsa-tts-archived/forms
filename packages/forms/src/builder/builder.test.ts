@@ -15,14 +15,14 @@ describe('form builder', () => {
   it('addPattern adds initial pattern of given type', () => {
     const builder = new BlueprintBuilder(defaultFormConfig);
     expect(Object.keys(builder.form.patterns).length).toEqual(2);
-    builder.addPatternToPage('input');
+    builder.addDefaultPatternToPage('input');
     expect(Object.keys(builder.form.patterns).length).toEqual(3);
   });
 
   it('addPattern preserves existing structure', () => {
     const initial = createTestBlueprint();
     const builder = new BlueprintBuilder(defaultFormConfig, initial);
-    const newPattern = builder.addPatternToPage('input');
+    const newPattern = builder.addDefaultPatternToPage('input');
     expect(builder.form.patterns[newPattern.id]).toEqual(newPattern);
     const oldPage = getPattern<PagePattern>(initial, 'page-1');
     const newPage = getPattern<PagePattern>(builder.form, 'page-1');
@@ -301,10 +301,12 @@ describe('form builder', () => {
           id: 'radio-group-1',
           data: {
             label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -382,10 +384,12 @@ describe('form builder', () => {
           id: 'radio-group-1',
           data: {
             label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -465,10 +469,12 @@ describe('form builder', () => {
           id: 'radio-group-1',
           data: {
             label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -544,10 +550,12 @@ describe('form builder', () => {
           id: 'radio-group-1',
           data: {
             label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -557,10 +565,12 @@ describe('form builder', () => {
             label: expect.stringMatching(
               /^\(\s*Copy\s+\d{1,2}\/\d{1,2}\/\d{4},\s+\d{1,2}:\d{2}:\d{2}\s+[AP]M\)\s*Multiple choice question label/
             ),
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
       },
@@ -776,10 +786,12 @@ export const createTestBlueprintMultipleFieldsets = () => {
           id: 'radio-group-1',
           data: {
             label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         } satisfies RadioGroupPattern,
       ],

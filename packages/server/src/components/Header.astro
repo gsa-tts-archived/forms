@@ -4,6 +4,7 @@ import logoSvg from '@gsa-tts/forms-design/images/logo.svg';
 
 import { getServerContext, getUserSession } from '../config/astro.js';
 import * as routes from '../routes';
+import DOJHeader from './DOJHeader.astro';
 
 const { baseUrl, title } = await getServerContext(Astro);
 
@@ -16,6 +17,7 @@ const getNavLinkClasses = (url: string) => {
 };
 
 const { session } = getUserSession(Astro);
+const isForm = Astro.url.href.includes('/forms/');
 ---
 
 <div class="usa-overlay"></div>
@@ -26,6 +28,9 @@ const { session } = getUserSession(Astro);
       the public.</span
     >
   </div>
+  {isForm ? (
+    <DOJHeader />
+  ) : (
   <div class="bg-base-darkest">
     <div class="usa-navbar">
       <div class="usa-logo">
@@ -39,6 +44,7 @@ const { session } = getUserSession(Astro);
       <button type="button" class="usa-menu-btn">Menu</button>
     </div>
   </div>
+  )}
   <nav aria-label="Primary navigation" class="usa-nav">
     <div class="usa-nav__inner">
       <button type="button" class="usa-nav__close">
@@ -50,13 +56,6 @@ const { session } = getUserSession(Astro);
             href={routes.getHomeUrl(baseUrl)}
             class={getNavLinkClasses(routes.getHomeUrl(baseUrl))}
             ><span>My Forms</span></a
-          >
-        </li>
-        <li class="usa-nav__primary-item">
-          <a
-            href={routes.getStorybookUrl(baseUrl)}
-            class={getNavLinkClasses(routes.getStorybookUrl(baseUrl))}
-            ><span>Storybook</span></a
           >
         </li>
         <li class="usa-nav__primary-item">

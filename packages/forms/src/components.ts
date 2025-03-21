@@ -50,10 +50,8 @@ export type AddressFieldProps = {
 
 export type AddressComponentProps = PatternProps<{
   type: 'address';
-  errors?: {
-    physical?: FormError;
-    mailing?: FormError;
-  };
+  error?: FormError;
+  value?: any;
   legend?: string;
   required?: boolean;
   addMailingAddress?: boolean;
@@ -114,11 +112,12 @@ export type CheckboxProps = PatternProps<{
   id: string;
   label: string;
   defaultChecked: boolean;
+  error?: FormError;
 }>;
 
 export type PageSetProps = PatternProps<{
   type: 'page-set';
-  pages: { title: string; selected: boolean; url: string }[];
+  pages: { title: string; selected: boolean; url: string; visited: boolean }[];
   actions: PromptAction[];
 }>;
 
@@ -131,12 +130,16 @@ export type RadioGroupProps = PatternProps<{
   type: 'radio-group';
   groupId: string;
   legend: string;
+  label: string;
+  hint?: string;
   options: {
     id: string;
     name: string;
     label: string;
     defaultChecked: boolean;
   }[];
+  required: boolean;
+  error?: FormError;
 }>;
 
 export type SelectDropdownProps = PatternProps<{
@@ -147,8 +150,10 @@ export type SelectDropdownProps = PatternProps<{
     label: string;
   }[];
   label: string;
+  hint?: string;
   required: boolean;
   error?: FormError;
+  value?: string;
 }>;
 
 export type DateOfBirthProps = PatternProps<{
@@ -173,6 +178,7 @@ export type EmailInputProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
+  hint?: string;
   value: {
     email: string;
   };
@@ -187,8 +193,8 @@ export type NameProps = PatternProps<{
   givenNameHint: string;
   familyNameHint: string;
   required?: boolean;
-  errors?: FormErrors;
-  values?: {
+  error?: FormError;
+  value?: {
     givenName?: string;
     middleName?: string;
     familyName?: string;
@@ -215,6 +221,16 @@ export type SocialSecurityNumberProps = PatternProps<{
   value: string;
 }>;
 
+export type SexProps = PatternProps<{
+  type: 'sex-input';
+  sexId: string;
+  label: string;
+  required: boolean;
+  error?: FormError;
+  helperText: string;
+  value: string;
+}>;
+
 export type GenderIdProps = PatternProps<{
   type: 'gender-id';
   genderId: string;
@@ -222,7 +238,9 @@ export type GenderIdProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
-  value: string;
+  value: {
+    gender: string;
+  };
   preferNotToAnswerText?: string;
   preferNotToAnswerChecked?: boolean;
 }>;
