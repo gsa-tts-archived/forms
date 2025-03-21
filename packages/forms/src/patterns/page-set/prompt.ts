@@ -84,13 +84,16 @@ const getPages = (
   }
 
   // Crop the list of pages to a window around the active page
-  let topPadding = Math.min(activePage, 3);
-  const bottomPadding = 10 - topPadding;
+  //let topPadding = Math.min(activePage, 3);
+  //const bottomPadding = 10 - topPadding;
+  const topPadding = 20;
+  const bottomPadding = 20;
   const pageWindow = pages.slice(
     Math.max(activePage - topPadding, 0),
     Math.min(activePage + bottomPadding + 1, pattern.data.pages.length)
   );
   // As a shortcut, append the last page.
+  /*
   if (activePage < pattern.data.pages.length - 1) {
     const lastPage = pages[pattern.data.pages.length - 1];
     pageWindow.push({
@@ -98,6 +101,7 @@ const getPages = (
       title: `... ${lastPage.title}`,
     });
   }
+  */
   return {
     pages,
     pageWindow,
