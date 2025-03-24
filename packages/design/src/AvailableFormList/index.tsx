@@ -23,6 +23,7 @@ export default function AvailableFormList({
   urlForFormManager: UrlForFormManager;
 }) {
   const [forms, setForms] = useState<FormDetails[]>([]);
+  console.log('there are my forms ', forms);
   useEffect(() => {
     formService.getFormList().then(result => {
       if (result.success) {

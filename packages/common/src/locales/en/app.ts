@@ -17,6 +17,7 @@ export const en = {
     attachment: {
       ...defaults,
       displayName: 'Attachment',
+      fieldLabel: 'Question text',
       maxAttachmentsLabel: 'Max attachments',
       allowedFileTypesLabel: 'Allowable file types',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
