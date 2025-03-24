@@ -3,8 +3,11 @@
   "version": "0.1.2",
   "private": true,
   "scripts": {
+    "auth": "pnpm --filter=@gsa-tts/forms-cli cli secrets generate-test-db-session -p ../../packages/server/src/main.db -o ../../e2e/.env",
     "dev": "tsc -w",
     "test:storybook": "test-storybook",
+    "pretest:dev": "pnpm auth",
+    "pretest": "pnpm auth",
     "test:dev": "pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0",
     "test": "pnpm playwright test"
   },

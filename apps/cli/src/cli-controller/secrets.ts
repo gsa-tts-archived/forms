@@ -107,11 +107,16 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
       '-p, --path <string>',
       'Path to the SQLite database file to prepare',
     )
+    .requiredOption(
+      '-o, --output <string>',
+      'Path to output the .env file used for testing',
+    )
     .action(async (options) => {
       const { createFilesystemDatabaseContext } = await import(
         '@gsa-tts/forms-database/context'
-      );
+        );
       const dbPath = options.path;
+      const outputFile = options.output;
 
       try {
         console.log('Preparing database at:', dbPath);
@@ -134,15 +139,21 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
         const testEmail = 'test@example.com';
 
         const user = await authRepository.createUser(testEmail);
-        console.log(`Test user created with id: ${user}`);
+        if (!user) {
+          console.log(`Test user created with id: ${testEmail}`);
+        }
         const userId = await authRepository.getUserId(testEmail);
 
-        if(userId) {
+        if (userId) {
           const lucia = await authContext.getLucia();
           const session = await lucia.createSession(userId, {
             session_token: randomUUID(),
           });
           console.log(`Test session created: ${session.id}`);
+
+          const envContent = `AUTH_SESSION=${session.id}\nE2E_ENDPOINT=http://localhost:4321\n`;
+          await fs.writeFile(outputFile, envContent, 'utf8');
+          console.log(`.env file written to: ${outputFile}`);
         }
         console.log('Auth Context & Database Prepared Successfully!');
       } catch (error) {
