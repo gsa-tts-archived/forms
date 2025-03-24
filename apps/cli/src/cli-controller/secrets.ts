@@ -147,6 +147,8 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
         console.log('Auth Context & Database Prepared Successfully!');
       } catch (error) {
         console.error('Error preparing the database:', error.message);
+      } finally {
+        process.exit();
       }
     });
 };
