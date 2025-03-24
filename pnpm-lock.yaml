@@ -80,6 +80,12 @@ importers:
 
   apps/cli:
     dependencies:
+      '@gsa-tts/forms-auth':
+        specifier: workspace:^
+        version: link:../../packages/auth
+      '@gsa-tts/forms-database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@gsa-tts/forms-infra-core':
         specifier: workspace:*
         version: link:../../infra/core

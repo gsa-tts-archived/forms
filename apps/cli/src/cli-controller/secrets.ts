@@ -8,6 +8,8 @@ import {
   getSecretsVault,
 } from '@gsa-tts/forms-infra-core';
 import { type Context } from './types.js';
+import { createAuthRepository, BaseAuthContext } from '@gsa-tts/forms-auth';
+import { randomUUID } from 'crypto';
 
 export const addSecretCommands = (ctx: Context, cli: Command) => {
   const cmd = cli
@@ -79,7 +81,7 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
     .command('set-login-gov-keys')
     .description(
       'generate and save login.gov keypair; if it already exists, it is not ' +
-        'updated (future work might include adding key rotation)'
+      'updated (future work might include adding key rotation)',
     )
     .argument('<deploy-env>', 'deployment environment (dev, demo)')
     .argument('<app-key>', 'application key')
@@ -89,12 +91,62 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
       const loginResult = await commands.setLoginGovSecrets(
         { vault, secretsDir },
         env,
-        appKey
+        appKey,
       );
       if (loginResult.preexisting) {
         console.log('Keypair already exists.');
       } else {
-        console.log(`New keypair added`);
+        console.log('New keypair added');
+      }
+    });
+
+  cmd
+    .command('generate-test-db-session')
+    .description('Prepare the database and auth context for testing')
+    .requiredOption(
+      '-p, --path <string>',
+      'Path to the SQLite database file to prepare',
+    )
+    .action(async (options) => {
+      const { createFilesystemDatabaseContext } = await import(
+        '@gsa-tts/forms-database/context'
+      );
+      const dbPath = options.path;
+
+      try {
+        console.log('Preparing database at:', dbPath);
+
+        // The login flow is to create fs db context -> feed into base auth context constructor -> feed it into the auth service
+        const dbContext = await createFilesystemDatabaseContext(dbPath);
+        const authRepository = createAuthRepository(dbContext);
+        const authContext = new BaseAuthContext(
+          authRepository,
+          {
+            // Stub or mock a login provider for testing (can be plugged in as needed)
+            authorize: () => Promise.resolve(true),
+          },
+          () => '', // Mock getCookie function
+          () => {}, // Mock setCookie function
+          () => {}, // Mock setUserSession function
+          () => Promise.resolve(true), // Mock isUserAuthorized function
+        );
+
+        const testEmail = 'test@example.com';
+
+        const user = await authRepository.createUser(testEmail);
+        console.log(`Test user created with id: ${user}`);
+        const userId = await authRepository.getUserId(testEmail);
+
+        if(userId) {
+          const lucia = await authContext.getLucia();
+          const session = await lucia.createSession(userId, {
+            session_token: randomUUID(),
+          });
+          console.log(`Test session created: ${session.id}`);
+        }
+        console.log('Auth Context & Database Prepared Successfully!');
+      } catch (error) {
+        console.error('Error preparing the database:', error.message);
       }
     });
 };
