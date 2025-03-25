@@ -74,14 +74,6 @@ export class FormsPlatformStack extends cdk.Stack {
       securityGroups: [appRunnerSecurityGroup],
     });
 
-    // Allow App Runner security group to access RDS security group
-    /*
-    rdsSecurityGroup.addIngressRule(
-      appRunnerSecurityGroup,
-      ec2.Port.tcp(5432),
-      'Allow postgres access from App Runner'
-    );
-    */
     new ec2.CfnSecurityGroupIngress(this, `${id}-apprunner-rds-ingress`, {
       groupId: rdsSecurityGroup.securityGroupId,
       sourceSecurityGroupId: appRunnerSecurityGroup.securityGroupId,
@@ -134,7 +126,8 @@ export class FormsPlatformStack extends cdk.Stack {
             DB_NAME: 'postgres',
           },
           environmentSecrets: {
-            DB_SECRET_ARN: apprunner.Secret.fromSecretsManager(dbSecret),
+            DB_SECRET: apprunner.Secret.fromSecretsManager(dbSecret),
+            //DB_SECRET_ARN: dbSecret,
           },
         },
         repository: ecr.Repository.fromRepositoryAttributes(
@@ -172,28 +165,10 @@ export class FormsPlatformStack extends cdk.Stack {
       }),
     });
 
-    // Create an ECR repository for the App Runner service's images.
-    /*
-    const ecrRepository = new ecr.Repository(this, `${id}-ecr-repository`, {
-      repositoryName: `forms-platform-${environment.valueAsString}`,
-    });
-    ecrRepository.grantPull(appRunnerService);
-    */
-
-    // Export a publicly-accessible URL for the App Runner service≥
-    /*
+    // Export a publicly-accessible URL for the App Runner service.
     new cdk.CfnOutput(this, 'FormsPlatformUrl', {
       value: appRunnerService.serviceUrl,
       description: 'URL for the Forms Platform',
     });
-    */
-
-    // Export a publicly-accessible URL for the App Runner service≥
-    /*
-    new cdk.CfnOutput(this, 'FormsPlatformEcrUrl', {
-      value: ecrRepository.repositoryUri,
-      description: 'ECR repository URI for the Forms Platform',
-    });
-    */
   }
 }

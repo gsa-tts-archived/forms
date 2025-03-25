@@ -2,18 +2,27 @@ import * as cdk from 'aws-cdk-lib';
 import * as codebuild from 'aws-cdk-lib/aws-codebuild';
 import * as codepipeline from 'aws-cdk-lib/aws-codepipeline';
 import * as codepipeline_actions from 'aws-cdk-lib/aws-codepipeline-actions';
+import * as iam from 'aws-cdk-lib/aws-iam';
+
 import * as ecr_repository from './ecr-repository';
+import { FormsEcrRepository } from './ecr-repository';
 
 export class FormsPipelineStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    // Read a parameter called "testparameter" from the stack
+    const codeConnectionArnParam = new cdk.CfnParameter(this, 'codeConnectionArn', {
+      type: 'String',
+      description:
+        "ARN for the source repository's AWS CodeConnection configuration",
+      allowedPattern: '.+',
+    });
+    const codeConnectionArn = codeConnectionArnParam.valueAsString
+
     // Create the ECR repository
     console.log('Creating ECR repository...');
-    const ecrRepo = new ecr_repository.FormsEcrRepository(
-      this,
-      'FormsEcrRepository'
-    );
+    const ecrRepo = new FormsEcrRepository(this, 'FormsEcrRepositoryConstruct');
     // Build CodeBuild Project: Builds & pushes Docker image
     console.log('Creating CodeBuild project...');
     const dockerBuild = new codebuild.PipelineProject(
@@ -57,6 +66,14 @@ export class FormsPipelineStack extends cdk.Stack {
     const pipeline = new codepipeline.Pipeline(this, 'Pipeline', {
       pipelineName: 'FormsBuildImagePipeline',
     });
+    pipeline.role.addToPrincipalPolicy(
+      new iam.PolicyStatement({
+        actions: ['codestar-connections:UseConnection'],
+        resources: [
+          codeConnectionArn,
+        ],
+      })
+    );
     ecrRepo.repository.grantPullPush(dockerBuild);
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
@@ -71,8 +88,7 @@ export class FormsPipelineStack extends cdk.Stack {
           owner: 'GSA-TTS',
           repo: 'forms-doj-stack',
           branch: 'main',
-          connectionArn:
-            'arn:aws:codeconnections:us-east-2:001907687576:connection/0415c419-d556-46cf-91d9-226dfa88d71b',
+          connectionArn: codeConnectionArn,
           output: sourceArtifact,
         }),
       ],

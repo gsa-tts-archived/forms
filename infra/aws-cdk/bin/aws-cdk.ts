@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { FormsPlatformStack } from '../lib/forms-stack';
 import { FormsPipelineStack } from '../lib/pipeline-stack';
+import { FormsPlatformStack } from '../lib/platform-stack';
 
 const app = new cdk.App();
 new FormsPlatformStack(app, 'FormsPlatformStack', {
