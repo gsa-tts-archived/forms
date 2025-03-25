@@ -76,7 +76,6 @@ export class FormsPipelineStack extends cdk.Stack {
     );
     ecrRepo.repository.grantPullPush(dockerBuild);
     const sourceArtifact = new codepipeline.Artifact();
-    const cloudAssemblyArtifact = new codepipeline.Artifact();
 
     // Pull from GitHub
     console.log('Adding source stage...');
@@ -107,6 +106,11 @@ export class FormsPipelineStack extends cdk.Stack {
       ],
     });
 
+    //this.addDeployStage(pipeline, ecrRepo, sourceArtifact);
+  }
+
+  private addDeployStage(pipeline: codepipeline.Pipeline, ecrRepo: ecr_repository.FormsEcrRepository, sourceArtifact: codepipeline.Artifact) {
+    const cloudAssemblyArtifact = new codepipeline.Artifact();
     // CodeBuild Project for CDK Synth
     console.log('Adding deploy stack CodeBuild pipeline project...');
     const deployStack = new codebuild.PipelineProject(
