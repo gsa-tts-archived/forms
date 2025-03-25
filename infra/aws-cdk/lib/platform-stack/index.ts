@@ -124,6 +124,7 @@ export class FormsPlatformStack extends cdk.Stack {
     dbSecret.grantRead(appRunnerRole);
 
     const appRunnerService = new apprunner.Service(this, `${id}-app-runner`, {
+      autoDeploymentsEnabled: true,
       source: apprunner.Source.fromEcr({
         imageConfiguration: {
           port: 4321,
