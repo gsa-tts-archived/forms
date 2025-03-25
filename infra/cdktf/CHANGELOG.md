@@ -1,5 +1,13 @@
 # @gsa-tts/forms-infra-cdktf
 
+## 0.1.12
+
+### Patch Changes
+
+- CDK work
+- Updated dependencies
+  - @gsa-tts/forms-infra-aws-cdk@0.1.12
+
 ## 0.1.11
 
 ### Patch Changes
