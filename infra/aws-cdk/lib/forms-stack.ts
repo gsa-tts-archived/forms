@@ -67,6 +67,13 @@ export class FormsPlatformStack extends cdk.Stack {
       }
     );
 
+    new ec2.InterfaceVpcEndpoint(this, 'SecretsManagerVPCEndpoint', {
+      vpc,
+      service: ec2.InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
+      subnets: { subnetType: ec2.SubnetType.PUBLIC },
+      securityGroups: [appRunnerSecurityGroup],
+    });
+
     // Allow App Runner security group to access RDS security group
     /*
     rdsSecurityGroup.addIngressRule(
@@ -174,10 +181,12 @@ export class FormsPlatformStack extends cdk.Stack {
     */
 
     // Export a publicly-accessible URL for the App Runner service≥
+    /*
     new cdk.CfnOutput(this, 'FormsPlatformUrl', {
       value: appRunnerService.serviceUrl,
       description: 'URL for the Forms Platform',
     });
+    */
 
     // Export a publicly-accessible URL for the App Runner service≥
     /*
