@@ -42,13 +42,6 @@ export class FormsPlatformStack extends cdk.Stack {
       maxAzs: 2,
     });
 
-    // Get the default security group
-    const defaultSecurityGroup = ec2.SecurityGroup.fromSecurityGroupId(
-      this,
-      'DefaultSecurityGroup',
-      vpc.vpcDefaultSecurityGroup
-    );
-
     // Security group for RDS
     const rdsSecurityGroup = new ec2.SecurityGroup(this, `${id}-rds-sg`, {
       vpc,
@@ -65,6 +58,20 @@ export class FormsPlatformStack extends cdk.Stack {
         description: 'Security group for App Runner service',
         allowAllOutbound: true,
       }
+    );
+
+    const loginGovSandboxIpAddresses = [
+      '108.156.107.56',
+      '108.156.107.41',
+      '108.156.107.98',
+      '108.156.107.80',
+    ];
+    loginGovSandboxIpAddresses.forEach(ip =>
+      appRunnerSecurityGroup.addEgressRule(
+        ec2.Peer.anyIpv4(),
+        ec2.Port.tcp(443),
+        'Allow outbound HTTPS traffic to idp.int.identitysandbox.gov'
+      )
     );
 
     new ec2.InterfaceVpcEndpoint(this, 'SecretsManagerVPCEndpoint', {

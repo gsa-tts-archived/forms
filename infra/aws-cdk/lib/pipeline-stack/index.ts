@@ -23,6 +23,7 @@ export class FormsPipelineStack extends cdk.Stack {
     // Create the ECR repository
     console.log('Creating ECR repository...');
     const ecrRepo = new FormsEcrRepository(this, 'FormsEcrRepositoryConstruct');
+
     // Build CodeBuild Project: Builds & pushes Docker image
     console.log('Creating CodeBuild project...');
     const dockerBuild = new codebuild.PipelineProject(
