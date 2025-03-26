@@ -39,11 +39,12 @@ test.describe('Import form from a provided sample', () => {
     await formPage.deletePattern('Page 3 of 4');
   });
 
-  test('Add a new page with a package download component', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
-    await formPage.navigateTo(formUrl);
-    await formPage.addPageWithPackageDownload('Download your documents');
-  });
+  // TODO: package download component will get re-added at some point. Build out this test.
+  // test('Add a new page with a package download component', async ({ page, formUrl }) => {
+  //   const formPage = new FormCreatePage(page);
+  //   await formPage.navigateTo(formUrl);
+  //   await formPage.addPageWithPackageDownload('Download your documents');
+  // });
 
   test('Reorder pages via drag and drop', async ({ page, formUrl }) => {
     const getPageMenuLinks = (links: (SVGElement | HTMLElement)[]) => links.map((link) => link.textContent?.trim() || '');

@@ -31,7 +31,7 @@ export class FormCreatePage {
 
   async addRichTextComponent(editorText: string) {
     await this.page.locator('.usa-sidenav').first().waitFor();
-    const menuButton = this.page.getByRole('button', { name: 'Question', exact: true });
+    const menuButton = this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true });
     await menuButton.click();
     await this.page
       .getByRole('button', { name: message.patterns.richText.displayName })
@@ -75,9 +75,12 @@ export class FormCreatePage {
   }
 
   async addPageWithPackageDownload(label: string) {
-    await this.page.getByRole('button', { name: 'Page' }).click();
+    await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
+    await this.page
+      .getByRole('button', { name: 'Page', exact: true })
+      .click();
     await this.page.getByRole('link', { name: 'Untitled Page' }).click();
-    await this.page.getByRole('button', { name: 'Question', exact: true }).click();
+    await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
     await this.page
       .getByRole('button', { name: message.patterns.packageDownload.displayName })
       .click();
