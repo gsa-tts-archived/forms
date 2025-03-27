@@ -59,13 +59,6 @@ const isForm = Astro.url.href.includes('/forms/');
           >
         </li>
         <li class="usa-nav__primary-item">
-          <a
-            href={routes.getStorybookUrl(baseUrl)}
-            class={getNavLinkClasses(routes.getStorybookUrl(baseUrl))}
-            ><span>Storybook</span></a
-          >
-        </li>
-        <li class="usa-nav__primary-item">
           {
             session ? (
               <a
