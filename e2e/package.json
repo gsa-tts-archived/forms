@@ -8,7 +8,7 @@
     "test:storybook": "test-storybook",
     "pretest:dev": "pnpm auth",
     "pretest": "pnpm auth",
-    "test:dev": "pnpm playwright test --headed --ui-port=8080 --ui-host=0.0.0.0",
+    "test:dev": "pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0",
     "test": "pnpm playwright test"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Page } from '@playwright/test';
 
 export class FormFillerPage {
   private readonly page: Page;
@@ -12,21 +12,23 @@ export class FormFillerPage {
   }
 
   async clickNextButton() {
-    const nextButton = this.page.getByRole('button', { name: 'Next' });
+    const nextButton = this.page.getByRole('button', { name: 'Next', exact: true });
     await nextButton.click();
   }
 
   async clickBackButton() {
-    const backButton = this.page.getByRole('button', { name: 'Back' });
+    const backButton = this.page.getByRole('link', { name: 'Back', exact: true });
     await backButton.click();
   }
 
-  async editFieldsetInput(fieldset: Locator, input: string, value: string) {
-    await fieldset.getByLabel(input).fill(value);
+  async getInput(role, matcher) {
+    return this.page.getByRole(role, matcher);
   }
 
-  async keyboardEnter() {
-    await this.page.keyboard.press('Enter');
+  async updateInputValue(role, matcher, value) {
+    const input = await this.getInput(role, matcher);
+    await input.first().fill(value);
   }
+
 
 }
