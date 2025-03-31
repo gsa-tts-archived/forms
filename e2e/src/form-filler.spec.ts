@@ -25,10 +25,6 @@ test.describe('Fill a form as an applicant', () => {
       const formPage = new FormFillerPage(page);
       await formPage.navigateTo(`${url.protocol}//${url.host}/forms/${formId}`);
 
-      await formPage.updateInputValue('textbox', { name: 'First Name', exact: true }, 'John');
-      await formPage.updateInputValue('textbox', { name: 'Middle Name', exact: true }, 'Michael');
-      await formPage.updateInputValue('textbox', { name: 'Last Name', exact: true }, 'Doe');
-
       await formPage.clickNextButton();
 
       expect(page.url()).toContain('page=1');
@@ -54,5 +50,5 @@ test.describe('Fill a form as an applicant', () => {
     } else {
       throw new Error('Invalid form URL');
     }
-  })
+  });
 });

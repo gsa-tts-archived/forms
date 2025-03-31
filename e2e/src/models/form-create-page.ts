@@ -74,23 +74,18 @@ export class FormCreatePage {
     await expect(pattern).not.toBeVisible();
   }
 
-  async addPageWithPackageDownload(label: string) {
+  async addPage() {
     await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
     await this.page
       .getByRole('button', { name: 'Page', exact: true })
       .click();
-    await this.page.getByRole('link', { name: 'Untitled Page' }).click();
+  }
+
+  async addPackageDownload() {
     await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
     await this.page
       .getByRole('button', { name: message.patterns.packageDownload.displayName })
       .click();
-    await this.page
-      .getByLabel(message.patterns.packageDownload.fieldLabel)
-      .fill(label);
-    await this.page.getByRole('button', { name: 'Save and Close' }).click();
-    await expect(
-      this.page.getByRole('button', { name: 'Download PDF' })
-    ).toBeVisible();
   }
 
   async moveListItem(buttonText: string, pageTitles: string[]) {

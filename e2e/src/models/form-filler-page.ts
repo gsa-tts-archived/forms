@@ -30,5 +30,4 @@ export class FormFillerPage {
     await input.first().fill(value);
   }
 
-
 }
