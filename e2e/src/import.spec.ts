@@ -39,7 +39,7 @@ test.describe('Import form from a provided sample', () => {
     await formPage.deletePattern('Page 3 of 4');
   });
 
-  test('Reorder pages via drag and drop', async ({ page, formUrl }) => {
+  test('Reorder pages via drag-and-drop', async ({ page, formUrl }) => {
     const getPageMenuLinks = (links: (SVGElement | HTMLElement)[]) => links.map((link) => link.textContent?.trim() || '');
     const formPage = new FormCreatePage(page);
     await formPage.navigateTo(formUrl);

@@ -91,6 +91,10 @@ jobs:
         shell: bash
         run: AUTH_SECRET=not-super-secret pnpm test:ci
 
+      - name: Run end-to-end tests
+        shell: bash
+        run: pnpm --filter=@gsa-tts/forms-e2e test:ci
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
