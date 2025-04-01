@@ -1,6 +1,6 @@
 {
   "name": "@gsa-tts/forms-e2e",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "scripts": {
     "auth": "pnpm --filter=@gsa-tts/forms-cli cli secrets generate-test-db-session -p ../../packages/server/src/main.db -o ../../e2e/.env",
