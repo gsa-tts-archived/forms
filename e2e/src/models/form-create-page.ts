@@ -93,7 +93,7 @@ export class FormCreatePage {
       .locator('li')
       .filter({ hasText: `${buttonText}${pageTitles[0]}` })
       .getByRole('button');
-    await handle.hover();
+    await handle.hover({ force: true });
     await this.page.mouse.down();
     const nextElement = this.page
       .locator('li')

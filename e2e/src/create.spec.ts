@@ -75,7 +75,7 @@ test('Drag-and-drop questions via mouse interaction', async ({ page }) => {
 
   // Locate the handle for the first draggable item
   const handle = page.locator('[aria-describedby="DndDescribedBy-1"]').first();
-  await handle.hover();
+  await handle.hover({ force: true });
   await page.mouse.down();
 
   // Locate the target position for the drag-and-drop action
