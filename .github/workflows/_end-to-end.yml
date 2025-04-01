@@ -9,19 +9,25 @@ on:
         type: string
 
 jobs:
-  test:
+  end-to-end:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v${{ inputs.playwright_version }}-noble
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Read node version from `.nvmrc` file
+        id: nvmrc
+        shell: bash
+        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
+
+      - name: Install required node.js version
+        uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          node-version: ${{ steps.nvmrc.outputs.NODE_VERSION }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -56,6 +62,11 @@ jobs:
       - name: Install Playwright
         run: pnpm dlx playwright@${{ inputs.playwright_version }} install --with-deps
         if: steps.playwright-cache.outputs.cache-hit != 'true'
+
+      # While most of the test suite is self-contained, the tests for the demo
+      # servers require a prod build of @atj/server.
+      - name: Build
+        run: pnpm build
 
       - name: Run end-to-end tests
         shell: bash
