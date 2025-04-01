@@ -10,7 +10,7 @@
     "pretest": "pnpm auth",
     "test:dev": "pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0",
     "test": "pnpm playwright test --headed",
-    "test:ci": "pnpm playwright test --headed"
+    "test:ci": "pnpm playwright test"
   },
   "devDependencies": {
     "@storybook/test-runner": "^0.19.1",
