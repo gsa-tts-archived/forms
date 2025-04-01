@@ -26,6 +26,19 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         id: pnpm-install
+        with:
+          run_install: true
+
+      - name: Cache Playwright binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ inputs.playwright_version }}
+
+      - name: Install Playwright
+        run: pnpm dlx playwright@${{ inputs.playwright_version }} install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run end-to-end tests
         shell: bash
