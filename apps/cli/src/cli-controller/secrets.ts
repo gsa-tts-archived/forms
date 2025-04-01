@@ -128,6 +128,7 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
           authRepository,
           {
             // Stub or mock a login provider for testing (can be plugged in as needed)
+            // @ts-expect-error - Object literal may only specify known properties, but this is a stub.
             authorize: () => Promise.resolve(true),
           },
           () => '', // Mock getCookie function
@@ -157,7 +158,7 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
         }
         console.log('Auth Context & Database Prepared Successfully!');
       } catch (error) {
-        console.error('Error preparing the database:', error.message);
+        console.error('Error preparing the database:', (error as Error).message);
       } finally {
         process.exit();
       }
