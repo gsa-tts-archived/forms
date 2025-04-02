@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: End-to-end Tests
 on:
   workflow_call:
     inputs:
@@ -19,15 +19,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Read node version from `.nvmrc` file
-        id: nvmrc
-        shell: bash
-        run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_OUTPUT
-
-      - name: Install required node.js version
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ steps.nvmrc.outputs.NODE_VERSION }}
+      - name: Install system dependencies
+        run: |
+          apt-get update && apt-get install -y \
+          build-essential \
+          python3 \
+          python3-pip \
+          python-is-python3 \
+          g++ \
+          make
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -35,42 +35,28 @@ jobs:
         with:
           run_install: false
 
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        shell: bash
-        run: |
-          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v4
-        name: Setup pnpm cache
+      - name: Install node.js version
+        uses: actions/setup-node@v4
+        id: install-node
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      # needed for better-sqlite3 binary
+      - name: Install global deps
+        run: npm i -g node-gyp
 
       - name: Install dependencies
         run: pnpm install
 
-      - name: Cache Playwright binaries
-        uses: actions/cache@v4
-        id: playwright-cache
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ inputs.playwright_version }}
-
-      - name: Install Playwright
-        run: pnpm dlx playwright@${{ inputs.playwright_version }} install --with-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-
-      # While most of the test suite is self-contained, the tests for the demo
-      # servers require a prod build of @atj/server.
       - name: Build
         run: pnpm build
 
+      # xvfb is pre-installed in the playwright container
       - name: Run end-to-end tests
         shell: bash
-        run: pnpm --filter=@gsa-tts/forms-e2e test:ci
+        run: xvfb-run pnpm --filter=@gsa-tts/forms-e2e test:ci
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
