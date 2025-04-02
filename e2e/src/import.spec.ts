@@ -44,8 +44,24 @@ test.describe('Import form from a provided sample', () => {
     const formPage = new FormCreatePage(page);
     await formPage.navigateTo(formUrl);
     const menuSelector = 'ul.add-list-reset a';
+    await page.waitForSelector(menuSelector, { state: 'visible' });
+
     const startOrder = await page.$$eval(menuSelector, getPageMenuLinks);
-    await formPage.moveListItem('Move this item', startOrder);
+
+    await expect(startOrder.length).toBeGreaterThan(1);
+
+    const element1BoundingBox = await page.getByRole('listitem').filter({ hasText: `Move this item${startOrder[0]}` }).getByRole('button')?.boundingBox();
+    const element2BoundingBox = await page.getByRole('listitem').filter({ hasText: `Move this item${startOrder[1]}` })?.boundingBox();
+
+    const startX = element1BoundingBox.x + element1BoundingBox.width / 2;
+    const startY = element1BoundingBox.y + element1BoundingBox.height / 2;
+    const endY = element2BoundingBox.y + element2BoundingBox.height / 2;
+
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX, endY);
+    await page.mouse.up();
+
     const endOrder = await page.$$eval(menuSelector, getPageMenuLinks);
 
     expect(startOrder).not.toEqual(endOrder);
