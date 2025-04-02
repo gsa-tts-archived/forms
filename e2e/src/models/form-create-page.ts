@@ -74,33 +74,4 @@ export class FormCreatePage {
     await expect(pattern).not.toBeVisible();
   }
 
-  async addPage() {
-    await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
-    await this.page
-      .getByRole('button', { name: 'Page', exact: true })
-      .click();
-  }
-
-  async addPackageDownload() {
-    await this.page.getByRole('button', { name: message.controls.addElement.textContent, exact: true }).click();
-    await this.page
-      .getByRole('button', { name: message.patterns.packageDownload.displayName })
-      .click();
-  }
-
-  async moveListItem(buttonText: string, pageTitles: string[]) {
-    const handle = this.page
-      .locator('li')
-      .filter({ hasText: `${buttonText}${pageTitles[0]}` })
-      .getByRole('button');
-    await expect(handle).toBeDefined();
-    await handle.hover({ force: true });
-    await this.page.mouse.down();
-    const nextElement = this.page
-      .locator('li')
-      .filter({ hasText: `${buttonText}${pageTitles[1]}` })
-      .getByRole('button');
-    await nextElement.hover();
-    await this.page.mouse.up();
-  }
 }
