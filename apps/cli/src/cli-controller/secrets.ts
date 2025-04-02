@@ -150,7 +150,7 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
           const session = await lucia.createSession(userId, {
             session_token: randomUUID(),
           });
-          console.log(`Test session created: ${session.id}`);
+          console.log(`Test session created.`);
 
           const envContent = `AUTH_SESSION=${session.id}\nE2E_ENDPOINT=http://localhost:4321\n`;
           await fs.writeFile(outputFile, envContent, 'utf8');
