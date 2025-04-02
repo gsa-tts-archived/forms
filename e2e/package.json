@@ -5,16 +5,10 @@
   "scripts": {
     "auth": "pnpm --filter=@gsa-tts/forms-cli cli secrets generate-test-db-session -p ../../packages/server/src/main.db -o ../../e2e/.env",
     "dev": "tsc -w",
-    "test:storybook": "test-storybook",
-    "pretest:ci": "pnpm auth",
-    "pretest:dev": "pnpm auth",
-    "pretest": "pnpm auth",
-    "test:ci": "pnpm playwright test --headed",
-    "test:dev": "pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0",
-    "test": "pnpm playwright test --headed"
+    "test:e2e:ci": "pnpm auth && pnpm playwright test --headed",
+    "test:e2e:dev": "pnpm auth && pnpm playwright test --ui-port=8080 --ui-host=0.0.0.0"
   },
   "devDependencies": {
-    "@storybook/test-runner": "^0.19.1",
     "dotenv": "^16.4.7",
     "path-to-regexp": "^8.2.0"
   },
