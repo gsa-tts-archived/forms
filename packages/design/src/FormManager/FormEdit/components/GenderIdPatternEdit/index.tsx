@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import { type GenderIdProps } from '@atj/forms';
-import { type GenderIdPattern } from '@atj/forms';
+import { type GenderIdProps } from '@gsa-tts/forms-core';
+import { type GenderIdPattern } from '@gsa-tts/forms-core';
 
 import GenderId from '../../../../Form/components/GenderId/index.js';
 import { PatternEditComponent } from '../../types.js';
@@ -10,7 +10,7 @@ import { PatternEditComponent } from '../../types.js';
 import { PatternEditActions } from '../common/PatternEditActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
 import { usePatternEditFormContext } from '../common/hooks.js';
-import { enLocale as message } from '@atj/common';
+import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
 const GenderIdPatternEdit: PatternEditComponent<GenderIdProps> = ({
@@ -45,7 +45,7 @@ const EditComponent = ({ pattern }: { pattern: GenderIdPattern }) => {
 
   return (
     <div className="grid-row grid-gap">
-      <div className="tablet:grid-col-6 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
           className={classnames('usa-label', {
             'usa-label--error': label.error,
@@ -58,7 +58,7 @@ const EditComponent = ({ pattern }: { pattern: GenderIdPattern }) => {
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className="usa-input bg-primary-lighter"
             id={fieldId('label')}
             defaultValue={pattern.data.label}
             {...register('label')}
@@ -67,20 +67,22 @@ const EditComponent = ({ pattern }: { pattern: GenderIdPattern }) => {
           />
         </label>
       </div>
-      <div className="tablet:grid-col-6 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
           className={classnames('usa-label', {
             'usa-label--error': hint.error,
           })}
         >
-          {message.patterns.genderId.hintLabel}
+          <span className={`${styles.secondaryColor}`}>
+            {message.patterns.genderId.hintLabel}
+          </span>
           {hint.error ? (
             <span className="usa-error-message" role="alert">
               {hint.error.message}
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className="usa-input bg-primary-lighter"
             id={fieldId('hint')}
             defaultValue={pattern.data.hint}
             {...register('hint')}
@@ -88,7 +90,7 @@ const EditComponent = ({ pattern }: { pattern: GenderIdPattern }) => {
           />
         </label>
       </div>
-      <div className="tablet:grid-col-6 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
           className={classnames('usa-label', {
             'usa-label--error': preferNotToAnswerText.error,
@@ -101,7 +103,7 @@ const EditComponent = ({ pattern }: { pattern: GenderIdPattern }) => {
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className="usa-input bg-primary-lighter"
             id={fieldId('preferNotToAnswerText')}
             defaultValue={''}
             {...register('preferNotToAnswerText')}

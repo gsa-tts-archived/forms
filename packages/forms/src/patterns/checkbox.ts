@@ -4,10 +4,9 @@ import {
   type Pattern,
   PatternBuilder,
   type PatternConfig,
-  validatePattern,
 } from '../pattern.js';
 import { type CheckboxProps } from '../components.js';
-import { getFormSessionValue } from '../session.js';
+import { getFormSessionError, getFormSessionValue } from '../session.js';
 import {
   safeZodParseFormErrors,
   safeZodParseToFormError,
@@ -47,19 +46,9 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
     return [];
   },
   createPrompt(_, session, pattern, options) {
-    const extraAttributes: Record<string, any> = {};
     const sessionValue = getFormSessionValue(session, pattern.id);
-    //const sessionError = getFormSessionError(session, pattern.id);
-    if (options.validate) {
-      const isValidResult = validatePattern(
-        checkboxConfig,
-        pattern,
-        sessionValue
-      );
-      if (!isValidResult.success) {
-        extraAttributes['error'] = isValidResult.error;
-      }
-    }
+    const sessionError = getFormSessionError(session, pattern.id);
+
     return {
       props: {
         _patternId: pattern.id,
@@ -68,7 +57,7 @@ export const checkboxConfig: PatternConfig<CheckboxPattern, PatternOutput> = {
         name: pattern.id,
         label: pattern.data.label,
         defaultChecked: sessionValue, // pattern.data.defaultChecked,
-        ...extraAttributes,
+        error: sessionError,
       } as CheckboxProps,
       children: [],
     };

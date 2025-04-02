@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useFormContext } from 'react-hook-form';
-import { type PhoneNumberProps } from '@atj/forms';
+import { type PhoneNumberProps } from '@gsa-tts/forms-core';
 import { type PatternComponent } from '../../index.js';
 
 const formatPhoneNumber = (value: string) => {
@@ -32,7 +32,11 @@ export const PhoneNumberPattern: PatternComponent<PhoneNumberProps> = ({
 
   return (
     <fieldset className="usa-fieldset">
-      <div className={classNames('usa-form-group margin-top-2')}>
+      <div
+        className={classNames('usa-form-group margin-top-2', {
+          'usa-form-group--error': error,
+        })}
+      >
         <label
           className={classNames('usa-label', {
             'usa-label--error': error,

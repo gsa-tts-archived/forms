@@ -1,9 +1,10 @@
 ---
-import closeSvg from '@atj/design/static/uswds/img/usa-icons/close.svg';
-import logoSvg from '@atj/design/images/logo.svg';
+import closeSvg from '@gsa-tts/forms-design/static/uswds/img/usa-icons/close.svg';
+import logoSvg from '@gsa-tts/forms-design/images/logo.svg';
 
 import { getServerContext, getUserSession } from '../config/astro.js';
 import * as routes from '../routes';
+import DOJHeader from './DOJHeader.astro';
 
 const { baseUrl, title } = await getServerContext(Astro);
 
@@ -16,6 +17,7 @@ const getNavLinkClasses = (url: string) => {
 };
 
 const { session } = getUserSession(Astro);
+const isForm = Astro.url.href.includes('/forms/');
 ---
 
 <div class="usa-overlay"></div>
@@ -26,11 +28,14 @@ const { session } = getUserSession(Astro);
       the public.</span
     >
   </div>
+  {isForm ? (
+    <DOJHeader />
+  ) : (
   <div class="bg-base-darkest">
     <div class="usa-navbar">
       <div class="usa-logo">
         <em class="usa-logo__text">
-          <a href={routes.getHomeUrl(baseUrl)} title="10x Access to Justice">
+          <a href={routes.getHomeUrl(baseUrl)} title="10x Forms Platform">
             <img src={logoSvg.src} role="img" alt="10x Logo" />
             <span class="text-white">{title}</span>
           </a>
@@ -39,6 +44,7 @@ const { session } = getUserSession(Astro);
       <button type="button" class="usa-menu-btn">Menu</button>
     </div>
   </div>
+  )}
   <nav aria-label="Primary navigation" class="usa-nav">
     <div class="usa-nav__inner">
       <button type="button" class="usa-nav__close">

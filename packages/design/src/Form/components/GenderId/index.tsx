@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { type GenderIdProps } from '@atj/forms';
+import { type GenderIdProps } from '@gsa-tts/forms-core';
 import { type PatternComponent } from '../../index.js';
 
 const GenderIdPattern: PatternComponent<GenderIdProps> = ({
@@ -24,19 +24,23 @@ const GenderIdPattern: PatternComponent<GenderIdProps> = ({
   const preferNotToAnswerId = `${genderId}.preferNotToAnswer`;
   const inputId = `${genderId}.gender`;
 
-  const watchedValue = useWatch({ name: inputId, defaultValue: value });
+  const watchedValue = useWatch({ name: inputId, defaultValue: value?.gender });
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = event.target.checked;
     setPreferNotToAnswerChecked(isChecked);
-    setValue(genderId, isChecked ? preferNotToAnswerText : value, {
+    setValue(genderId, isChecked ? preferNotToAnswerText : value?.gender, {
       shouldValidate: true,
     });
   };
 
   return (
     <fieldset className="usa-fieldset">
-      <div className={classNames('usa-form-group margin-top-2')}>
+      <div
+        className={classNames('usa-form-group margin-top-2', {
+          'usa-form-group--error': error,
+        })}
+      >
         <label
           className={classNames('usa-label', {
             'usa-label--error': error,

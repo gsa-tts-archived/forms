@@ -1,8 +1,8 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
-import { type SocialSecurityNumberProps } from '@atj/forms';
-import { type SocialSecurityNumberPattern } from '@atj/forms';
+import { type SocialSecurityNumberProps } from '@gsa-tts/forms-core';
+import { type SocialSecurityNumberPattern } from '@gsa-tts/forms-core';
 
 import SocialSecurityNumber from '../../../../Form/components/SocialSecurityNumber/index.js';
 import { PatternEditComponent } from '../../types.js';
@@ -10,7 +10,7 @@ import { PatternEditComponent } from '../../types.js';
 import { PatternEditActions } from '../common/PatternEditActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
 import { usePatternEditFormContext } from '../common/hooks.js';
-import { enLocale as message } from '@atj/common';
+import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
 const SocialSecurityNumberPatternEdit: PatternEditComponent<
@@ -46,11 +46,15 @@ const EditComponent = ({
 
   return (
     <div className="grid-row grid-gap">
-      <div className="tablet:grid-col-6 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
-          className={classnames('usa-label', {
-            'usa-label--error': label.error,
-          })}
+          className={classNames(
+            'usa-label',
+            {
+              'usa-label--error': label.error,
+            },
+            `${styles.patternChoiceFieldWrapper}`
+          )}
         >
           {message.patterns.ssn.fieldLabel}
           {label.error ? (
@@ -59,7 +63,13 @@ const EditComponent = ({
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className={classNames(
+              'usa-input bg-primary-lighter',
+              {
+                'usa-input--error': label.error,
+              },
+              `${styles.patternChoiceFieldWrapper}`
+            )}
             id={fieldId('label')}
             defaultValue={pattern.data.label}
             {...register('label')}
@@ -68,25 +78,30 @@ const EditComponent = ({
           />
         </label>
       </div>
-      <div className="tablet:grid-col-6 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
-          className={classnames('usa-label', {
-            'usa-label--error': hint.error,
-          })}
+          className={classNames(
+            'usa-label',
+            `${styles.patternChoiceFieldWrapper}`
+          )}
         >
-          {message.patterns.ssn.hintLabel}
+          <span className={`${styles.secondaryColor}`}>
+            {message.patterns.ssn.hintLabel}
+          </span>
           {hint.error ? (
             <span className="usa-error-message" role="alert">
               {hint.error.message}
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className={classNames(
+              'usa-input bg-primary-lighter',
+              `${styles.patternChoiceFieldWrapper}`
+            )}
             id={fieldId('hint')}
             defaultValue={pattern.data.hint}
             {...register('hint')}
             type="text"
-            autoFocus
           />
         </label>
       </div>

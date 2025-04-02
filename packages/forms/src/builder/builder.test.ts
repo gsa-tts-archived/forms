@@ -80,7 +80,6 @@ describe('form builder', () => {
           label: 'Pattern 1',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-2': {
@@ -90,7 +89,6 @@ describe('form builder', () => {
           label: 'Pattern 2',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-3': {
@@ -100,7 +98,6 @@ describe('form builder', () => {
           label: 'Pattern 3',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
     });
@@ -147,7 +144,6 @@ describe('form builder', () => {
           label: 'Pattern 1',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-2': {
@@ -157,7 +153,6 @@ describe('form builder', () => {
           label: 'Pattern 2',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-3': {
@@ -167,7 +162,6 @@ describe('form builder', () => {
           label: 'Pattern 3',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
     });
@@ -219,7 +213,6 @@ describe('form builder', () => {
           label: 'Pattern 1',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-2': {
@@ -229,7 +222,6 @@ describe('form builder', () => {
           label: 'Pattern 2',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
       'element-3': {
@@ -239,7 +231,6 @@ describe('form builder', () => {
           label: 'Pattern 3',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
     });
@@ -284,7 +275,6 @@ describe('form builder', () => {
             label: 'Input Pattern',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         },
         'form-summary-1': {
@@ -299,7 +289,7 @@ describe('form builder', () => {
           type: 'fieldset',
           id: 'fieldset-1',
           data: {
-            legend: 'Fieldset pattern description',
+            legend: 'Question set pattern description',
             patterns: ['element-2'],
           },
         },
@@ -307,11 +297,13 @@ describe('form builder', () => {
           type: 'radio-group',
           id: 'radio-group-1',
           data: {
-            label: 'Radio group label',
+            label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -323,7 +315,6 @@ describe('form builder', () => {
             ),
             initial: '',
             required: true,
-            maxLength: 128,
           },
         },
       },
@@ -366,7 +357,6 @@ describe('form builder', () => {
             label: 'Input Pattern',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         },
         'form-summary-1': {
@@ -381,7 +371,7 @@ describe('form builder', () => {
           type: 'fieldset',
           id: 'fieldset-1',
           data: {
-            legend: 'Fieldset pattern description',
+            legend: 'Question set pattern description',
             patterns: ['element-2'],
           },
         },
@@ -389,11 +379,13 @@ describe('form builder', () => {
           type: 'radio-group',
           id: 'radio-group-1',
           data: {
-            label: 'Radio group label',
+            label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -450,7 +442,6 @@ describe('form builder', () => {
             label: 'Input Pattern',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         },
         'form-summary-1': {
@@ -465,7 +456,7 @@ describe('form builder', () => {
           type: 'fieldset',
           id: 'fieldset-1',
           data: {
-            legend: 'Fieldset pattern description',
+            legend: 'Question set pattern description',
             patterns: ['element-2'],
           },
         },
@@ -473,11 +464,13 @@ describe('form builder', () => {
           type: 'radio-group',
           id: 'radio-group-1',
           data: {
-            label: 'Radio group label',
+            label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -485,7 +478,7 @@ describe('form builder', () => {
           id: newPattern.id,
           data: {
             legend: expect.stringMatching(
-              /^\(\s*Copy\s+\d{1,2}\/\d{1,2}\/\d{4},\s+\d{1,2}:\d{2}:\d{2}\s+[AP]M\)\s*Fieldset pattern description/
+              /^\(\s*Copy\s+\d{1,2}\/\d{1,2}\/\d{4},\s+\d{1,2}:\d{2}:\d{2}\s+[AP]M\)\s*Question set pattern description/
             ),
             patterns: ['element-2'],
           },
@@ -495,7 +488,7 @@ describe('form builder', () => {
     });
   });
 
-  it('copy radio group pattern', () => {
+  it('copy multiple choice pattern', () => {
     const initial = createTestBlueprintMultipleFieldsets();
     const builder = new BlueprintBuilder(defaultFormConfig, initial);
     const parentPattern = getPattern<PagePattern>(initial, 'page-1');
@@ -530,7 +523,6 @@ describe('form builder', () => {
             label: 'Input Pattern',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         },
         'form-summary-1': {
@@ -545,7 +537,7 @@ describe('form builder', () => {
           type: 'fieldset',
           id: 'fieldset-1',
           data: {
-            legend: 'Fieldset pattern description',
+            legend: 'Question set pattern description',
             patterns: ['element-2'],
           },
         },
@@ -553,11 +545,13 @@ describe('form builder', () => {
           type: 'radio-group',
           id: 'radio-group-1',
           data: {
-            label: 'Radio group label',
+            label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
         [newPattern.id]: {
@@ -565,12 +559,14 @@ describe('form builder', () => {
           id: newPattern.id,
           data: {
             label: expect.stringMatching(
-              /^\(\s*Copy\s+\d{1,2}\/\d{1,2}\/\d{4},\s+\d{1,2}:\d{2}:\d{2}\s+[AP]M\)\s*Radio group label/
+              /^\(\s*Copy\s+\d{1,2}\/\d{1,2}\/\d{4},\s+\d{1,2}:\d{2}:\d{2}\s+[AP]M\)\s*Multiple choice question label/
             ),
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         },
       },
@@ -604,7 +600,6 @@ describe('form builder', () => {
           label: 'Pattern 1',
           initial: '',
           required: true,
-          maxLength: 128,
         },
       },
     });
@@ -643,7 +638,6 @@ export const createTestBlueprint = () => {
             label: 'Pattern 1',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -653,7 +647,6 @@ export const createTestBlueprint = () => {
             label: 'Pattern 2',
             initial: 'test',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
       ],
@@ -702,7 +695,6 @@ export const createTwoPageThreePatternTestForm = () => {
             label: 'Pattern 1',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -712,7 +704,6 @@ export const createTwoPageThreePatternTestForm = () => {
             label: 'Pattern 2',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -722,7 +713,6 @@ export const createTwoPageThreePatternTestForm = () => {
             label: 'Pattern 3',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
       ],
@@ -767,7 +757,6 @@ export const createTestBlueprintMultipleFieldsets = () => {
             label: 'Input Pattern',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -782,7 +771,7 @@ export const createTestBlueprintMultipleFieldsets = () => {
           type: 'fieldset',
           id: 'fieldset-1',
           data: {
-            legend: 'Fieldset pattern description',
+            legend: 'Question set pattern description',
             patterns: ['element-2'],
           },
         } satisfies FieldsetPattern,
@@ -790,11 +779,13 @@ export const createTestBlueprintMultipleFieldsets = () => {
           type: 'radio-group',
           id: 'radio-group-1',
           data: {
-            label: 'Radio group label',
+            label: 'Multiple choice question label',
+            hint: '',
             options: [
               { id: 'option-1', label: 'Option 1' },
               { id: 'option-2', label: 'Option 2' },
             ],
+            required: false,
           },
         } satisfies RadioGroupPattern,
       ],

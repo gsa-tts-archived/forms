@@ -5,12 +5,12 @@ import {
   type Blueprint,
   type CheckboxPattern,
   type Pattern,
-} from '@atj/forms';
-import { createTestBrowserFormService } from '@atj/forms/context';
-import { type InputPattern } from '@atj/forms';
-import { type PagePattern } from '@atj/forms';
-import { type PageSetPattern } from '@atj/forms';
-import { type SequencePattern } from '@atj/forms';
+} from '@gsa-tts/forms-core';
+import { createTestBrowserFormService } from '@gsa-tts/forms-core/context';
+import { type InputPattern } from '@gsa-tts/forms-core';
+import { type PagePattern } from '@gsa-tts/forms-core';
+import { type PageSetPattern } from '@gsa-tts/forms-core';
+import { type SequencePattern } from '@gsa-tts/forms-core';
 
 import { type FormUIContext } from './Form/index.js';
 import { defaultPatternComponents } from './Form/components/index.js';
@@ -49,8 +49,7 @@ export const createOnePageTwoPatternTestForm = () => {
           data: {
             label: 'Pattern 1',
             initial: '',
-            required: true,
-            maxLength: 128,
+            required: false,
           },
         } satisfies InputPattern,
         {
@@ -59,8 +58,7 @@ export const createOnePageTwoPatternTestForm = () => {
           data: {
             label: 'Pattern 2',
             initial: 'test',
-            required: true,
-            maxLength: 128,
+            required: false,
           },
         } satisfies InputPattern,
       ],
@@ -109,7 +107,6 @@ export const createTwoPageTwoPatternTestForm = () => {
             label: 'Pattern 1',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -119,7 +116,6 @@ export const createTwoPageTwoPatternTestForm = () => {
             label: 'Pattern 2',
             initial: 'test',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
       ],
@@ -150,7 +146,6 @@ export const createTwoPatternTestForm = () => {
             label: 'Pattern 1',
             initial: '',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
         {
@@ -160,7 +155,6 @@ export const createTwoPatternTestForm = () => {
             label: 'Pattern 2',
             initial: 'test',
             required: true,
-            maxLength: 128,
           },
         } satisfies InputPattern,
       ],

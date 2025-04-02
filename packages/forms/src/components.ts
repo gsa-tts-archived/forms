@@ -1,5 +1,5 @@
 import { getRootPattern } from './blueprint.js';
-import { type FormError } from './error.js';
+import { type FormErrors, type FormError } from './error.js';
 import {
   type FormConfig,
   type Pattern,
@@ -9,6 +9,7 @@ import {
 import type { PageRule } from './patterns/pages/page/config.js';
 import { type FormSession, nullSession, sessionIsComplete } from './session.js';
 import { type ActionName } from './submission.js';
+import { stateTerritoryOrMilitaryPostList } from './patterns/address/jurisdictions.js';
 
 export type PackageDownloadProps = PatternProps<{
   type: 'package-download';
@@ -23,6 +24,7 @@ export type TextInputProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
+  hint?: string;
 }>;
 
 export type TextAreaProps = PatternProps<{
@@ -33,7 +35,30 @@ export type TextAreaProps = PatternProps<{
   required: boolean;
   error?: FormError;
   hint?: string;
-  maxLength: number;
+}>;
+
+export type AddressFieldProps = {
+  type: 'input' | 'select';
+  inputId: string;
+  value: string;
+  label: string;
+  required?: boolean;
+  pattern?: string;
+  options?: typeof stateTerritoryOrMilitaryPostList;
+  error?: FormError;
+  hint?: string;
+};
+
+export type AddressComponentProps = PatternProps<{
+  type: 'address';
+  error?: FormError;
+  value?: any;
+  legend?: string;
+  required?: boolean;
+  addMailingAddress?: boolean;
+  isMailingAddressSameAsPhysical?: boolean;
+  childProps: Record<string, AddressFieldProps>;
+  _patternId?: string;
 }>;
 
 export type AttachmentProps = PatternProps<{
@@ -75,6 +100,7 @@ export type FieldsetProps = PatternProps<{
   legend?: string;
   subHeading?: string;
   error?: FormError;
+  hint?: string;
 }>;
 
 export type ZipcodeProps = PatternProps<{
@@ -88,11 +114,12 @@ export type CheckboxProps = PatternProps<{
   id: string;
   label: string;
   defaultChecked: boolean;
+  error?: FormError;
 }>;
 
 export type PageSetProps = PatternProps<{
   type: 'page-set';
-  pages: { title: string; selected: boolean; url: string }[];
+  pages: { title: string; selected: boolean; url: string; visited: boolean }[];
   actions: PromptAction[];
 }>;
 
@@ -107,12 +134,16 @@ export type RadioGroupProps = PatternProps<{
   type: 'radio-group';
   groupId: string;
   legend: string;
+  label: string;
+  hint?: string;
   options: {
     id: string;
     name: string;
     label: string;
     defaultChecked: boolean;
   }[];
+  required: boolean;
+  error?: FormError;
 }>;
 
 export type SelectDropdownProps = PatternProps<{
@@ -123,8 +154,10 @@ export type SelectDropdownProps = PatternProps<{
     label: string;
   }[];
   label: string;
+  hint?: string;
   required: boolean;
   error?: FormError;
+  value?: string;
 }>;
 
 export type DateOfBirthProps = PatternProps<{
@@ -149,8 +182,26 @@ export type EmailInputProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
+  hint?: string;
   value: {
     email: string;
+  };
+}>;
+
+export type NameProps = PatternProps<{
+  type: 'name-input';
+  givenNameId: string;
+  middleNameId: string;
+  familyNameId: string;
+  label: string;
+  givenNameHint: string;
+  familyNameHint: string;
+  required?: boolean;
+  error?: FormError;
+  value?: {
+    givenName?: string;
+    middleName?: string;
+    familyName?: string;
   };
 }>;
 
@@ -174,6 +225,16 @@ export type SocialSecurityNumberProps = PatternProps<{
   value: string;
 }>;
 
+export type SexProps = PatternProps<{
+  type: 'sex-input';
+  sexId: string;
+  label: string;
+  required: boolean;
+  error?: FormError;
+  helperText: string;
+  value: string;
+}>;
+
 export type GenderIdProps = PatternProps<{
   type: 'gender-id';
   genderId: string;
@@ -181,7 +242,9 @@ export type GenderIdProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
-  value: string;
+  value: {
+    gender: string;
+  };
   preferNotToAnswerText?: string;
   preferNotToAnswerChecked?: boolean;
 }>;
@@ -189,10 +252,12 @@ export type GenderIdProps = PatternProps<{
 export type RepeaterProps = PatternProps<{
   type: 'repeater';
   legend?: string;
+  hint?: string;
   showControls?: boolean;
   subHeading?: string;
   error?: FormError;
   value?: unknown;
+  addButtonLabel?: string;
 }>;
 
 export type SequenceProps = PatternProps<{

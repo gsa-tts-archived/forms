@@ -1,4 +1,4 @@
-import { success } from '@atj/common';
+import { success } from '@gsa-tts/forms-common';
 
 import { type RepeaterPattern } from '../..';
 import { type SubmitHandler } from '../../submission';
@@ -8,7 +8,6 @@ export const repeaterAddRowHandler: SubmitHandler<RepeaterPattern> = async (
   opts
 ) => {
   const currentData = opts.session.data.values[opts.pattern.id];
-  console.log('TEST currentData in submit', currentData);
   const repeaterPatternData = Array.isArray(currentData)
     ? currentData
     : Array.isArray(currentData?.[opts.pattern.id])
@@ -25,8 +24,6 @@ export const repeaterAddRowHandler: SubmitHandler<RepeaterPattern> = async (
     {} as Record<string, any>
   );
 
-  console.log('New Row Data:', initialRepeaterRowData);
-
   // If this is the first add (repeaterPatternData is empty), add two rows
   // Otherwise add just one row
   const rowsToAdd = repeaterPatternData.length === 0 ? 2 : 1;
@@ -37,8 +34,6 @@ export const repeaterAddRowHandler: SubmitHandler<RepeaterPattern> = async (
     ...opts.session.data.values,
     [opts.pattern.id]: Object.freeze([...repeaterPatternData, ...newRows]),
   };
-
-  console.log('TEST newValues in submit', newValues);
   // Only create new session object if values actually changed
   if (
     opts.session.data.values[opts.pattern.id] !== newValues[opts.pattern.id]

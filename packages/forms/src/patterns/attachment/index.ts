@@ -1,4 +1,4 @@
-import { enLocale as message } from '@atj/common';
+import { enLocale as message } from '@gsa-tts/forms-common';
 
 import { type PatternConfig } from '../../pattern.js';
 
@@ -12,10 +12,10 @@ export const attachmentConfig: PatternConfig<
   AttachmentPatternOutput
 > = {
   displayName: message.patterns.attachment.displayName,
-  iconPath: 'shortanswer-icon.svg',
+  iconPath: 'attachment-icon.svg',
   initial: {
     label: 'File upload',
-    required: true,
+    required: false,
     maxAttachments: 1,
     allowedFileTypes: attachmentFileTypeMimes as [string, ...string[]],
     maxFileSizeMB: 10,

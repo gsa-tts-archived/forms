@@ -3,7 +3,7 @@ import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { UniqueIdentifier } from '@dnd-kit/core';
 
-import { getPattern, type PageSetProps } from '@atj/forms';
+import { getPattern, type PageSetProps } from '@gsa-tts/forms-core';
 
 import { PatternEditComponent } from '../../types.js';
 

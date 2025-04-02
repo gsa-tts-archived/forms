@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { type Result } from '@atj/common';
 import { type FormError } from '../../error.js';
 import {
   type FormConfig,
@@ -14,6 +13,8 @@ import { createPrompt } from './prompt.js';
 
 export type RepeaterPattern = Pattern<{
   legend?: string;
+  hint?: string;
+  addButtonLabel?: string;
   showControls?: boolean;
   patterns: PatternId[];
 }>;
@@ -30,6 +31,8 @@ const PromptActionSchema = z.object({
 
 const configSchema = z.object({
   legend: z.string().min(1),
+  hint: z.string().optional(),
+  addButtonLabel: z.string().optional(),
   showControls: z.boolean().optional(),
   patterns: z.union([
     z.array(z.string()),
@@ -74,14 +77,16 @@ interface RepeaterFailure {
 type RepeaterResult = RepeaterSuccess | RepeaterFailure;
 
 export const repeaterConfig: PatternConfig<RepeaterPattern> = {
-  displayName: 'Repeater',
-  iconPath: 'block-icon.svg',
+  displayName: 'Repeater question set',
+  iconPath: 'list-icon.svg',
   initial: {
     legend: 'Default Heading',
+    hint: '',
+    addButtonLabel: 'Add',
     patterns: [],
     showControls: true,
   },
-  // @ts-ignore
+
   parseUserInput: ((
     pattern: RepeaterPattern,
     input: unknown,

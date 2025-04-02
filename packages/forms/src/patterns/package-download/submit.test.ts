@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { failure, success } from '@atj/common';
+import { failure, success } from '@gsa-tts/forms-common';
 
 import { type Blueprint, type FormSession, defaultFormConfig } from '../..';
 
@@ -84,10 +84,7 @@ const createTestForm = async (): Promise<Blueprint> => {
   const pdfBytes = await loadSamplePDF(
     'doj-pardon-marijuana/demo-application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
   );
-  const input1 = new Input(
-    { label: 'Input 1', required: true, maxLength: 10 },
-    'input-1'
-  );
+  const input1 = new Input({ label: 'Input 1', required: true }, 'input-1');
   const page1 = new Page(
     { title: 'Page 1', patterns: [input1.id], rules: [] },
     'page-1'

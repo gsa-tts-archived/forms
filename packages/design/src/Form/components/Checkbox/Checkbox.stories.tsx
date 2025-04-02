@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { type Meta, type StoryObj } from '@storybook/react';
 
 import { CheckboxPattern } from './Checkbox.js';
-import { CheckboxProps } from '@atj/forms';
+import { CheckboxProps } from '@gsa-tts/forms-core';
 
 const meta: Meta<typeof CheckboxPattern> = {
   title: 'patterns/CheckboxPattern',
@@ -13,9 +13,11 @@ const meta: Meta<typeof CheckboxPattern> = {
       const FormDecorator = () => {
         const formMethods = useForm();
         return (
-          <FormProvider {...formMethods}>
-            <Story {...args} />
-          </FormProvider>
+          <div className="padding-left-2">
+            <FormProvider {...formMethods}>
+              <Story {...args} />
+            </FormProvider>
+          </div>
         );
       };
       return <FormDecorator />;

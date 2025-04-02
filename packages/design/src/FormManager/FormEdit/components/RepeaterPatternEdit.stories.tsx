@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent } from '@storybook/test';
 import { within } from '@testing-library/react';
 
-import { enLocale as message } from '@atj/common';
-import { type RepeaterPattern } from '@atj/forms';
+import { enLocale as message } from '@gsa-tts/forms-common';
+import { type RepeaterPattern } from '@gsa-tts/forms-core';
 
 import {
   createPatternEditStoryMeta,
@@ -16,7 +16,7 @@ const pattern: RepeaterPattern = {
   id: '1',
   type: 'repeater',
   data: {
-    legend: 'Repeater pattern description',
+    legend: 'Repeater question set pattern description',
     patterns: [],
   },
 };
@@ -34,8 +34,8 @@ export const Basic: StoryObj<typeof FormEdit> = {
     const canvas = within(canvasElement);
     await testUpdateFormFieldOnSubmitByElement(
       canvasElement,
-      await canvas.findByText('Repeater pattern description'),
-      'Legend Text Element',
+      await canvas.findByText('Repeater question set pattern description'),
+      'Question set label',
       'Updated repeater pattern'
     );
   },
@@ -46,8 +46,8 @@ export const Error: StoryObj<typeof FormEdit> = {
     const canvas = within(canvasElement);
     await testEmptyFormLabelErrorByElement(
       canvasElement,
-      await canvas.findByText('Repeater pattern description'),
-      'Legend Text Element',
+      await canvas.findByText('Repeater question set pattern description'),
+      'Question set label',
       message.patterns.repeater.errorTextMustContainChar
     );
   },
@@ -68,31 +68,25 @@ export const AddPattern: StoryObj<typeof FormEdit> = {
     await userEvent.click(shortAnswerButton);
 
     // Submit new field's edit form
-    const input = await canvas.findByLabelText('Field label');
+    const input = canvas.getByRole('textbox');
     await userEvent.clear(input);
     await userEvent.type(input, 'Repeater short question');
 
     const addQuestionToRepeaterButton = canvas.getByRole('button', {
-      name: /Add question to repeater/,
+      name: /Add question to set/,
     });
     await userEvent.click(addQuestionToRepeaterButton);
 
     const dateOfBirthButton = canvas.getByRole('button', {
-      name: /Date of Birth/,
+      name: /Date of birth/,
     });
     await userEvent.click(dateOfBirthButton);
 
     const form = input?.closest('form');
     form?.requestSubmit();
 
-    const fieldLabel = await canvas.findByText('Field label', {
+    const dateOfBirthLegend = await canvas.findByText('Date of birth', {
       selector: 'label',
-    });
-    await expect(fieldLabel).toBeInTheDocument();
-
-    // Confirm that the "Date of Birth" legend exists
-    const dateOfBirthLegend = await canvas.findByText('Date of Birth', {
-      selector: 'legend',
     });
     await expect(dateOfBirthLegend).toBeInTheDocument();
   },
@@ -105,7 +99,7 @@ export const RemovePattern: StoryObj<typeof FormEdit> = {
     // Confirm that the expected repeater legend exists
     expect(
       canvas.queryAllByRole('group', {
-        name: /Repeater pattern description/i,
+        name: /Repeater question set pattern description/i,
       })
     ).toHaveLength(1);
 
@@ -117,7 +111,7 @@ export const RemovePattern: StoryObj<typeof FormEdit> = {
 
     // Confirm that the repeater was removed
     const test = await canvas.queryAllByRole('group', {
-      name: /Repeater pattern description/i,
+      name: /Repeater question set pattern description/i,
     });
     expect(test).toHaveLength(0);
   },

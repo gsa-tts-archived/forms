@@ -1,9 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import { enLocale as message } from '@atj/common';
-import { PatternId, type ParagraphProps } from '@atj/forms';
-import { type ParagraphPattern } from '@atj/forms';
+import { enLocale as message } from '@gsa-tts/forms-common';
+import { PatternId, type ParagraphProps } from '@gsa-tts/forms-core';
+import { type ParagraphPattern } from '@gsa-tts/forms-core';
 
 import Paragraph from '../../../../Form/components/Paragraph/index.js';
 import { PatternEditComponent } from '../../types.js';
@@ -60,7 +60,7 @@ const EditComponent = ({ patternId }: { patternId: PatternId }) => {
         ) : null}
         <textarea
           id={fieldId('text')}
-          className="usa-textarea bg-primary-lighter text-bold"
+          className="usa-textarea bg-primary-lighter"
           style={{ height: 'unset' }}
           rows={4}
           {...register('text')}

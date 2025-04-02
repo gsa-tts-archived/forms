@@ -39,6 +39,7 @@ describe('Page prompt', () => {
             title: 'Page 1',
             selected: true,
             url: '?page=0',
+            visited: false,
           },
         ],
       },
@@ -59,10 +60,6 @@ describe('Page prompt', () => {
                 inputId: 'input-1',
                 label: 'Input 1',
                 required: true,
-                error: {
-                  type: 'custom',
-                  message: 'Required',
-                },
                 value: undefined,
               },
               children: [],
@@ -75,10 +72,7 @@ describe('Page prompt', () => {
 });
 
 const createTestForm = async (): Promise<Blueprint> => {
-  const input1 = new Input(
-    { label: 'Input 1', required: true, maxLength: 10 },
-    'input-1'
-  );
+  const input1 = new Input({ label: 'Input 1', required: true }, 'input-1');
   const page1 = new Page(
     { title: 'Page 1', patterns: [input1.id], rules: [] },
     'page-1'

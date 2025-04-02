@@ -1,7 +1,308 @@
 ---
-import AppFormManager from '../components/AppFormManager';
-import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import ContentLayout from '../layouts/ContentLayout.astro';
+import skipLogicImage from '../images/skip-logic-ui.png';
+import hintHelpImage from '../images/hint-help-ui.png';
+import heroImage from '../images/hero-image.png';
+import agencySealImage from '../images/agency-seal.png';
+import videoPlaceholderImage from '../images/video-placeholder.png';
 ---
-<Layout title="10x Access to Justice Spotlight">
-  <AppFormManager client:only />
-</Layout>
+<ContentLayout title="10x Forms Platform">
+  <style>
+    .marketing-button--outline {
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .marketing-section--dark :is(h1, h2, h3, h4) {
+      color: #fff
+    }
+
+    .marketing-section--lighter {
+      background: #F2F9FF;
+    }
+
+    .testimonial-quote {
+      position: relative;
+    }
+
+    .testimonial-quote:after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -13px;
+      border-color: #162e51 transparent transparent transparent;
+      border-style: solid;
+      border-width: 15px 8px 0 8px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .video-player {
+      max-width: 46.5rem;
+      margin: 0 auto;
+    }
+
+    .video-content-target {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+    }
+
+    .text-overlay {
+      background: #1b1b1b;
+    }
+  </style>
+  <section class="usa-section usa-section--dark" aria-label="Introduction">
+    <div class="grid-container maxw-desktop marketing-section--dark">
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-9">
+          <h1>
+            Elegant federal forms that work for all users on all devices
+          </h1>
+          <ul class="usa-button-group">
+            <li class="usa-button-group__item">
+              <a href="https://airtable.com/appGtiqPPhrrdKy65/pagiq1oAO6YHJJdZR/form" class="usa-button">Request a demo</a>
+            </li>
+          </ul>
+        </div>
+        <div class="tablet:grid-col-3 display-none tablet:display-block">
+          <img src={heroImage.src} alt="" width={heroImage.width} height={heroImage.height} class="display-block margin-x-auto" loading="eager" decoding="sync" />
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="grid-container usa-section maxw-desktop">
+    <div class="grid-row grid-gap">
+      <div class="tablet:grid-col-12">
+        <h2 class="font-body-xl margin-top-0 tablet:margin-bottom-0 text-center">
+          What makes us different?
+        </h2>
+        <p class="text-center usa-prose font-body-lg tablet:margin-bottom-5 text-300">
+          The 10x Forms Platform is built for feds, by feds. By streamlining form digitization, we help agencies reduce costs, improve efficiency, meet federal mandates, and increase the public's satisfaction.
+        </p>
+      </div>
+    </div>
+    <div class="grid-row grid-gap">
+      <div class="tablet:grid-col-12 margin-bottom-5 text-center">
+        <div class="video-player">
+          <a href="https://www.loom.com/share/b0e2812f202842fdbdc7872296100987?sid=bd8345e3-32ff-4314-bf33-f4aa2389c421"
+             class="video-player__button display-block position-relative" aria-label="Play video">
+            <Image src={videoPlaceholderImage} alt="" class="display-block margin-x-auto"
+                   loading="eager" decoding="sync" />
+            <div class="text-overlay position-absolute bottom-0 left-0 width-full">
+              <div class="text-overlay__content text-left padding-x-4 padding-y-2 text-white text-bold">
+                <div class="display-flex flex-align-center">
+                  <svg width="29" height="34" viewBox="0 0 29 34" fill="none" xmlns="http://www.w3.org/2000/svg" class="display-block">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M0 0.5V33.5L28.5 17L0 0.5Z" fill="white" aria-hidden="true" />
+                  </svg>
+                  <span class="margin-left-2">Forms platform demo: <time datetime="2025-03-21">2025-03-21</time></span>
+                </div>
+              </div>
+            </div>
+          </a>
+          <template id="video-content">
+            <div class="video-content-target bg-primary-darker">
+              <iframe
+                src="https://www.loom.com/embed/b0e2812f202842fdbdc7872296100987?sid=bd8345e3-32ff-4314-bf33-f4aa2389c421&autoplay=1"
+                frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen
+                allow="autoplay; fullscreen"
+                title="10x Forms Demo"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+    <div class="grid-row grid-gap">
+      <div class="tablet:grid-col-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" aria-hidden="true"
+             class="margin-bottom-1">
+          <path fill="#000" fill-rule="evenodd"
+                d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2ZM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2Z"
+                clip-rule="evenodd" />
+        </svg>
+        <h3 class="font-body-lg margin-top-0 tablet:margin-bottom-0">
+          Team control
+        </h3>
+        <p class="usa-prose">
+          Never submit a ticket or tap someone from IT to make a simple content change. Your team controls everything.
+        </p>
+      </div>
+      <div class="tablet:grid-col-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" aria-hidden="true"
+             class="margin-bottom-1">
+          <path fill="#000" fill-rule="evenodd"
+                d="M9.4 16.6 4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4Zm5.2 0 4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4Z"
+                clip-rule="evenodd" />
+        </svg>
+        <h3 class="font-body-lg margin-top-0 tablet:margin-bottom-0">
+          No code
+        </h3>
+        <p class="usa-prose">
+          Feds of any skill levels and disciplines can use our platform and begin designing forms within minutes.
+        </p>
+      </div>
+      <div class="tablet:grid-col-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" aria-hidden="true"
+             class="margin-bottom-1">
+          <path fill="#000" fill-rule="evenodd" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17Z"
+                clip-rule="evenodd" />
+        </svg>
+        <h3 class="font-body-lg margin-top-0 tablet:margin-bottom-0">
+          Checks all the boxes
+        </h3>
+        <p class="usa-prose">
+          Every form made on our platform meets strict security and accessibility standards.
+        </p>
+      </div>
+      <div class="tablet:grid-col-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" aria-hidden="true"
+             class="margin-bottom-1">
+          <path fill="#000" fill-rule="evenodd"
+                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6Zm4 18H6V4h7v5h5v11ZM8 15.01l1.41 1.41L11 14.84V19h2v-4.16l1.59 1.59L16 15.01 12.01 11 8 15.01Z"
+                clip-rule="evenodd" />
+        </svg>
+        <h3 class="font-body-lg margin-top-0 tablet:margin-bottom-0">
+          Easy import
+        </h3>
+        <p class="usa-prose">
+          Upload your existing form PDF and start editing right away.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="usa-section usa-section--dark">
+    <div class="grid-container maxw-desktop marketing-section--dark">
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-12">
+          <h2 class="font-body-xl">
+            Compliance with 21st Century IDEA and M-23-22
+          </h2>
+        </div>
+      </div>
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-4">
+          <h3 class="font-body-lg">21st Century IDEA</h3>
+          <p>Our no-code Forms Platform helps you turn your PDF forms into M-23-22-compliant digital experiences.</p>
+        </div>
+        <div class="tablet:grid-col-4">
+          <h3 class="font-body-lg">Section 508</h3>
+          <p>It's fully accessible out of the box, with all components based on U.S. Web Design System (USWDS) code and design patterns.</p>
+        </div>
+        <div class="tablet:grid-col-4">
+          <h3 class="font-body-lg">Paperwork Reduction Act</h3>
+          <p>When you're digitizing an existing form, complying with PRA is as easy as following the simple, built-in guidance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="usa-section marketing-section--lighter">
+    <div class="grid-container maxw-desktop">
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-6">
+          <h2 class="font-body-xl margin-top-0 tablet:margin-bottom-0">
+            Integrate with your data
+          </h2>
+        </div>
+        <div class="tablet:grid-col-6 usa-prose">
+          <p class="margin-top-0">
+            Get started quickly &mdash; a month or two, even &mdash; instead of a year-long procurement. Start delivering value quickly and affordably, without requiring huge process changes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="usa-section">
+    <div class="grid-container maxw-desktop">
+      <div class="grid-row grid-gap margin-bottom-3 tablet:margin-bottom-6">
+        <div class="tablet:grid-col-12">
+          <h2 class="font-body-xl margin-top-0 margin-bottom-3 tablet:margin-bottom-6">
+            We understand your concerns
+          </h2>
+        </div>
+        <div class="tablet:grid-col-6 tablet:display-flex flex-align-center">
+          <ul class="usa-list usa-list--unstyled">
+            <li>
+              <h3 class="font-body-lg margin-y-0">Eligibility screening</h3>
+              <p class="margin-top-0">Want to skip one or more pages based on a set of answers? We've got you covered.</p>
+            </li>
+            <li>
+              <h3 class="font-body-lg margin-y-0">Skip logic</h3>
+              <p class="margin-top-0">Keep things simple. Hide the rest of a page based on an answer.</p>
+            </li>
+            <li>
+              <h3 class="font-body-lg margin-y-0">Document attachment</h3>
+              <p class="margin-top-0">Allow your form fillers to attach documents like PDFs and images.</p>
+            </li>
+          </ul>
+        </div>
+        <div class="tablet:grid-col-6">
+          <Image src={skipLogicImage} alt="" width="876" height="722"
+                 class="display-block margin-x-auto tablet:margin-x-0" />
+        </div>
+      </div>
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-6 margin-bottom-3 tablet:margin-bottom-0">
+          <Image src={hintHelpImage} alt="" width="876" height="626"
+                 class="display-block margin-x-auto tablet:margin-x-0" />
+        </div>
+        <div class="tablet:grid-col-6 tablet:display-flex flex-align-center">
+          <ul class="usa-list usa-list--unstyled">
+            <li>
+              <h3 class="font-body-lg margin-y-0">Validation</h3>
+              <p class="margin-top-0">Good, clear validation helps avoid rejected forms, saving time for both form owners and applicants.</p>
+            </li>
+            <li>
+              <h3 class="font-body-lg margin-y-0">Hints and help</h3>
+              <p class="margin-top-0">Desktop, mobile, old or new, screen reader or other assistive tech, our USWDS-based components &quot;just work.&quot;</p>
+            </li>
+            <li>
+              <h3 class="font-body-lg margin-y-0">Form submission</h3>
+              <p class="margin-top-0">Get form submissions as completed PDFs, batch CSV files, or fetch data directly via our API.</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="usa-section usa-section--dark marketing-section--dark">
+    <div class="grid-container maxw-desktop">
+      <div class="grid-row grid-gap">
+        <div class="tablet:grid-col-12">
+          <h2 class="font-body-lg margin-top-0 tablet:margin-bottom-2">
+            Find out more about other 10x projects
+          </h2>
+        </div>
+        <div class="tablet:grid-col-12">
+          <a class="usa-button usa-button--big" href="https://10x.gsa.gov/">
+            10x.gsa.gov
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    (function() {
+      const template: HTMLTemplateElement | null = document.querySelector('#video-content');
+      const button = document.querySelector('.video-player__button');
+
+      if (template) {
+        const clone = template.content.cloneNode(true);
+        const viewport = document.querySelector('.video-player');
+        if (button && viewport) {
+          button.addEventListener('click', (e) => {
+            e.preventDefault();
+            viewport.replaceChildren(clone);
+          }, {
+            once: true,
+          });
+        }
+      }
+    })();
+  </script>
+</ContentLayout>

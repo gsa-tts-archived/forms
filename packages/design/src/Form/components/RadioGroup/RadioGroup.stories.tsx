@@ -12,9 +12,11 @@ const meta: Meta<typeof RadioGroupPattern> = {
       const FormDecorator = () => {
         const formMethods = useForm();
         return (
-          <FormProvider {...formMethods}>
-            <Story {...args} />
-          </FormProvider>
+          <div className="padding-left-2">
+            <FormProvider {...formMethods}>
+              <Story {...args} />
+            </FormProvider>
+          </div>
         );
       };
       return <FormDecorator />;
@@ -29,7 +31,7 @@ export const Default = {
     _patternId: '',
     type: 'radio-group',
     groupId: 'radio-group-1',
-    legend: 'This is a radio group',
+    legend: 'This is a multiple choice question',
     options: [
       {
         id: 'option-1',

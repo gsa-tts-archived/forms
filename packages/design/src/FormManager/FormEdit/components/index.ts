@@ -3,6 +3,7 @@ import {
   type EditComponentForPattern,
 } from '../types.js';
 
+import AddressPatternEdit from './AddressPatternEdit/index.js';
 import AttachmentPatternEdit from './AttachmentPatternEdit/index.js';
 import CheckboxPatternEdit from './CheckboxPatternEdit/index.js';
 import DateOfBirthPatternEdit from './DateOfBirthPatternEdit/index.js';
@@ -11,6 +12,7 @@ import FieldsetEdit from './FieldsetEdit/index.js';
 import FormSummaryEdit from './FormSummaryEdit.js';
 import InputPatternEdit from './InputPatternEdit/index.js';
 import GenderIdPatternEdit from './GenderIdPatternEdit/index.js';
+import NamePatternEdit from './NamePatternEdit/index.js';
 import PackageDownloadPatternEdit from './PackageDownloadPatternEdit.js';
 import PageSetEdit from './PageSetEdit/index.js';
 import { PageEdit } from './PageEdit/index.js';
@@ -24,8 +26,9 @@ import SelectDropdownPatternEdit from './SelectDropdownPatternEdit/index.js';
 import SocialSecurityNumberPatternEdit from './SocialSecurityNumberPatternEdit/index.js';
 import SubmissionConfirmationEdit from './SubmissionConfirmationEdit.js';
 import TextAreaPatternEdit from './TextAreaPatternEdit/index.js';
-
+import SexPatternEdit from './SexPatternEdit/index.js';
 export const defaultPatternEditComponents: EditComponentForPattern = {
+  address: AddressPatternEdit as PatternEditComponent,
   attachment: AttachmentPatternEdit as PatternEditComponent,
   checkbox: CheckboxPatternEdit as PatternEditComponent,
   'date-of-birth': DateOfBirthPatternEdit as PatternEditComponent,
@@ -34,6 +37,7 @@ export const defaultPatternEditComponents: EditComponentForPattern = {
   'form-summary': FormSummaryEdit as PatternEditComponent,
   'gender-id': GenderIdPatternEdit as PatternEditComponent,
   input: InputPatternEdit as PatternEditComponent,
+  'name-input': NamePatternEdit as PatternEditComponent,
   'package-download': PackageDownloadPatternEdit as PatternEditComponent,
   page: PageEdit as PatternEditComponent,
   'page-set': PageSetEdit as PatternEditComponent,
@@ -48,4 +52,5 @@ export const defaultPatternEditComponents: EditComponentForPattern = {
     SocialSecurityNumberPatternEdit as PatternEditComponent,
   'submission-confirmation': SubmissionConfirmationEdit as PatternEditComponent,
   'text-area': TextAreaPatternEdit as PatternEditComponent,
+  'sex-input': SexPatternEdit as PatternEditComponent,
 };

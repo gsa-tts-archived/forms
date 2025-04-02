@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { type AttachmentProps } from '@atj/forms';
-import { attachmentFileTypeOptions } from '@atj/forms';
+import { type AttachmentProps } from '@gsa-tts/forms-core';
+import { attachmentFileTypeOptions } from '@gsa-tts/forms-core';
 import { type PatternComponent } from '../../../Form/index.js';
 
 const Attachment: PatternComponent<AttachmentProps> = props => {
@@ -66,6 +66,7 @@ const Attachment: PatternComponent<AttachmentProps> = props => {
         <div className="usa-form-group">
           <p className="text-bold" id={`label-${props.inputId}`}>
             {props.label}
+            {props.required && <span className="required-indicator">*</span>}
           </p>
           <label className="usa-label" htmlFor={`input-${props.inputId}`}>
             {props.maxAttachments === 1

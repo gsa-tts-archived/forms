@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { failure, success } from '@atj/common';
+import { failure, success } from '@gsa-tts/forms-common';
 
 import { parseForm, parseFormString } from './parse-form';
 import { defaultFormConfig, type InputPattern } from '../patterns';
@@ -20,7 +20,6 @@ describe('parseForm', () => {
           data: {
             label: 'label',
             required: true,
-            maxLength: 100,
           },
         } satisfies InputPattern,
       },
@@ -95,7 +94,6 @@ describe('parseFormString', () => {
           data: {
             label: 'label',
             required: true,
-            maxLength: 100,
             initial: '',
           },
         } satisfies InputPattern,

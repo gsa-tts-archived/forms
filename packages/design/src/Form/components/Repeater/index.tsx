@@ -1,6 +1,11 @@
 import React, { Children, useMemo } from 'react';
 import { useFieldArray } from 'react-hook-form';
-import { type RepeaterProps, type PromptComponent } from '@atj/forms';
+import {
+  type RepeaterProps,
+  type PromptComponent,
+  FormError,
+  FormErrors,
+} from '@gsa-tts/forms-core';
 
 import { type PatternComponent } from '../../index.js';
 import { renderPromptComponents } from '../../form-common.js';
@@ -32,7 +37,7 @@ const RepeaterRow = ({
       {children.map((child, i) => (
         <React.Fragment key={i}>{child}</React.Fragment>
       ))}
-      {index !== fieldsLength - 1 && fieldsLength > 1 && (
+      {fieldsLength > 1 && (
         <button
           type="submit"
           name="action"
@@ -40,7 +45,7 @@ const RepeaterRow = ({
           className="usa-button usa-button--outline"
           onClick={handleDelete}
         >
-          Delete this item
+          Delete
         </button>
       )}
     </li>
@@ -64,8 +69,15 @@ interface ComponentProps {
   [key: string]: unknown;
 }
 
+interface ChildValue {
+  [key: string]: unknown;
+}
+
 interface ChildElementProps {
   component: ComponentProps;
+  error?: FormError | FormErrors;
+  value?: unknown;
+  isMailingAddressSameAsPhysical?: boolean;
 }
 
 const Repeater: PatternComponent<RepeaterProps> = props => {
@@ -82,9 +94,9 @@ const Repeater: PatternComponent<RepeaterProps> = props => {
     );
     Children.forEach(children, (child, idx) => {
       if (!React.isValidElement<ChildElementProps>(child)) return;
-      const childProps = (props.childComponents as PromptComponent[])[idx]
+      const childrenProps = (props.childComponents as PromptComponent[])[idx]
         .props;
-      const patternId = childProps._patternId;
+      const patternId = childrenProps._patternId;
 
       const parts = patternId.split('.');
       const index = parts[1];
@@ -93,22 +105,21 @@ const Repeater: PatternComponent<RepeaterProps> = props => {
       const repeaterValues = (props.value as RepeaterValue) || [];
       const rowData = repeaterValues[Number(index)] || {};
       const childValue = rowData[childId];
-
       const childError = props.error?.fields?.[patternId];
+
+      const enrichedChild = React.cloneElement<ChildElementProps>(
+        child as React.ReactElement<ChildElementProps>,
+        {
+          ...child.props,
+          error: childError,
+          value: childValue,
+          isMailingAddressSameAsPhysical:
+            (childValue as ChildValue)?.isMailingAddressSameAsPhysical === 'on',
+        }
+      );
 
       if (!groups[index]) groups[index] = [];
 
-      const enrichedChild = React.cloneElement<ChildElementProps>(child, {
-        ...child.props,
-        component: {
-          ...child.props.component,
-          props: {
-            ...childProps,
-            value: childValue,
-            error: childError,
-          },
-        },
-      });
       groups[index].push(enrichedChild);
     });
 
@@ -143,20 +154,6 @@ const Repeater: PatternComponent<RepeaterProps> = props => {
     [props._patternId]
   );
 
-  const handleDeleteLast = React.useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      const form = e.currentTarget.form;
-      if (form) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'deleteIndex';
-        input.value = (fields.length - 1).toString();
-        form.appendChild(input);
-      }
-    },
-    [fields.length]
-  );
-
   const renderRows = useMemo(
     () =>
       fields.map((field, index) => (
@@ -186,6 +183,11 @@ const Repeater: PatternComponent<RepeaterProps> = props => {
           {props.legend}
         </legend>
       )}
+      {props.hint && (
+        <div className="usa-hint" id={props._patternId}>
+          {props.hint}
+        </div>
+      )}
       {props.error && (
         <div className="usa-error-message" id={props._patternId} role="alert">
           {props.error.message}
@@ -201,17 +203,7 @@ const Repeater: PatternComponent<RepeaterProps> = props => {
               value={`action/repeater-add-row/${props._patternId}`}
               className="usa-button usa-button--outline"
             >
-              Add new item
-            </button>
-            <button
-              type="submit"
-              name="action"
-              value={`action/repeater-delete-row/${props._patternId}`}
-              className="usa-button usa-button--outline"
-              disabled={fields.length === 1}
-              onClick={handleDeleteLast}
-            >
-              Delete last item
+              {props.addButtonLabel || 'Add'}
             </button>
           </div>
         </>

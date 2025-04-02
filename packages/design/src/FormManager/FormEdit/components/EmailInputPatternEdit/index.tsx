@@ -1,8 +1,8 @@
-import classnames from 'classnames';
+import classNames from 'classnames';
 import React from 'react';
 
-import { type EmailInputProps } from '@atj/forms';
-import { type EmailInputPattern } from '@atj/forms';
+import { type EmailInputProps } from '@gsa-tts/forms-core';
+import { type EmailInputPattern } from '@gsa-tts/forms-core';
 
 import EmailInput from '../../../../Form/components/EmailInput/index.js';
 import { PatternEditComponent } from '../../types.js';
@@ -10,7 +10,7 @@ import { PatternEditComponent } from '../../types.js';
 import { PatternEditActions } from '../common/PatternEditActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
 import { usePatternEditFormContext } from '../common/hooks.js';
-import { enLocale as message } from '@atj/common';
+import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
 const EmailInputEdit: PatternEditComponent<EmailInputProps> = ({
@@ -40,14 +40,18 @@ const EditComponent = ({ pattern }: { pattern: EmailInputPattern }) => {
   const { fieldId, getFieldState, register } =
     usePatternEditFormContext<EmailInputPattern>(pattern.id);
   const label = getFieldState('label');
-
+  const hint = getFieldState('hint');
   return (
     <div className="grid-row grid-gap">
-      <div className="tablet:grid-col-12 mobile-lg:grid-col-12 margin-bottom-2">
+      <div className="grid-col-12 margin-bottom-2">
         <label
-          className={classnames('usa-label', {
-            'usa-label--error': label.error,
-          })}
+          className={classNames(
+            'usa-label',
+            {
+              'usa-label--error': label.error,
+            },
+            `${styles.patternChoiceFieldWrapper}`
+          )}
         >
           {message.patterns.emailInput.fieldLabel}
           {label.error ? (
@@ -56,12 +60,51 @@ const EditComponent = ({ pattern }: { pattern: EmailInputPattern }) => {
             </span>
           ) : null}
           <input
-            className="usa-input"
+            className={classNames(
+              'usa-input bg-primary-lighter',
+              {
+                'usa-input--error': label.error,
+              },
+              `${styles.patternChoiceFieldWrapper}`
+            )}
             id={fieldId('label')}
             defaultValue={pattern.data.label}
             {...register('label')}
             type="text"
             autoFocus
+          />
+        </label>
+      </div>
+      <div className="grid-col-12 margin-bottom-2">
+        <label
+          className={classNames(
+            'usa-label',
+            {
+              'usa-label--error': hint.error,
+            },
+            `${styles.patternChoiceFieldWrapper}`
+          )}
+        >
+          <span className={`${styles.secondaryColor}`}>
+            {message.patterns.dateOfBirth.hintLabel}
+          </span>
+          {hint.error ? (
+            <span className="usa-error-message" role="alert">
+              {hint.error.message}
+            </span>
+          ) : null}
+          <input
+            className={classNames(
+              'usa-input bg-primary-lighter',
+              {
+                'usa-input--error': hint.error,
+              },
+              `${styles.patternChoiceFieldWrapper}`
+            )}
+            id={fieldId('hint')}
+            defaultValue={pattern.data.hint}
+            {...register('hint')}
+            type="text"
           />
         </label>
       </div>

@@ -1,173 +1,268 @@
 import * as z from 'zod';
 
 import { type Pattern, type PatternConfig } from '../../pattern.js';
-import { PatternProps } from '../../components.js';
+import { AddressComponentProps } from '../../components.js';
+import { getFormSessionError, getFormSessionValue } from '../../session.js';
 import {
+  convertZodErrorToFormErrors,
   safeZodParseFormErrors,
-  safeZodParseToFormError,
 } from '../../util/zod.js';
-import {
-  stateTerritoryOrMilitaryPostAbbreviations,
-  stateTerritoryOrMilitaryPostList,
-} from './jurisdictions.js';
-import { getFormSessionValue } from '../../session.js';
+import { stateTerritoryOrMilitaryPostList } from './jurisdictions.js';
 
-export type AddressPattern = Pattern<{}>;
+const baseAddressSchema = z.object({
+  physicalStreetAddress: z
+    .string()
+    .min(1, { message: 'Street address is required' })
+    .max(128, { message: 'Street address must be less than 128 characters' }),
+  physicalStreetAddress2: z
+    .string()
+    .max(128, {
+      message: 'Street address line 2 must be less than 128 characters',
+    })
+    .optional(),
+  physicalCity: z
+    .string()
+    .min(1, { message: 'City is required' })
+    .max(64, { message: 'City must be less than 64 characters' }),
+  physicalStateTerritoryOrMilitaryPost: z
+    .string()
+    .min(1, { message: 'State, territory, or military post is required' }),
+  physicalZipCode: z
+    .string()
+    .max(10, { message: 'ZIP code must be less than 10 characters' }),
+  physicalUrbanizationCode: z
+    .string()
+    .max(128, { message: 'Urbanization code must be less than 128 characters' })
+    .optional(),
+  physicalGooglePlusCode: z.string().max(8).optional(),
 
-export type AddressComponentProps = PatternProps<{
-  childProps: {
-    streetAddress: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      error?: string;
-    };
-    streetAddress2: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      error?: string;
-    };
-    city: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      error?: string;
-    };
-    stateTerritoryOrMilitaryPost: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      options: typeof stateTerritoryOrMilitaryPostList;
-      error?: string;
-    };
-    zipCode: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      error?: string;
-    };
-    urbanizationCode: {
-      inputId: string;
-      value: string;
-      label: string;
-      required: boolean;
-      error?: string;
-    };
-  };
-}>;
+  mailingStreetAddress: z
+    .string()
+    .min(1, { message: 'Street address is required' })
+    .max(128, { message: 'Street address must be less than 128 characters' })
+    .optional(),
+  mailingStreetAddress2: z
+    .string()
+    .max(128, {
+      message: 'Street address line 2 must be less than 128 characters',
+    })
+    .optional(),
+  mailingCity: z
+    .string()
+    .min(1, { message: 'City is required' })
+    .max(64, { message: 'City must be less than 64 characters' })
+    .optional(),
+  mailingStateTerritoryOrMilitaryPost: z
+    .string()
+    .min(1, { message: 'State, territory, or military post is required' })
+    .optional(),
+  mailingZipCode: z
+    .string()
+    .max(10, { message: 'ZIP code must be less than 10 characters' })
+    .optional(),
+  mailingUrbanizationCode: z
+    .string()
+    .max(128, { message: 'Urbanization code must be less than 128 characters' })
+    .optional(),
+  mailingGooglePlusCode: z.string().max(8).optional(),
 
-const AddressSchema = z.object({
-  steetAddress: z.string().max(128),
-  steetAddress2: z.string().max(128).optional(),
-  city: z.string().max(64),
-  stateTerritoryOrMilitaryPost: stateTerritoryOrMilitaryPostAbbreviations,
-  zipCode: z.string().max(10),
-  urbanizationCode: z.string().max(128).optional(),
-  //googlePlusCode: z.string().max(8),
+  isMailingAddressSameAsPhysical: z.string().optional(),
 });
 
-type AddressPatternOutput = z.infer<typeof AddressSchema>;
+export type AddressPatternOutput = z.infer<typeof baseAddressSchema>;
 
-const configSchema = z.object({});
+interface AddressSchemaData {
+  legend: string;
+  required: boolean;
+  addMailingAddress?: boolean;
+}
+
+export const createAddressSchema = (data: AddressSchemaData) => {
+  const schema = baseAddressSchema.superRefine((fields, ctx) => {
+    const requiredPhysicalFields: (keyof typeof fields)[] = [
+      'physicalStreetAddress',
+      'physicalCity',
+      'physicalStateTerritoryOrMilitaryPost',
+    ];
+
+    const requiredMailingFields: (keyof typeof fields)[] = [
+      'mailingStreetAddress',
+      'mailingCity',
+      'mailingStateTerritoryOrMilitaryPost',
+    ];
+
+    const hasPhysicalError = requiredPhysicalFields.some(
+      field => !fields[field]
+    );
+    const hasMailingError = data.addMailingAddress
+      ? requiredMailingFields.some(field => !fields[field])
+      : false;
+
+    if (hasPhysicalError) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'All required fields must be filled out',
+        path: ['_physical'],
+      });
+    }
+
+    if (hasMailingError) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'All required fields must be filled out',
+        path: ['_mailing'],
+      });
+    }
+  });
+
+  return schema;
+};
+
+const configSchema = z.object({
+  legend: z.string().min(1),
+  required: z.boolean(),
+  addMailingAddress: z.boolean().optional(),
+});
+
+export type AddressPattern = Pattern<z.infer<typeof configSchema>>;
+
+const parseUserInput = (
+  pattern: AddressPattern,
+  obj: z.infer<typeof baseAddressSchema>
+) => {
+  const result = createAddressSchema(pattern.data).safeParse(obj);
+  if (result.success) {
+    return {
+      success: true,
+      data: result.data,
+    };
+  } else {
+    const fieldErrors = convertZodErrorToFormErrors(result.error);
+
+    // Filter out fields with errors
+    const validData = Object.keys(obj).reduce(
+      (acc, key) => {
+        const typedKey = key as keyof z.infer<typeof baseAddressSchema>;
+        if (!fieldErrors[typedKey]) {
+          acc[typedKey] = obj[typedKey];
+        }
+        return acc;
+      },
+      {} as Partial<z.infer<typeof baseAddressSchema>>
+    );
+
+    return {
+      success: false,
+      error: {
+        type: 'custom',
+        fields: fieldErrors,
+      },
+      data: validData, // Only include non-error fields
+    };
+  }
+};
+
+const parseConfigData = (obj: unknown) =>
+  safeZodParseFormErrors(configSchema, obj);
+
+const createPromptProps = (pattern: { id: string }, prefix: string) => {
+  const props = {
+    [`${prefix}StreetAddress`]: {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}StreetAddress`,
+      value: '',
+      label: 'Street address',
+      required: prefix !== 'physical',
+    },
+    [`${prefix}StreetAddress2`]: {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}StreetAddress2`,
+      value: '',
+      label: 'Street address line 2',
+      required: false,
+    },
+    [`${prefix}City`]: {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}City`,
+      value: '',
+      label: 'City',
+      required: true,
+    },
+    [`${prefix}StateTerritoryOrMilitaryPost`]: {
+      type: 'select' as const,
+      inputId: `${pattern.id}.${prefix}StateTerritoryOrMilitaryPost`,
+      value: '',
+      label: 'State, territory, or military post',
+      required: true,
+      options: stateTerritoryOrMilitaryPostList,
+    },
+    [`${prefix}ZipCode`]: {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}ZipCode`,
+      value: '',
+      label: 'ZIP code',
+      required: false,
+    },
+    [`${prefix}UrbanizationCode`]: {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}UrbanizationCode`,
+      value: '',
+      label: 'Urbanization (Puerto Rico only)',
+      required: false,
+    },
+  };
+
+  if (prefix !== 'mailing') {
+    props[`${prefix}GooglePlusCode`] = {
+      type: 'input' as const,
+      inputId: `${pattern.id}.${prefix}GooglePlusCode`,
+      value: '',
+      label: 'Google Plus Code',
+      required: false,
+    };
+  }
+
+  return props;
+};
 
 export const addressConfig: PatternConfig<
   AddressPattern,
   AddressPatternOutput
 > = {
-  displayName: 'Physical address',
-  iconPath: 'block-icon.svg',
+  displayName: 'Address',
+  iconPath: 'address-icon.svg',
   initial: {
-    patterns: [],
+    legend: 'Physical address',
+    required: false,
+    addMailingAddress: false,
   },
-  parseUserInput: (_, obj) => {
-    return safeZodParseToFormError(AddressSchema, obj);
-  },
-  parseConfigData: obj => safeZodParseFormErrors(configSchema, obj),
+  // @ts-ignore
+  parseUserInput,
+  parseConfigData,
   getChildren(pattern, patterns) {
     return [];
   },
   createPrompt(config, session, pattern, options) {
     const sessionValue = getFormSessionValue(session, pattern.id);
-    const result = options.validate
-      ? AddressSchema.safeParse(sessionValue)
-      : null;
+    const sessionError = getFormSessionError(session, pattern.id);
+
     return {
       props: {
         _patternId: pattern.id,
         type: 'address',
         childProps: {
-          streetAddress: {
-            inputId: `${pattern.id}.streetAddress`,
-            value: sessionValue?.streetAddress,
-            label: 'Street address',
-            required: true,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.steetAddress?.join(', '),
-          },
-          streetAddress2: {
-            inputId: `${pattern.id}.streetAddress2`,
-            value: sessionValue?.streetAddress2,
-            label: 'Street address line 2',
-            required: false,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.steetAddress2?.join(', '),
-          },
-          city: {
-            inputId: `${pattern.id}.city`,
-            value: sessionValue?.city,
-            label: 'City',
-            required: true,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.city?.join(', '),
-          },
-          stateTerritoryOrMilitaryPost: {
-            inputId: `${pattern.id}.city`,
-            value: sessionValue?.stateTerritoryOrMilitaryPost,
-            label: 'State, territory, or military post',
-            required: true,
-            options: stateTerritoryOrMilitaryPostList,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.stateTerritoryOrMilitaryPost?.join(
-                    ', '
-                  ),
-          },
-          zipCode: {
-            inputId: `${pattern.id}.zipCode`,
-            value: sessionValue?.zipCode,
-            label: 'ZIP code',
-            required: true,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.zipCode?.join(', '),
-          },
-          urbanizationCode: {
-            inputId: `${pattern.id}.urbanizationCode`,
-            value: sessionValue?.urbanizationCode,
-            label: 'Urbanization (Puerto Rico only)',
-            required: false,
-            error:
-              !result || result?.success
-                ? undefined
-                : result.error.formErrors.fieldErrors.urbanizationCode?.join(
-                    ', '
-                  ),
-          },
+          ...createPromptProps(pattern, 'physical'),
+          ...(pattern.data.addMailingAddress
+            ? createPromptProps(pattern, 'mailing')
+            : {}),
         },
+        error: sessionError,
+        value: sessionValue,
+        legend: pattern.data.legend,
+        required: pattern.data.required,
+        addMailingAddress: pattern.data.addMailingAddress,
+        isMailingAddressSameAsPhysical:
+          sessionValue?.isMailingAddressSameAsPhysical === 'on',
       } satisfies AddressComponentProps,
       children: [],
     };

@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { type PageSetProps } from '@atj/forms';
+import { type PageSetProps } from '@gsa-tts/forms-core';
 
 import { FormManagerProvider } from '../../../FormManager/store.js';
 import {
@@ -42,11 +42,19 @@ export const Basic = {
         title: 'First page',
         selected: false,
         url: '#/?page=0',
+        visited: true,
       },
       {
         title: 'Second page',
         selected: true,
         url: '#/?page=0',
+        visited: true,
+      },
+      {
+        title: 'Third page',
+        selected: false,
+        url: '#/?page=0',
+        visited: false,
       },
     ],
     actions: [],

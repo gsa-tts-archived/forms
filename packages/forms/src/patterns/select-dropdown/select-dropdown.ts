@@ -1,12 +1,8 @@
 import * as z from 'zod';
 
 import { type SelectDropdownProps } from '../../components.js';
-import {
-  type Pattern,
-  type PatternConfig,
-  validatePattern,
-} from '../../pattern.js';
-import { getFormSessionValue } from '../../session.js';
+import { type Pattern, type PatternConfig } from '../../pattern.js';
+import { getFormSessionError, getFormSessionValue } from '../../session.js';
 import {
   safeZodParseFormErrors,
   safeZodParseToFormError,
@@ -15,6 +11,7 @@ import {
 const configSchema = z.object({
   label: z.string().min(1),
   required: z.boolean(),
+  hint: z.string().optional(),
   options: z
     .object({
       value: z
@@ -65,15 +62,15 @@ export const selectDropdownConfig: PatternConfig<
   SelectDropdownPattern,
   SelectDropdownPatternOutput
 > = {
-  displayName: 'Select Dropdown',
+  displayName: 'Dropdown',
   iconPath: 'dropdown-icon.svg',
   initial: {
-    label: 'Select-dropdown-label',
+    label: 'Dropdown-label',
     required: false,
     options: [
-      { value: 'value1', label: 'Option-1' },
-      { value: 'value2', label: 'Option-2' },
-      { value: 'value3', label: 'Option-3' },
+      { value: 'value1', label: 'Option 1' },
+      { value: 'value2', label: 'Option 2' },
+      { value: 'value3', label: 'Option 3' },
     ],
   },
 
@@ -93,15 +90,15 @@ export const selectDropdownConfig: PatternConfig<
   },
 
   createPrompt(_, session, pattern, options) {
-    const extraAttributes: Record<string, any> = {};
     const sessionValue = getFormSessionValue(session, pattern.id);
-    const error = session.data.errors[pattern.id];
+    const sessionError = getFormSessionError(session, pattern.id);
 
     return {
       props: {
         _patternId: pattern.id,
         type: 'select-dropdown',
         label: pattern.data.label,
+        hint: pattern.data.hint,
         selectId: pattern.id,
         options: pattern.data.options.map(option => {
           return {
@@ -111,8 +108,7 @@ export const selectDropdownConfig: PatternConfig<
         }),
         required: pattern.data.required,
         value: sessionValue,
-        error,
-        ...extraAttributes,
+        error: sessionError,
       } as SelectDropdownProps,
       children: [],
     };

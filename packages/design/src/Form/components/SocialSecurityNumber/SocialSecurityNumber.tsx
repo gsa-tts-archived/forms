@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useFormContext } from 'react-hook-form';
-import { type SocialSecurityNumberProps } from '@atj/forms';
+import { type SocialSecurityNumberProps } from '@gsa-tts/forms-core';
 
 import { type PatternComponent } from '../../index.js';
 
@@ -27,14 +27,18 @@ export const SocialSecurityNumberPattern: PatternComponent<
 
   return (
     <fieldset className="usa-fieldset">
-      <div className={classNames('usa-form-group margin-top-2')}>
+      <div
+        className={classNames('usa-form-group margin-top-2', {
+          'usa-form-group--error': error,
+        })}
+      >
         <label
           className={classNames('usa-label', {
             'usa-label--error': error,
           })}
           htmlFor={ssnId}
         >
-          {label || 'Social Security Number'}
+          {label || 'Social Security number'}
           {required && <span className="required-indicator">*</span>}
         </label>
         {hint && (

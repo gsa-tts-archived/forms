@@ -1,16 +1,18 @@
 import { describe, expect, it } from 'vitest';
 
-import { Input } from '../input/builder';
+import { success } from '@gsa-tts/forms-common';
+
+import { createTestBrowserFormService } from '../../context';
 import { createFormSession } from '../../session';
+import type { Blueprint } from '../../types';
+
+import { Input } from '../input/builder';
 
 import { PageSet } from './page-set/builder';
 import { submitPage } from './submit';
 import { defaultFormConfig } from '..';
-import type { Blueprint } from '../../types';
 import { Page } from './page/builder';
 import { FormClient } from './form-client';
-import { createTestBrowserFormService } from '../../context';
-import { success } from '@atj/common';
 
 describe('Page-set submission', () => {
   it('stores session data for valid page data', async () => {
@@ -193,14 +195,8 @@ const createTestSession = () => {
 };
 
 const createTestForm = () => {
-  const input1 = new Input(
-    { label: 'label', required: true, maxLength: 10 },
-    'input-1'
-  );
-  const input2 = new Input(
-    { label: 'label', required: true, maxLength: 10 },
-    'input-2'
-  );
+  const input1 = new Input({ label: 'label', required: true }, 'input-1');
+  const input2 = new Input({ label: 'label', required: true }, 'input-2');
   const page1 = new Page(
     {
       title: 'Page 1',
