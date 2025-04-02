@@ -61,7 +61,7 @@ jobs:
       # xvfb is pre-installed in the playwright container
       - name: Run end-to-end tests
         shell: bash
-        run: xvfb-run pnpm --filter=@gsa-tts/forms-e2e test:ci
+        run: xvfb-run pnpm test:e2e:ci
 
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
