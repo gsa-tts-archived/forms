@@ -126,7 +126,11 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
         const authRepository = createAuthRepository(dbContext);
         const authContext = new BaseAuthContext(
           authRepository,
-          () => Promise.resolve(true),
+          {
+            // Stub or mock a login provider for testing (can be plugged in as needed)
+            // @ts-expect-error - Object literal may only specify known properties, but this is a stub.
+            authorize: () => Promise.resolve(true),
+          },
           () => '', // Mock getCookie function
           () => {}, // Mock setCookie function
           () => {}, // Mock setUserSession function
