@@ -2,27 +2,29 @@ import { test, expect } from './fixtures/import-file.fixture.js';
 import { FormCreatePage } from './models/form-create-page.js';
 
 test.describe('Import form from a provided sample', () => {
-  test('Verify the form import was successful', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
+  let formPage: FormCreatePage;
+  let formUrl: string;
+
+  test.beforeEach(async ({ page, formUrl: url }) => {
+    formPage = new FormCreatePage(page);
+    formUrl = url;
     await formPage.navigateTo(formUrl);
+  });
+
+  test('Verify the form import was successful', async () => {
     await formPage.verifyBlueprintLoaded();
   });
 
-  test('Edit page title', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
-    await formPage.navigateTo(formUrl);
+  test('Edit page title', async () => {
     await formPage.editPageTitle('Pardon Application *', 'My awesome form page');
   });
 
-  test('Add a rich text component and format text', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
+  test('Add a rich text component and format text', async () => {
     const editorText = 'This is some text entered in the rich text editor';
-    await formPage.navigateTo(formUrl);
     await formPage.addRichTextComponent(editorText);
   });
 
   test('Move question to another page', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
     const destinationPage = 'Charge Details';
     await formPage.navigateTo(`${formUrl}?page=8`);
     await formPage.moveQuestionToPage('Race', destinationPage);
@@ -32,17 +34,14 @@ test.describe('Import form from a provided sample', () => {
     expect(page.getByText('Name:')).toBeDefined();
   });
 
-  test('Delete a question/pattern', async ({ page, formUrl }) => {
-    const formPage = new FormCreatePage(page);
+  test('Delete a question/pattern', async ({ formUrl }) => {
     await formPage.navigateTo(`${formUrl}?page=11`);
     await formPage.confirmDialog();
     await formPage.deletePattern('Page 3 of 4');
   });
 
-  test('Reorder pages via drag-and-drop', async ({ page, formUrl }) => {
+  test('Reorder pages via drag-and-drop', async ({ page }) => {
     const getPageMenuLinks = (links: (SVGElement | HTMLElement)[]) => links.map((link) => link.textContent?.trim() || '');
-    const formPage = new FormCreatePage(page);
-    await formPage.navigateTo(formUrl);
     const menuSelector = 'ul.add-list-reset a';
     await page.waitForSelector(menuSelector, { state: 'visible' });
 
