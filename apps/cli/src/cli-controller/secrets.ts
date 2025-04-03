@@ -120,21 +120,26 @@ export const addSecretCommands = (ctx: Context, cli: Command) => {
 
       try {
         console.log('Preparing database at:', dbPath);
+        const stubLoginProvider = {};
+        const stubGetCookie = () => {};
+        const stubSetCookie = () => {};
+        const stubSetUserSession = () => {};
+        const stubIsUserAuthorized = () => {
+          return Promise.resolve(true);
+        }
 
         // The login flow is to create fs db context -> feed into base auth context constructor -> feed it into the auth service
         const dbContext = await createFilesystemDatabaseContext(dbPath);
         const authRepository = createAuthRepository(dbContext);
         const authContext = new BaseAuthContext(
           authRepository,
-          {
-            // Stub or mock a login provider for testing (can be plugged in as needed)
-            // @ts-expect-error - Object literal may only specify known properties, but this is a stub.
-            authorize: () => Promise.resolve(true),
-          },
-          () => '', // Mock getCookie function
-          () => {}, // Mock setCookie function
-          () => {}, // Mock setUserSession function
-          () => Promise.resolve(true), // Mock isUserAuthorized function
+          // Stub a login provider for testing (can be plugged in as needed)
+          // @ts-expect-error - Object literal may only specify known properties, but this is a stub.
+          stubLoginProvider,
+          stubGetCookie,
+          stubSetCookie,
+          stubSetUserSession,
+          stubIsUserAuthorized,
         );
 
         const testEmail = 'test@example.com';
