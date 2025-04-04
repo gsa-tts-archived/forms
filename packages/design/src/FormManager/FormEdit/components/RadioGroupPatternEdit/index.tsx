@@ -10,7 +10,10 @@ import { PatternEditComponent } from '../../types.js';
 import { PatternEditActions } from '../common/PatternEditActions.js';
 import { PatternOptionActions } from '../common/PatternOptionActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
-import { createPatternOptionsWithContext, usePatternEditFormContext } from '../common/hooks.js';
+import {
+  createPatternOptionsWithContext,
+  usePatternEditFormContext,
+} from '../common/hooks.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
@@ -40,7 +43,8 @@ const RadioGroupPatternEdit: PatternEditComponent<RadioGroupProps> = ({
 const EditComponent = ({ pattern }: { pattern: RadioGroupPattern }) => {
   const { fieldId, getFieldState, register } =
     usePatternEditFormContext<RadioGroupPattern>(pattern.id);
-  const { options, setOptions, deleteOption, updateOptionLabel } = createPatternOptionsWithContext(pattern);
+  const { options, setOptions, deleteOption, updateOptionLabel } =
+    createPatternOptionsWithContext(pattern);
   const label = getFieldState('label');
   const hint = getFieldState('hint');
 

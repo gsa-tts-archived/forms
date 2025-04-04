@@ -12,13 +12,13 @@ export type Option = {
   id: string;
   label: string;
   [key: string]: unknown;
-}
+};
 
 type UsePatternOptionsProps = {
   initialOptions: Option[];
   onOptionsChange?: (options: Option[]) => void;
   setValue?: (name: string, value: unknown) => void;
-}
+};
 
 type NestedKeys<T extends object> = {
   [K in keyof T & (string | number)]: T[K] extends object
@@ -46,8 +46,8 @@ export const usePatternEditFormContext = <T extends Pattern>(
 export const usePatternOptions = ({
   initialOptions,
   onOptionsChange,
-  setValue
-} : UsePatternOptionsProps) => {
+  setValue,
+}: UsePatternOptionsProps) => {
   const [options, setOptions] = useState<Option[]>(initialOptions);
 
   useEffect(() => {
@@ -56,8 +56,8 @@ export const usePatternOptions = ({
   }, [options, setValue, onOptionsChange]);
 
   const deleteOption = (optionId: string) => {
-    setOptions(options.filter(option => option.id !== optionId))
-  }
+    setOptions(options.filter(option => option.id !== optionId));
+  };
 
   const updateOptionLabel = (index: number, value: string) => {
     const newOptions = [...options];
@@ -71,7 +71,7 @@ export const usePatternOptions = ({
     options,
     setOptions,
     deleteOption,
-    updateOptionLabel
+    updateOptionLabel,
   };
 };
 
@@ -79,12 +79,14 @@ export const createPatternOptionsWithContext = <T extends Pattern>(
   pattern: T,
   patternEditContext?: ReturnType<typeof usePatternEditFormContext<T>>
 ) => {
-  const context = patternEditContext || usePatternEditFormContext<T>(pattern.id);
+  const context =
+    patternEditContext || usePatternEditFormContext<T>(pattern.id);
 
   return usePatternOptions({
     initialOptions: pattern.data.options || [],
-    setValue: (name, value) => context.setValue(name as NestedKeys<T['data']>, value)
+    setValue: (name, value) =>
+      context.setValue(name as NestedKeys<T['data']>, value),
   });
-}
+};
 
 export default usePatternOptions;
