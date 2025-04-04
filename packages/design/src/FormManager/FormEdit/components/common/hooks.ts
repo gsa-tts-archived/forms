@@ -17,7 +17,7 @@ export type Option = {
 type UsePatternOptionsProps = {
   initialOptions: Option[];
   onOptionsChange?: (options: Option[]) => void;
-  setValue?: (name: string, value: unknown) => void;
+  setValue?: (name: string, value: PatternValue) => void;
 };
 
 type NestedKeys<T extends object> = {
