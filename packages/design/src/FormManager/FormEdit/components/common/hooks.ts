@@ -11,7 +11,7 @@ import {
 export type Option = {
   id: string;
   label: string;
-  [key: string]: string | number | readonly string[] | undefined | boolean;
+  [key: string]: string | number | readonly string[] | undefined;
 };
 
 type UsePatternOptionsProps = {
