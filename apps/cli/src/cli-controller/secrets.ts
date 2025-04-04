@@ -8,8 +8,6 @@ import {
   getSecretsVault,
 } from '@gsa-tts/forms-infra-core';
 import { type Context } from './types.js';
-import { createAuthRepository, BaseAuthContext } from '@gsa-tts/forms-auth';
-import { randomUUID } from 'crypto';
 
 export const addSecretCommands = (ctx: Context, cli: Command) => {
   const cmd = cli
