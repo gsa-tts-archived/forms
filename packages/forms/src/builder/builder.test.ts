@@ -14,9 +14,9 @@ import { BlueprintBuilder } from './index.js';
 describe('form builder', () => {
   it('addPattern adds initial pattern of given type', () => {
     const builder = new BlueprintBuilder(defaultFormConfig);
-    expect(Object.keys(builder.form.patterns).length).toEqual(2);
-    builder.addPatternToPage('input');
     expect(Object.keys(builder.form.patterns).length).toEqual(3);
+    builder.addPatternToPage('input');
+    expect(Object.keys(builder.form.patterns).length).toEqual(4);
   });
 
   it('addPattern preserves existing structure', () => {

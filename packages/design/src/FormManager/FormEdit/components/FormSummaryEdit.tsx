@@ -7,6 +7,7 @@ import { type FormSummaryPattern } from '@gsa-tts/forms-core';
 
 import FormSummary from '../../../Form/components/FormSummary/index.js';
 import { PatternEditComponent } from '../types.js';
+import { PatternEditActions } from './common/PatternEditActions.js';
 
 import { PatternEditForm } from './common/PatternEditForm.js';
 import { usePatternEditFormContext } from './common/hooks.js';
@@ -93,6 +94,9 @@ const EditComponent = ({ pattern }: { pattern: Pattern }) => {
             defaultValue={pattern.data.description}
           ></textarea>
         </label>
+      </div>
+      <div className="grid-col-12">
+        <PatternEditActions />
       </div>
     </div>
   );
