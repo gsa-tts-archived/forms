@@ -4,6 +4,7 @@ import AccordionRow from './AccordionRow/index.js';
 import Attachment from './Attachment/index.js';
 import Address from './Address/index.js';
 import Checkbox from './Checkbox/index.js';
+import CheckboxGroup from './CheckboxGroup/index.js';
 import DateOfBirth from './DateOfBirth/index.js';
 import EmailInput from './EmailInput/index.js';
 import Fieldset from './Fieldset/index.js';
@@ -31,6 +32,7 @@ export const defaultPatternComponents: ComponentForPattern = {
   attachment: Attachment as PatternComponent,
   address: Address as PatternComponent,
   checkbox: Checkbox as PatternComponent,
+  'checkbox-group': CheckboxGroup as PatternComponent,
   'date-of-birth': DateOfBirth as PatternComponent,
   'email-input': EmailInput as PatternComponent,
   fieldset: Fieldset as PatternComponent,
