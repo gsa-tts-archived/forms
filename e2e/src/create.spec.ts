@@ -26,6 +26,15 @@ const addQuestions = async (page: Page) => {
   await page.getByRole('button', { name: 'Short answer' }).click();
 }
 
+const addAndSelectPage = async (page: Page) => {
+  const menuButton = page.getByRole('button', { name: 'Add element', exact: true });
+  await menuButton.click();
+  await page.getByRole('button', { name: 'Page', exact: true }).click();
+
+  const untitledPage = page.locator('.usa-sidenav__item', { hasText: 'Untitled Page'})
+  await untitledPage.click();
+}
+
 test('Create form from scratch', async ({ page }) => {
   const { regexp } = pathToRegexp(Create.path);
   await createNewForm(page);
@@ -67,6 +76,7 @@ test('Add questions', async ({ page }) => {
 
 test('Drag-and-drop questions via mouse interaction', async ({ page }) => {
   await createNewForm(page);
+  await addAndSelectPage(page);
   await addQuestions(page);
 
   const element1BoxPreOrder = await page.locator('.usa-label', { hasText: 'Short answer label'}).first().boundingBox();
