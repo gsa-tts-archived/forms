@@ -151,4 +151,9 @@ export const en = {
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
   },
+  controls: {
+    addElement: {
+      textContent: 'Add element',
+    },
+  },
 };
