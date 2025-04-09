@@ -52,7 +52,6 @@ test('Create form from scratch', async ({ page }) => {
 
 test('Add questions', async ({ page }) => {
   await createNewForm(page);
-  await addPage(page);
   await addQuestions(page);
   
   const element1 = page.locator('.usa-label', { hasText: 'Short answer label'});
@@ -73,6 +72,7 @@ test('Add questions', async ({ page }) => {
 
 test('Drag-and-drop questions via mouse interaction', async ({ page }) => {
   await createNewForm(page);
+  await addPage(page);
   await addQuestions(page);
 
   const element1BoxPreOrder = await page.locator('.usa-label', { hasText: 'Short answer label'}).first().boundingBox();
