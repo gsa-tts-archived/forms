@@ -22,6 +22,14 @@ const addQuestions = async (page: Page) => {
   await fieldLabel2.fill('Multiple choice question label');
 
   await page.getByRole('button', { name: 'Save' }).click();
+  await menuButton.click();
+  await page.getByRole('button', { name: 'Short answer' }).click();
+}
+
+const addPage = async (page: Page) => {
+  const menuButton = page.getByRole('button', { name: 'Add element', exact: true });
+  await menuButton.click();
+  await page.getByRole('button', { name: 'Page' }).click();
 }
 
 test('Create form from scratch', async ({ page }) => {
@@ -44,6 +52,7 @@ test('Create form from scratch', async ({ page }) => {
 
 test('Add questions', async ({ page }) => {
   await createNewForm(page);
+  await addPage(page);
   await addQuestions(page);
   
   const element1 = page.locator('.usa-label', { hasText: 'Short answer label'});

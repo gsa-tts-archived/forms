@@ -75,18 +75,18 @@ const syncFormSummary = (blueprint: Blueprint): Blueprint => {
   );
 
   if (!formSummaryPattern) return blueprint;
-  
+
   // Check if the pattern has data property before accessing it
   if (!formSummaryPattern.data) return blueprint;
-  
+
   // Now it's safe to access title and description
   const { title, description } = formSummaryPattern.data;
-  
+
   // Only update if values exist and differ
   if (title !== undefined && summary.title !== title) {
     summary.title = title;
   }
-  
+
   if (description !== undefined && summary.description !== description) {
     summary.description = description;
   }

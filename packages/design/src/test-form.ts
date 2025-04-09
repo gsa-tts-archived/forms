@@ -39,7 +39,7 @@ export const createOnePageThreePatternTestForm = () => {
           id: 'page-1',
           data: {
             title: 'Page 1',
-            patterns: ['form-summary-1','element-1', 'element-2'],
+            patterns: ['form-summary-1', 'element-1', 'element-2'],
           },
         } satisfies PagePattern,
         {
@@ -94,7 +94,7 @@ export const createTwoPageTwoPatternTestForm = () => {
           id: 'page-1',
           data: {
             title: 'First page',
-            patterns: ['form-summary-1','element-1', 'element-2'],
+            patterns: ['form-summary-1', 'element-1', 'element-2'],
           },
         } satisfies PagePattern,
         {
@@ -149,7 +149,7 @@ export const createTwoPatternTestForm = () => {
           type: 'sequence',
           id: 'root',
           data: {
-            patterns: ['form-summary-1','element-1', 'element-2'],
+            patterns: ['form-summary-1', 'element-1', 'element-2'],
           },
         } satisfies SequencePattern,
         {

@@ -7,15 +7,15 @@ import { saveForm } from './save-form.js';
 import { success } from '@gsa-tts/forms-common';
 
 const TEST_FORM = createForm({ title: 'Form Title', description: '' });
-const formSummaryId = generatePatternId()
+const formSummaryId = generatePatternId();
 
 TEST_FORM.patterns[formSummaryId] = {
   type: 'form-summary',
   id: formSummaryId,
   data: {
     title: 'Form Title',
-    description: ''
-  }
+    description: '',
+  },
 };
 
 const TEST_FORM_2 = {
