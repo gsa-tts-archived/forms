@@ -29,7 +29,7 @@ const addQuestions = async (page: Page) => {
 const addAndSelectPage = async (page: Page) => {
   const menuButton = page.getByRole('button', { name: 'Add element', exact: true });
   await menuButton.click();
-  await page.getByRole('button', { name: 'Page' }).click();
+  await page.getByRole('button', { name: 'Page', exact: true }).click();
 
   const untitledPage = page.locator('.usa-sidenav__item', { hasText: 'Untitled Page'})
   await untitledPage.click();
@@ -89,9 +89,10 @@ test('Drag-and-drop questions via mouse interaction', async ({ page }) => {
   const handle = page.locator('[aria-describedby="DndDescribedBy-1"]').first();
   await handle.hover();
   await page.mouse.down();
+  await page.mouse.up();
 
   // Locate the target position for the drag-and-drop action
-  const nextElement = page.locator('.draggable-list-item-wrapper').nth(2);
+  const nextElement = page.locator('.draggable-list-item-wrapper').nth(3);
   const nextElementBox = await nextElement.boundingBox();
   if (nextElementBox) {
     await page.mouse.move(nextElementBox.x + nextElementBox.width / 2, nextElementBox.y + nextElementBox.height / 2);
