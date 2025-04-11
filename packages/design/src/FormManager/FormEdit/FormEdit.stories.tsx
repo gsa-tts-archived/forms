@@ -8,7 +8,7 @@ import { FormManagerProvider } from '../store.js';
 import FormEdit from './index.js';
 import {
   createTestSession,
-  createOnePageTwoPatternTestForm,
+  createOnePageThreePatternTestForm,
   createTestFormManagerContext,
 } from '../../test-form.js';
 
@@ -21,7 +21,7 @@ const meta: Meta<typeof FormEdit> = {
         <FormManagerProvider
           context={createTestFormManagerContext()}
           session={createTestSession({
-            form: createOnePageTwoPatternTestForm(),
+            form: createOnePageThreePatternTestForm(),
             route: {
               params: {
                 page: '0',
@@ -48,6 +48,18 @@ export const FormEditTest: StoryObj<typeof FormEdit> = {
     await editFieldLabel(canvasElement, 'Pattern 2', 'Pattern 2 (updated)');
   },
 };
+
+export const FormEditUpdateSummary: StoryObj<typeof FormEdit> = {
+  play: async ({ canvasElement }) => {
+    await editFormSummary(
+      canvasElement,
+      'New Form Title',
+      'Updated Form Title',
+      'This is an updated form description'
+    );
+  },
+};
+
 
 export const FormEditAddPattern: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
@@ -76,25 +88,56 @@ export const FormEditAddPattern: StoryObj<typeof FormEdit> = {
 const editFieldLabel = async (
   element: HTMLElement,
   currentLabel: string,
-  updatedLabel: string
+  updatedLabel: string,
+  options? : {
+    inputLabelText?: string;
+    description?: string;
+    descriptionLabelText?: string;
+  }
 ) => {
   const canvas = within(element);
+  const inputLabelText = options?.inputLabelText || 'Question text';
 
-  // Give focus to the field matching `currentLabel`
-  await userEvent.click(await canvas.findByLabelText(currentLabel));
+  if (options?.description && options?.descriptionLabelText) {
+    await userEvent.click(await canvas.findByText(currentLabel));
 
-  const input = canvas.getByLabelText('Question text');
-  await userEvent.clear(input);
-  await userEvent.type(input, updatedLabel);
+    const input = canvas.getByLabelText(inputLabelText);
+    await userEvent.clear(input);
+    await userEvent.type(input, updatedLabel);
+
+    const descriptionInput = canvas.getByLabelText(options.descriptionLabelText);
+    await userEvent.clear(descriptionInput);
+    await userEvent.type(descriptionInput, options.description);
+  } else {
+    // Give focus to the field matching `currentLabel`
+    await userEvent.click(await canvas.findByLabelText(currentLabel));
+
+    const input = canvas.getByLabelText(inputLabelText);
+    await userEvent.clear(input);
+    await userEvent.type(input, updatedLabel);
+  }
 
   await userEvent.click(canvas.getByText(/save and close/i));
 
   // Wait for the updated label to appear
   await waitFor(() => {
-    const newLabel = canvas.getByLabelText(updatedLabel);
+    const newLabel = options?.description ? canvas.getByText(updatedLabel) : canvas.getByLabelText(updatedLabel);
     expect(newLabel).toBeInTheDocument();
   });
 };
+
+const editFormSummary = (
+  element: HTMLElement,
+  currentTitle: string,
+  updatedTitle: string,
+  updatedDescription: string
+) => {
+  return editFieldLabel(element, currentTitle, updatedTitle, {
+    inputLabelText: 'Title',
+    description: updatedDescription,
+    descriptionLabelText: 'Description'
+  })
+}
 
 export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
@@ -109,7 +152,7 @@ export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
       return buttons;
     });
 
-    const grabber = handle[1];
+    const grabber = handle[2];
 
     // Enter reordering mode with the spacebar
     await userEvent.type(grabber, ' ');
@@ -123,7 +166,7 @@ export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
     // Wait for the DOM to update and verify the new order
     await waitFor(() => {
       const pattern1 = canvas.getByText('Pattern 1');
-      const pattern2 = canvas.getByText('Pattern 2');
+      const pattern2 = canvas.getByText('New Form Title');
       expect(pattern2.compareDocumentPosition(pattern1)).toBe(
         Node.DOCUMENT_POSITION_FOLLOWING
       );

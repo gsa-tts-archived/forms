@@ -131,11 +131,6 @@ const sidebarPatterns: DropdownPattern[] = [
   ['fieldset', defaultFormConfig.patterns['fieldset'], 'Form structure'],
   ['repeater', defaultFormConfig.patterns['repeater'], 'Form structure'],
   ['page', defaultFormConfig.patterns['page'], 'Form structure'],
-  [
-    'form-summary',
-    defaultFormConfig.patterns['form-summary'],
-    'Form structure',
-  ],
   ['rich-text', defaultFormConfig.patterns['rich-text'], 'Other'],
   ['attachment', defaultFormConfig.patterns['attachment'], 'Other'],
   ['package-download', defaultFormConfig.patterns['package-download'], 'Other'],
@@ -146,8 +141,7 @@ export const compoundFieldChildPatterns: DropdownPattern[] =
     ([key]) =>
       key !== 'fieldset' &&
       key !== 'repeater' &&
-      key !== 'page' &&
-      key !== 'form-summary'
+      key !== 'page'
   );
 
 export const SidebarAddPatternMenuItem = ({

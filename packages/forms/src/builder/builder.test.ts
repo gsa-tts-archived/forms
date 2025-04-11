@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { type Pattern, createForm, getPattern } from '../index.js';
 import { defaultFormConfig } from '../patterns/index.js';
 import { type FieldsetPattern } from '../patterns/fieldset/config.js';
-import { type FormSummaryPattern } from '../patterns/form-summary.js';
+import { type FormSummaryPattern } from '../patterns/form-summary/form-summary.js';
 import { type InputPattern } from '../patterns/input/config.js';
 import { type PagePattern } from '../patterns/page/config.js';
 import { type PageSetPattern } from '../patterns/page-set/config.js';
@@ -14,9 +14,9 @@ import { BlueprintBuilder } from './index.js';
 describe('form builder', () => {
   it('addPattern adds initial pattern of given type', () => {
     const builder = new BlueprintBuilder(defaultFormConfig);
-    expect(Object.keys(builder.form.patterns).length).toEqual(2);
-    builder.addPatternToPage('input');
     expect(Object.keys(builder.form.patterns).length).toEqual(3);
+    builder.addPatternToPage('input');
+    expect(Object.keys(builder.form.patterns).length).toEqual(4);
   });
 
   it('addPattern preserves existing structure', () => {
