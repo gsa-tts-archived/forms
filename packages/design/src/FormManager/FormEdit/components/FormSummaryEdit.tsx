@@ -92,7 +92,8 @@ const EditComponent = ({ pattern }: { pattern: Pattern }) => {
             className={`usa-textarea bg-primary-lighter ${styles.patternChoiceFieldWrapper} ${styles.formDescription}`}
             {...register('description')}
             defaultValue={pattern.data.description}
-          ></textarea>
+            style={{ resize: 'none', overflow: 'auto', height: '100px' }}
+          />
         </label>
       </div>
       <div className="grid-col-12">
