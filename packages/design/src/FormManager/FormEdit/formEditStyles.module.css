@@ -61,6 +61,7 @@
 }
 
 .draggableListItemWrapper .radioFormPattern legend,
+.draggableListItemWrapper .checkboxFormPattern legend,
 .draggableListItemWrapper .dateOfBirthPattern legend,
 .draggableListItemWrapper .phoneNumberPattern legend,
 .draggableListItemWrapper .ssnPattern legend,
