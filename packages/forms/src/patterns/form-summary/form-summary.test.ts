@@ -1,8 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import {
-    formSummaryConfig,
-    type FormSummaryPattern,
-} from './form-summary';
+import { formSummaryConfig, type FormSummaryPattern } from './form-summary';
 import { type FormSummaryProps } from '../../components.js';
 
 describe('FormSummaryPattern tests', () => {
@@ -64,7 +61,7 @@ describe('FormSummaryPattern tests', () => {
     });
 
     it('should handle excessively long description in config data', () => {
-      const data: FormSummaryPattern['data'] =  {
+      const data: FormSummaryPattern['data'] = {
         title: 'Valid Form Title',
         description: 'A'.repeat(2025), // 2025 characters
       };
@@ -86,7 +83,9 @@ describe('FormSummaryPattern tests', () => {
     it('should have correct initial values', () => {
       expect(formSummaryConfig.initial).toBeDefined();
       expect(formSummaryConfig.initial.title).toBe('Form title');
-      expect(formSummaryConfig.initial.description).toBe('Form extended description');
+      expect(formSummaryConfig.initial.description).toBe(
+        'Form extended description'
+      );
     });
 
     it('should have an empty children array', () => {
@@ -98,7 +97,7 @@ describe('FormSummaryPattern tests', () => {
           description: 'Test form description',
         },
       };
-      
+
       const patterns = {} as Record<string, any>;
       const children = formSummaryConfig.getChildren(pattern, patterns);
       expect(children).toEqual([]);
@@ -130,18 +129,23 @@ describe('FormSummaryPattern tests', () => {
           description: 'Test form description',
         },
       };
-      
+
       const session = {} as any; // Mock session
       const options = {} as any; // Mock options
       const formConfig = {} as any; // Mock FormConfig
-      
-      const prompt = formSummaryConfig.createPrompt(formConfig, session, pattern, options);
-      
+
+      const prompt = formSummaryConfig.createPrompt(
+        formConfig,
+        session,
+        pattern,
+        options
+      );
+
       expect(prompt).toBeDefined();
       expect(prompt.props).toBeDefined();
       expect(prompt.props._patternId).toBe('test-form-summary');
       expect(prompt.props.type).toBe('form-summary');
-      
+
       const props = prompt.props as FormSummaryProps;
       expect(props.title).toBe('Test Form Title');
       expect(props.description).toBe('Test form description');

@@ -60,7 +60,6 @@ export const FormEditUpdateSummary: StoryObj<typeof FormEdit> = {
   },
 };
 
-
 export const FormEditAddPattern: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -89,7 +88,7 @@ const editFieldLabel = async (
   element: HTMLElement,
   currentLabel: string,
   updatedLabel: string,
-  options? : {
+  options?: {
     inputLabelText?: string;
     description?: string;
     descriptionLabelText?: string;
@@ -105,7 +104,9 @@ const editFieldLabel = async (
     await userEvent.clear(input);
     await userEvent.type(input, updatedLabel);
 
-    const descriptionInput = canvas.getByLabelText(options.descriptionLabelText);
+    const descriptionInput = canvas.getByLabelText(
+      options.descriptionLabelText
+    );
     await userEvent.clear(descriptionInput);
     await userEvent.type(descriptionInput, options.description);
   } else {
@@ -121,7 +122,9 @@ const editFieldLabel = async (
 
   // Wait for the updated label to appear
   await waitFor(() => {
-    const newLabel = options?.description ? canvas.getByText(updatedLabel) : canvas.getByLabelText(updatedLabel);
+    const newLabel = options?.description
+      ? canvas.getByText(updatedLabel)
+      : canvas.getByLabelText(updatedLabel);
     expect(newLabel).toBeInTheDocument();
   });
 };
@@ -135,9 +138,9 @@ const editFormSummary = (
   return editFieldLabel(element, currentTitle, updatedTitle, {
     inputLabelText: 'Title',
     description: updatedDescription,
-    descriptionLabelText: 'Description'
-  })
-}
+    descriptionLabelText: 'Description',
+  });
+};
 
 export const FormEditReorderPattern: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
