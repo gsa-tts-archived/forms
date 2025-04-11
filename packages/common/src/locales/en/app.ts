@@ -34,6 +34,14 @@ export const en = {
       displayName: 'Checkbox',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
+    checkboxGroup: {
+      ...defaults,
+      displayName: 'Checkbox group',
+      fieldLabel: 'Question text',
+      hintLabel: 'Hint Text (optional)',
+      hint: '',
+      errorTextMustContainChar: 'String must contain at least 1 character(s)',
+    },
     fieldset: {
       ...defaults,
       displayName: 'Question set',
