@@ -6,7 +6,7 @@ import { FormManagerProvider, useFormManagerStore } from '../store.js';
 import {
   createTestFormManagerContext,
   createTestSession,
-  createTwoPatternTestForm,
+  createPatternTestForm,
 } from '../../test-form.js';
 
 const StoryImpl = () => {
@@ -30,7 +30,12 @@ export default {
     () => (
       <FormManagerProvider
         context={createTestFormManagerContext()}
-        session={createTestSession({ form: createTwoPatternTestForm() })}
+        session={createTestSession({ form: createPatternTestForm({
+          useSequence: true,
+          patternCount: 2,
+          requiredInputs: true,
+        })
+      })}
       >
         <StoryImpl />
       </FormManagerProvider>

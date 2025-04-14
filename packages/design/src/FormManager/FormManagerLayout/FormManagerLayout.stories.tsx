@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { FormManagerLayout } from './index.js';
 import {
-  createTwoPatternTestForm,
+  createPatternTestForm,
   createTestSession,
   createTestFormManagerContext,
 } from '../../test-form.js';
@@ -19,7 +19,12 @@ const meta: Meta<typeof FormManagerLayout> = {
       <MemoryRouter initialEntries={['/']}>
         <FormManagerProvider
           context={createTestFormManagerContext()}
-          session={createTestSession({ form: createTwoPatternTestForm() })}
+          session={createTestSession({ form: createPatternTestForm({
+            useSequence: true,
+            patternCount: 2,
+            requiredInputs: true,
+          })
+        })}
         >
           <Story {...args} />
         </FormManagerProvider>

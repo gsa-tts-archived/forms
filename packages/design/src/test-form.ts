@@ -156,36 +156,11 @@ export const createPatternTestForm = (config: TestFormConfig = {}) => {
   });
 };
 
-export const createOnePageThreePatternTestForm = () => {
-  return createPatternTestForm({
-    patternCount: 3,
-    requiredInputs: false,
-  });
-};
-
-export const createTwoPageTwoPatternTestForm = () => {
-  return createPatternTestForm({
-    pageCount: 2,
-    pageTitles: ['First page', 'Second page'],
-    patternCount: 2,
-    requiredInputs: true,
-    patternDistribution: {
-      0: ['element-1', 'element-2'],
-    },
-  });
-};
-
 export const createTwoPatternTestForm = () => {
   return createPatternTestForm({
     useSequence: true,
     patternCount: 2,
     requiredInputs: true,
-  });
-};
-
-export const createSimpleTestBlueprint = (pattern: Pattern) => {
-  return createPatternTestForm({
-    singlePattern: pattern,
   });
 };
 
@@ -225,7 +200,11 @@ export const createTestSession = (options?: {
   route?: FormRoute;
 }) => {
   return createFormSession(
-    options?.form || createTwoPatternTestForm(),
+    options?.form || createPatternTestForm({
+      useSequence: true,
+      patternCount: 2,
+      requiredInputs: true,
+    }),
     options?.route
   );
 };
