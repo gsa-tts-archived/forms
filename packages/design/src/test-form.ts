@@ -2,7 +2,6 @@ import {
   createForm,
   createFormSession,
   defaultFormConfig,
-  FormSummaryPattern,
   type Blueprint,
   type Pattern,
 } from '@gsa-tts/forms-core';
@@ -12,197 +11,177 @@ import { type PagePattern } from '@gsa-tts/forms-core';
 import { type PageSetPattern } from '@gsa-tts/forms-core';
 import { type SequencePattern } from '@gsa-tts/forms-core';
 
+import { type FormSummaryPattern } from '@gsa-tts/forms-core';
 import { type FormUIContext } from './Form/index.js';
 import { defaultPatternComponents } from './Form/components/index.js';
 import { defaultPatternEditComponents } from './FormManager/FormEdit/components/index.js';
 import { type FormManagerContext } from './FormManager/index.js';
 import { FormRoute } from '../../forms/dist/types/route-data.js';
 
-export const createOnePageThreePatternTestForm = () => {
-  return createForm(
-    {
-      title: 'Test form',
-      description: 'Test description',
+
+export interface TestFormConfig {
+  pageCount?: number;
+  pageTitles?: string[];
+  patternCount?: number;
+  requiredInputs?: boolean;
+  useSequence?: boolean;
+  formTitle?: string;
+  formDescription?: string;
+  formSummaryTitle?: string;
+  formSummaryDescription?: string;
+  initialValues?: string[];
+  patternLabels?: string[];
+  patternDistribution?: Record<number, string[]>
+  singlePattern?: Pattern;
+}
+
+export const createPatternTestForm = (config: TestFormConfig = {}) => {
+  const {
+    pageCount = 1,
+    pageTitles = Array(Math.max(1, pageCount)).fill(0).map((_, i) => `Page ${i + 1}`),
+    patternCount = 2,
+    requiredInputs = false,
+    useSequence = false,
+    formTitle = 'Test form',
+    formDescription = 'Test description',
+    formSummaryTitle = 'New Form Title',
+    formSummaryDescription = 'New form description',
+    initialValues = ['', 'test', ...Array(Math.max(0, patternCount - 2)).fill('')],
+    patternLabels = Array(Math.max(1, patternCount)).fill(0).map((_, i) => `Pattern ${i + 1}`),
+    singlePattern = null
+  } = config;
+  
+  const formMeta = {
+    title: formTitle,
+    description: formDescription,
+  };
+  
+  const pageIds = Array(pageCount).fill(0).map((_, i) => `page-${i + 1}`);
+  const inputIds = Array(patternCount).fill(0).map((_, i) => `element-${i + 1}`);
+  const formSummaryId = 'form-summary-1';
+  const patterns: Pattern[] = [];
+  
+  if (singlePattern) {
+    return createForm(
+      formMeta,
+      {
+        root: 'root',
+        patterns: [
+          {
+            type: 'sequence',
+            id: 'root',
+            data: {
+              patterns: [singlePattern.id],
+            },
+          } as SequencePattern,
+          singlePattern,
+        ],
+      }
+    );
+  }
+
+  if (useSequence) {
+    patterns.push({
+      type: 'sequence',
+      id: 'root',
+      data: {
+        patterns: [formSummaryId, ...inputIds],
+      },
+    } as SequencePattern);
+  } else {
+    patterns.push({
+      type: 'page-set',
+      id: 'root',
+      data: {
+        pages: pageIds,
+      },
+    } as PageSetPattern);
+    
+    pageIds.forEach((pageId, index) => {
+      let pagePatterns: string[] = [];
+      
+      if (index === 0) {
+        pagePatterns.push(formSummaryId);
+      }
+      
+      if (config.patternDistribution && config.patternDistribution[index]) {
+        pagePatterns = [...pagePatterns, ...config.patternDistribution[index]];
+      } else if (index === 0) {
+        pagePatterns = [...pagePatterns, ...inputIds];
+      }
+      
+      patterns.push({
+        type: 'page',
+        id: pageId,
+        data: {
+          title: pageTitles[index] || `Page ${index + 1}`,
+          patterns: pagePatterns,
+        },
+      } as PagePattern);
+    });
+  }
+  
+  inputIds.forEach((id, index) => {
+    patterns.push({
+      type: 'input',
+      id,
+      data: {
+        label: patternLabels[index] || `Pattern ${index + 1}`,
+        initial: initialValues[index] || '',
+        required: requiredInputs,
+      },
+    } as InputPattern);
+  });
+  
+  patterns.push({
+    type: 'form-summary',
+    id: formSummaryId,
+    data: {
+      title: formSummaryTitle,
+      description: formSummaryDescription,
     },
+  } as FormSummaryPattern);
+  
+  return createForm(
+    formMeta,
     {
       root: 'root',
-      patterns: [
-        {
-          type: 'page-set',
-          id: 'root',
-          data: {
-            pages: ['page-1'],
-          },
-        } satisfies PageSetPattern,
-        {
-          type: 'page',
-          id: 'page-1',
-          data: {
-            title: 'Page 1',
-            patterns: ['form-summary-1', 'element-1', 'element-2'],
-          },
-        } satisfies PagePattern,
-        {
-          type: 'input',
-          id: 'element-1',
-          data: {
-            label: 'Pattern 1',
-            initial: '',
-            required: false,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'input',
-          id: 'element-2',
-          data: {
-            label: 'Pattern 2',
-            initial: 'test',
-            required: false,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'form-summary',
-          id: 'form-summary-1',
-          data: {
-            title: 'New Form Title',
-            description: 'New form description',
-          },
-        } satisfies FormSummaryPattern,
-      ],
+      patterns,
     }
   );
+};
+
+export const createOnePageThreePatternTestForm = () => {
+  return createPatternTestForm({
+    patternCount: 3,
+    requiredInputs: false
+  });
 };
 
 export const createTwoPageTwoPatternTestForm = () => {
-  return createForm(
-    {
-      title: 'Test form',
-      description: 'Test description',
-    },
-    {
-      root: 'root',
-      patterns: [
-        {
-          type: 'page-set',
-          id: 'root',
-          data: {
-            pages: ['page-1', 'page-2'],
-          },
-        } satisfies PageSetPattern,
-        {
-          type: 'page',
-          id: 'page-1',
-          data: {
-            title: 'First page',
-            patterns: ['form-summary-1', 'element-1', 'element-2'],
-          },
-        } satisfies PagePattern,
-        {
-          type: 'page',
-          id: 'page-2',
-          data: {
-            title: 'Second page',
-            patterns: [],
-          },
-        } satisfies PagePattern,
-        {
-          type: 'input',
-          id: 'element-1',
-          data: {
-            label: 'Pattern 1',
-            initial: '',
-            required: true,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'input',
-          id: 'element-2',
-          data: {
-            label: 'Pattern 2',
-            initial: 'test',
-            required: true,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'form-summary',
-          id: 'form-summary-1',
-          data: {
-            title: 'New Form Title',
-            description: 'New form description',
-          },
-        } satisfies FormSummaryPattern,
-      ],
+  return createPatternTestForm({
+    pageCount: 2,
+    pageTitles: ['First page', 'Second page'],
+    patternCount: 2,
+    requiredInputs: true,
+    patternDistribution: {
+      0: ['element-1', 'element-2']
     }
-  );
+  });
 };
 
 export const createTwoPatternTestForm = () => {
-  return createForm(
-    {
-      title: 'Test form',
-      description: 'Test description',
-    },
-    {
-      root: 'root',
-      patterns: [
-        {
-          type: 'sequence',
-          id: 'root',
-          data: {
-            patterns: ['form-summary-1', 'element-1', 'element-2'],
-          },
-        } satisfies SequencePattern,
-        {
-          type: 'input',
-          id: 'element-1',
-          data: {
-            label: 'Pattern 1',
-            initial: '',
-            required: true,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'input',
-          id: 'element-2',
-          data: {
-            label: 'Pattern 2',
-            initial: 'test',
-            required: true,
-          },
-        } satisfies InputPattern,
-        {
-          type: 'form-summary',
-          id: 'form-summary-1',
-          data: {
-            title: 'New Form Title',
-            description: 'New form description',
-          },
-        } satisfies FormSummaryPattern,
-      ],
-    }
-  );
+  return createPatternTestForm({
+    useSequence: true,
+    patternCount: 2,
+    requiredInputs: true
+  });
 };
 
 export const createSimpleTestBlueprint = (pattern: Pattern) => {
-  return createForm(
-    {
-      title: 'Test form',
-      description: 'Test description',
-    },
-    {
-      root: 'root',
-      patterns: [
-        {
-          type: 'sequence',
-          id: 'root',
-          data: {
-            patterns: [pattern.id],
-          },
-        } satisfies SequencePattern,
-        pattern,
-      ],
-    }
-  );
+  return createPatternTestForm({
+    singlePattern: pattern
+  });
 };
 
 export const createTestFormConfig = () => {
