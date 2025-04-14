@@ -55,23 +55,34 @@ test.describe('Fill a form as an applicant', () => {
   test('Verify download', async ({ page, formUrl }) => {
     const url = new URL(formUrl);
     const result = getFormParams(url);
+    const fields = [
+      { label: 'First Name', value: 'John' },
+      { label: 'Middle Name', value: 'Michael' },
+      { label: 'Last Name', value: 'Doe' },
+    ];
 
     if(result) {
       const { formId } = result.params;
       const formPage = new FormFillerPage(page);
       await formPage.navigateTo(`${url.protocol}//${url.host}/forms/${formId}`);
-      const getDownloadButton = async () => await page.getByRole('button', { name: 'Download PDF', exact: true }).isVisible();
-      let hasDownloadButton = await getDownloadButton();
 
-      await formPage.updateInputValue('First Name', 'John');
-      await formPage.updateInputValue('Middle Name', 'Michael');
-      await formPage.updateInputValue('Last Name', 'Doe');
+      const isDownloadButtonVisible = async (): Promise<boolean> =>
+        await page.getByRole('button', { name: 'Download PDF', exact: true }).isVisible();
 
-      while(!hasDownloadButton) {
-        await formPage.clickNextButton();
-        await page.waitForTimeout(500);
-        hasDownloadButton = await getDownloadButton();
+      const waitForDownloadButton = async () => {
+        let isButtonVisible = await isDownloadButtonVisible();
+        while (!isButtonVisible) {
+          await formPage.clickNextButton();
+          await page.waitForTimeout(500);
+          isButtonVisible = await isDownloadButtonVisible();
+        }
+      };
+
+      for (const { label, value } of fields) {
+        await formPage.updateInputValue(label, value);
       }
+
+      await waitForDownloadButton();
 
       const downloadPromise = page.waitForEvent('download');
       await page.getByRole('button', { name: 'Download PDF', exact: true }).click();
