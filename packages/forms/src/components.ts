@@ -124,6 +124,23 @@ export type CheckboxProps = PatternProps<{
   error?: FormError;
 }>;
 
+export type CheckboxGroupProps = PatternProps<{
+  type: 'checkbox-group';
+  groupId: string;
+  label: string;
+  hint?: string;
+  options: {
+    id: string;
+    name: string;
+    label: string;
+    defaultChecked: boolean;
+    disabled?: boolean;
+    value?: string;
+  }[];
+  required: boolean;
+  error?: FormError;
+}>;
+
 export type PageSetProps = PatternProps<{
   type: 'page-set';
   pages: { title: string; selected: boolean; url: string; visited: boolean }[];

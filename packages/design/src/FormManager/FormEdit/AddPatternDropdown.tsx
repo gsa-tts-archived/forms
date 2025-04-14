@@ -19,6 +19,7 @@ const icons: Record<string, string | any> = {
   'address-icon.svg': '#home',
   'block-icon.svg': blockIcon,
   'checkbox-icon.svg': checkboxIcon,
+  'checkbox-group-icon.svg': checkboxIcon,
   'date-icon.svg': '#calendar_today',
   'dropdown-icon.svg': '#expand_more',
   'email-icon.svg': '#alternate_email',
@@ -88,6 +89,7 @@ type DropdownPattern = [string, PatternConfig, string];
 const sidebarPatterns: DropdownPattern[] = [
   ['radio-group', defaultFormConfig.patterns['radio-group'], 'Choice'],
   ['checkbox', defaultFormConfig.patterns['checkbox'], 'Choice'],
+  ['checkbox-group', defaultFormConfig.patterns['checkbox-group'], 'Choice'],
   ['select-dropdown', defaultFormConfig.patterns['select-dropdown'], 'Choice'],
   ['input', defaultFormConfig.patterns['input'], 'Freeform answer'],
   ['text-area', defaultFormConfig.patterns['text-area'], 'Freeform answer'],
@@ -138,10 +140,7 @@ const sidebarPatterns: DropdownPattern[] = [
 
 export const compoundFieldChildPatterns: DropdownPattern[] =
   sidebarPatterns.filter(
-    ([key]) =>
-      key !== 'fieldset' &&
-      key !== 'repeater' &&
-      key !== 'page'
+    ([key]) => key !== 'fieldset' && key !== 'repeater' && key !== 'page'
   );
 
 export const SidebarAddPatternMenuItem = ({

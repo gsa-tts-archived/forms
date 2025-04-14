@@ -4,6 +4,7 @@ import { accordionRowConfig } from './accordion-row/index.js';
 import { attachmentConfig } from './attachment/index.js';
 import { addressConfig } from './address/index.js';
 import { checkboxConfig } from './checkbox.js';
+import { checkboxGroupConfig } from './checkbox-group/index.js';
 import { dateOfBirthConfig } from './date-of-birth/date-of-birth.js';
 import { emailInputConfig } from './email-input/email-input.js';
 import { fieldsetConfig } from './fieldset/index.js';
@@ -33,6 +34,7 @@ export const defaultFormConfig: FormConfig = {
     address: addressConfig,
     attachment: attachmentConfig,
     checkbox: checkboxConfig,
+    'checkbox-group': checkboxGroupConfig,
     'date-of-birth': dateOfBirthConfig,
     'email-input': emailInputConfig,
     fieldset: fieldsetConfig,
@@ -61,6 +63,7 @@ export { type AttachmentPattern } from './attachment/config.js';
 export * from './attachment/file-type-options.js';
 export * from './address/index.js';
 export * from './checkbox.js';
+export * from './checkbox-group/index.js';
 export * from './date-of-birth/date-of-birth.js';
 export * from './email-input/email-input.js';
 export * from './fieldset/index.js';
