@@ -22,7 +22,10 @@ import { useFormManagerStore } from '../../../store.js';
 import styles from '../../formEditStyles.module.css';
 import classNames from 'classnames';
 
-export type DraggableListPresentation = 'compact' | 'compact-center' | 'default';
+export type DraggableListPresentation =
+  | 'compact'
+  | 'compact-center'
+  | 'default';
 export type DraggableListProps = React.PropsWithChildren<{
   order: UniqueIdentifier[];
   updateOrder: (order: UniqueIdentifier[]) => void;
@@ -151,7 +154,8 @@ const SortableItemOverlay = ({
         </div>
         <div
           className={classNames('grid-col', {
-            'flex-fill': presentation === 'compact' || presentation == 'compact-center',
+            'flex-fill':
+              presentation === 'compact' || presentation == 'compact-center',
             'grid-col-12': presentation === 'default',
           })}
         >
@@ -188,7 +192,8 @@ const SortableItem = ({
         'cursor-pointer',
         {
           'margin-bottom-3': presentation === 'default',
-          'border-top-1px': presentation === 'compact' || presentation == 'compact-center',
+          'border-top-1px':
+            presentation === 'compact' || presentation == 'compact-center',
           'border-base-lighter': presentation === 'compact',
         }
       )}
@@ -205,7 +210,8 @@ const SortableItem = ({
     >
       <div
         className={classNames('grid-row', {
-          'display-flex': presentation === 'compact' || presentation == 'compact-center',
+          'display-flex':
+            presentation === 'compact' || presentation == 'compact-center',
         })}
       >
         <div
@@ -234,7 +240,8 @@ const SortableItem = ({
         </div>
         <div
           className={classNames('grid-col', {
-            'flex-fill': presentation === 'compact' || presentation == 'compact-center',
+            'flex-fill':
+              presentation === 'compact' || presentation == 'compact-center',
             'grid-col-12': presentation === 'default',
           })}
         >

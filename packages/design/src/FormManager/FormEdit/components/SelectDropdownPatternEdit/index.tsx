@@ -55,8 +55,8 @@ const EditComponent = ({ pattern }: { pattern: SelectDropdownPattern }) => {
   const optionIds = options.map(option => option.id as UniqueIdentifier);
 
   const updateOptionOrder = (newOrder: UniqueIdentifier[]) => {
-    const reorderedOptions = newOrder.map(id => 
-      options.find(option => option.id === id)!
+    const reorderedOptions = newOrder.map(
+      id => options.find(option => option.id === id)!
     );
     setOptions(reorderedOptions);
   };
@@ -118,9 +118,9 @@ const EditComponent = ({ pattern }: { pattern: SelectDropdownPattern }) => {
       </div>
       <div className="tablet:grid-col-6 mobile-lg:grid-col-12">
         <DraggableList
-        order={optionIds}
-        updateOrder={updateOptionOrder}
-        presentation="compact-center"
+          order={optionIds}
+          updateOrder={updateOptionOrder}
+          presentation="compact-center"
         >
           {options.map((option, index) => {
             const optionValue = getFieldState(`options.${index}.value`);

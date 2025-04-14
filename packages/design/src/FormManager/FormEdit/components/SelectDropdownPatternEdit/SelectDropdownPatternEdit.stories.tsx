@@ -94,17 +94,19 @@ export const DeleteField: StoryObj<typeof FormEdit> = {
 
     const option2Element = canvas.getByLabelText('Option 2 label');
     const option2Row = option2Element.closest('div');
-    const deleteButton = within(option2Row as HTMLElement).getByRole('button', { name: /delete/i });
-    
+    const deleteButton = within(option2Row as HTMLElement).getByRole('button', {
+      name: /delete/i,
+    });
+
     const originalConfirm = window.confirm;
     window.confirm = () => true;
-    
+
     await userEvent.click(deleteButton);
-  
+
     await new Promise(resolve => setTimeout(resolve, 3000));
     window.confirm = originalConfirm;
 
-    await expect(canvas.getByDisplayValue('Option-1')).toBeInTheDocument();
+    await expect(canvas.getByLabelText('Option 1 label')).toBeInTheDocument();
     await expect(canvas.getByDisplayValue('Option-3')).toBeInTheDocument();
   },
 };

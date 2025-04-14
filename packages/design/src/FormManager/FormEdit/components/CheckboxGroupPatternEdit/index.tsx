@@ -54,8 +54,8 @@ const EditComponent = ({ pattern }: { pattern: CheckboxGroupPattern }) => {
   const optionIds = options.map(option => option.id as UniqueIdentifier);
 
   const updateOptionOrder = (newOrder: UniqueIdentifier[]) => {
-    const reorderedOptions = newOrder.map(id => 
-      options.find(option => option.id === id)!
+    const reorderedOptions = newOrder.map(
+      id => options.find(option => option.id === id)!
     );
     setOptions(reorderedOptions);
   };
