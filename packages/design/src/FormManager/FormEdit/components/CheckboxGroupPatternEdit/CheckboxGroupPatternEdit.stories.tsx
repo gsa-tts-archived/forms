@@ -78,6 +78,33 @@ export const AddField: StoryObj<typeof FormEdit> = {
   },
 };
 
+export const DeleteField: StoryObj<typeof FormEdit> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(
+      canvas.getByText(message.patterns.checkboxGroup.displayName)
+    );
+
+    await expect(canvas.getByLabelText('Option 2 label')).toBeInTheDocument();
+
+    const option2Element = canvas.getByLabelText('Option 2 label');
+    const option2Row = option2Element.closest('div');
+    const deleteButton = within(option2Row as HTMLElement).getByRole('button', { name: /delete/i });
+    
+    const originalConfirm = window.confirm;
+    window.confirm = () => true;
+    
+    await userEvent.click(deleteButton);
+  
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    window.confirm = originalConfirm;
+
+    await expect(canvas.getByLabelText('Option 1 label')).toBeInTheDocument();
+    await expect(canvas.getByDisplayValue('Option 3')).toBeInTheDocument();
+  },
+};
+
 export const Error: StoryObj<typeof CheckboxGroupPatternEdit> = {
   play: async ({ canvasElement }) => {
     userEvent.setup();

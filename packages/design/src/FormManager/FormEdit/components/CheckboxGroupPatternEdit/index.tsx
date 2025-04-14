@@ -1,6 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import { UniqueIdentifier } from '@dnd-kit/core';
+import { DraggableList } from '../PreviewSequencePattern/DraggableList.js';
+
 import { type CheckboxGroupProps } from '@gsa-tts/forms-core';
 import { type CheckboxGroupPattern } from '@gsa-tts/forms-core';
 
@@ -47,6 +50,15 @@ const EditComponent = ({ pattern }: { pattern: CheckboxGroupPattern }) => {
     createPatternOptionsWithContext(pattern);
   const label = getFieldState('label');
   const hint = getFieldState('hint');
+
+  const optionIds = options.map(option => option.id as UniqueIdentifier);
+
+  const updateOptionOrder = (newOrder: UniqueIdentifier[]) => {
+    const reorderedOptions = newOrder.map(id => 
+      options.find(option => option.id === id)!
+    );
+    setOptions(reorderedOptions);
+  };
 
   return (
     <div className="grid-row grid-gap">
@@ -106,51 +118,57 @@ const EditComponent = ({ pattern }: { pattern: CheckboxGroupPattern }) => {
         </label>
       </div>
       <div className="tablet:grid-col-6 mobile-lg:grid-col-12">
-        {options.map((option, index) => {
-          const optionId = getFieldState(`options.${index}.id`);
-          const optionLabel = getFieldState(`options.${index}.label`);
-          return (
-            <div key={index}>
-              {optionId.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionId.error.message}
-                </span>
-              ) : null}
-              {optionLabel.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionLabel.error.message}
-                </span>
-              ) : null}
-              <div className="display-flex margin-bottom-2">
-                <input
-                  className={classnames('hide', 'usa-input', {
-                    'usa-label--error': label.error,
-                  })}
-                  id={fieldId(`options.${index}.id`)}
-                  {...register(`options.${index}.id`)}
-                  defaultValue={option.id}
-                  aria-label={`Option ${index + 1} id`}
-                />
-                <label
-                  htmlFor={`options-${index}.id`}
-                  className={`usa-checkbox__label ${styles.optionCircle}`}
-                ></label>
-                <input
-                  className="usa-input bg-primary-lighter"
-                  id={fieldId(`options.${index}.label`)}
-                  {...register(`options.${index}.label`)}
-                  value={option.label}
-                  onChange={e => updateOptionLabel(index, e.target.value)}
-                  aria-label={`Option ${index + 1} label`}
-                />
-                <PatternOptionActions
-                  optionId={option.id}
-                  onDelete={deleteOption}
-                />
+        <DraggableList
+          order={optionIds}
+          updateOrder={updateOptionOrder}
+          presentation="compact-center"
+        >
+          {options.map((option, index) => {
+            const optionId = getFieldState(`options.${index}.id`);
+            const optionLabel = getFieldState(`options.${index}.label`);
+            return (
+              <div key={index}>
+                {optionId.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionId.error.message}
+                  </span>
+                ) : null}
+                {optionLabel.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionLabel.error.message}
+                  </span>
+                ) : null}
+                <div className="display-flex margin-bottom-2">
+                  <input
+                    className={classnames('hide', 'usa-input', {
+                      'usa-label--error': label.error,
+                    })}
+                    id={fieldId(`options.${index}.id`)}
+                    {...register(`options.${index}.id`)}
+                    defaultValue={option.id}
+                    aria-label={`Option ${index + 1} id`}
+                  />
+                  <label
+                    htmlFor={`options-${index}.id`}
+                    className={`usa-checkbox__label ${styles.optionCircle}`}
+                  ></label>
+                  <input
+                    className="usa-input bg-primary-lighter"
+                    id={fieldId(`options.${index}.label`)}
+                    {...register(`options.${index}.label`)}
+                    value={option.label}
+                    onChange={e => updateOptionLabel(index, e.target.value)}
+                    aria-label={`Option ${index + 1} label`}
+                  />
+                  <PatternOptionActions
+                    optionId={option.id}
+                    onDelete={deleteOption}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </DraggableList>
         <button
           className={`usa-link ${styles.addMorePatternButton}`}
           type="button"
