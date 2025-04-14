@@ -63,6 +63,26 @@ test.describe('Fill a form as an applicant', () => {
       { label: 'Last Name', value: 'Doe' },
     ];
 
+    const getPdfFormFromFile = async (downloadPath: string) => {
+      const pdfBuffer = await fs.readFile(downloadPath);
+      const pdfDoc = await PDFDocument.load(pdfBuffer);
+      return pdfDoc.getForm();
+    }
+
+    const isFieldValuePresent = (pdfForm: PDFForm, value: string) => {
+      const pdfFieldNames = pdfForm.getFields().map((pdfFormField) => pdfFormField.getName());
+
+      let fieldValueFound = false;
+      for (const fieldName of pdfFieldNames) {
+        const pdfField = pdfForm.getField(fieldName);
+        if (pdfField.getText() === value) {
+          fieldValueFound = true;
+          break;
+        }
+      }
+      return fieldValueFound;
+    }
+
     if (result) {
       const { formId } = result.params;
       const formPage = new FormFillerPage(page);
@@ -94,22 +114,18 @@ test.describe('Fill a form as an applicant', () => {
       );
 
       const downloadPath = await download.path();
-      const pdfBuffer = await fs.readFile(downloadPath);
+      const pdfForm = await getPdfFormFromFile(downloadPath);
 
-      const pdfDoc = await PDFDocument.load(pdfBuffer);
-      const form = pdfDoc.getForm();
-      const fieldNames = form.getFields().map((field) => field.getName());
-
-      let fieldValueFound = false;
-      for (const fieldName of fieldNames) {
-        const field = form.getField(fieldName);
-        if (field.getText() === 'John') {
-          fieldValueFound = true;
-          break;
-        }
+      let fieldValuesFound = [];
+      for (const { value } of fields) {
+        fieldValuesFound = [
+          ...fieldValuesFound,
+          isFieldValuePresent(pdfForm, value)
+        ];
       }
 
-      expect(fieldValueFound).toBe(true);
+      expect(fieldValuesFound.every(value => value === true)).toBe(true);
+      expect(fieldValuesFound.length).toBe(fields.length);
 
     } else {
       throw new Error('Invalid form URL');
