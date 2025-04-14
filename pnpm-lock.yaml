@@ -179,6 +179,9 @@ importers:
       path-to-regexp:
         specifier: ^8.2.0
         version: 8.2.0
+      pdf-lib:
+        specifier: ^1.17.1
+        version: 1.17.1
 
   infra/aws-cdk:
     dependencies:

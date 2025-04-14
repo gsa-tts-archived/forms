@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "dotenv": "^16.4.7",
-    "path-to-regexp": "^8.2.0"
+    "path-to-regexp": "^8.2.0",
+    "pdf-lib": "^1.17.1"
   },
   "dependencies": {
     "@gsa-tts/forms-common": "workspace:*"

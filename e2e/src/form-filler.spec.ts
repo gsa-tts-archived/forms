@@ -60,16 +60,26 @@ test.describe('Fill a form as an applicant', () => {
       const { formId } = result.params;
       const formPage = new FormFillerPage(page);
       await formPage.navigateTo(`${url.protocol}//${url.host}/forms/${formId}`);
+      const getDownloadButton = async () => await page.getByRole('button', { name: 'Download PDF', exact: true }).isVisible();
+      let hasDownloadButton = await getDownloadButton();
 
       await formPage.updateInputValue('First Name', 'John');
       await formPage.updateInputValue('Middle Name', 'Michael');
       await formPage.updateInputValue('Last Name', 'Doe');
 
-      await formPage.clickNextButton();
+      while(!hasDownloadButton) {
+        await formPage.clickNextButton();
+        await page.waitForTimeout(500);
+        hasDownloadButton = await getDownloadButton();
+      }
 
-      expect(page.url()).toContain('page=1');
-      await page.getByRole('link', { name: 'Untitled Page', exact: true }).click();
+      const downloadPromise = page.waitForEvent('download');
       await page.getByRole('button', { name: 'Download PDF', exact: true }).click();
+      const download = await downloadPromise;
+      expect(download.suggestedFilename()).toBe(
+        'demo-application_for_certificate_of_pardon_for_simple_marijuana_possession.pdf'
+      );
+
     } else {
       throw new Error('Invalid form URL');
     }
