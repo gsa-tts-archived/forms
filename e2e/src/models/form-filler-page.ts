@@ -21,4 +21,8 @@ export class FormFillerPage {
     await backButton.click();
   }
 
+  async updateInputValue(label, value) {
+    await this.page.getByLabel(label).first().fill(value);
+  }
+
 }
