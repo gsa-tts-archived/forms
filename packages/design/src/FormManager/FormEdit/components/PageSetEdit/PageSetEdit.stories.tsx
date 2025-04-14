@@ -6,9 +6,16 @@ import {
   testUpdateFormFieldOnSubmitByElement,
 } from '../common/story-helper.js';
 import PageSetEdit from './index.js';
-import { createTwoPageTwoPatternTestForm } from '../../../../test-form.js';
+import { createPatternTestForm } from '../../../../test-form.js';
 
-const blueprint = createTwoPageTwoPatternTestForm();
+const blueprint = createPatternTestForm({
+  pageCount: 2,
+  pageTitles: ['First page', 'Second page'],
+  patternDistribution: {
+    0: ['element-1', 'element-2'],
+  },
+  useSequence: false,
+});
 
 const storyConfig: Meta<typeof PageSetEdit> = {
   title: 'Edit components/PageSetEdit',

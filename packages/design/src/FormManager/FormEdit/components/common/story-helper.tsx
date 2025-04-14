@@ -4,7 +4,7 @@ import { type Decorator, type Meta } from '@storybook/react';
 import { type Blueprint, type Pattern } from '@gsa-tts/forms-core';
 
 import {
-  createSimpleTestBlueprint,
+  createPatternTestForm,
   createTestFormManagerContext,
   createTestSession,
 } from '../../../../test-form.js';
@@ -26,7 +26,7 @@ export const createPatternEditStoryMeta = ({
   blueprint,
   decorators,
 }: PatternEditStoryMetaOptions): Meta<typeof FormEdit> => {
-  const form = blueprint ?? createSimpleTestBlueprint(pattern as Pattern);
+  const form = blueprint ?? createPatternTestForm({singlePattern: pattern as Pattern});
   return {
     title: 'Untitled pattern edit story',
     component: FormEdit,

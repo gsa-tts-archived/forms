@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import DocumentImporter from './index.js';
-import { createTwoPatternTestForm } from '../../../test-form.js';
+import { createPatternTestForm } from '../../../test-form.js';
 
 const meta: Meta<typeof DocumentImporter> = {
   title: 'FormManager/DocumentImporter',
@@ -17,7 +17,7 @@ const meta: Meta<typeof DocumentImporter> = {
   ],
   parameters: {
     formId: 'test-id',
-    form: createTwoPatternTestForm(),
+    form: createPatternTestForm(),
   },
   tags: ['autodocs'],
 };

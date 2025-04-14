@@ -6,7 +6,7 @@ import { createTestBrowserFormService } from '@gsa-tts/forms-core/context';
 
 import FormList from './index.js';
 import {
-  createTwoPatternTestForm,
+  createPatternTestForm,
   createTestSession,
   createTestFormManagerContext,
 } from '../../test-form.js';
@@ -20,7 +20,7 @@ const meta: Meta<typeof FormList> = {
       <MemoryRouter initialEntries={['/']}>
         <FormManagerProvider
           context={createTestFormManagerContext()}
-          session={createTestSession({ form: createTwoPatternTestForm() })}
+          session={createTestSession({ form: createPatternTestForm() })}
         >
           <Story {...args} />
         </FormManagerProvider>
@@ -29,7 +29,7 @@ const meta: Meta<typeof FormList> = {
   ],
   args: {
     formService: createTestBrowserFormService({
-      'test-form': createTwoPatternTestForm(),
+      'test-form': createPatternTestForm(),
     }),
   },
   tags: ['autodocs'],

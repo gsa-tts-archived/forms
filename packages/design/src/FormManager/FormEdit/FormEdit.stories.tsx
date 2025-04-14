@@ -8,7 +8,7 @@ import { FormManagerProvider } from '../store.js';
 import FormEdit from './index.js';
 import {
   createTestSession,
-  createOnePageThreePatternTestForm,
+  createPatternTestForm,
   createTestFormManagerContext,
 } from '../../test-form.js';
 
@@ -21,7 +21,11 @@ const meta: Meta<typeof FormEdit> = {
         <FormManagerProvider
           context={createTestFormManagerContext()}
           session={createTestSession({
-            form: createOnePageThreePatternTestForm(),
+            form: createPatternTestForm({
+              patternCount: 3,
+              requiredInputs: false,
+              useSequence: false,
+            }),
             route: {
               params: {
                 page: '0',
