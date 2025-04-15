@@ -69,11 +69,9 @@ test.describe('Fill a form as an applicant', () => {
       return pdfDoc.getForm();
     }
 
-    const isFieldValuePresent = (pdfForm: PDFForm, value: string) => {
-      const pdfFieldNames = pdfForm.getFields().map((pdfFormField) => pdfFormField.getName());
-
+    const isFieldValuePresent = (pdfForm: PDFForm, fieldNames: string[], value: string) => {
       let fieldValueFound = false;
-      for (const fieldName of pdfFieldNames) {
+      for (const fieldName of fieldNames) {
         const pdfField = pdfForm.getField(fieldName);
         if (pdfField.getText() === value) {
           fieldValueFound = true;
@@ -115,12 +113,13 @@ test.describe('Fill a form as an applicant', () => {
 
       const downloadPath = await download.path();
       const pdfForm = await getPdfFormFromFile(downloadPath);
+      const pdfFieldNames = pdfForm.getFields().map((pdfFormField) => pdfFormField.getName());
 
       let fieldValuesFound = [];
       for (const { value } of fields) {
         fieldValuesFound = [
           ...fieldValuesFound,
-          isFieldValuePresent(pdfForm, value)
+          isFieldValuePresent(pdfForm, pdfFieldNames, value)
         ];
       }
 
