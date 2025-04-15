@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
+import { match } from 'path-to-regexp';
+import { PDFDocument } from 'pdf-lib';
 import { test, expect } from './fixtures/add-download.fixture.js';
 import { FormFillerPage } from './models/form-filler-page.js';
-import { match } from 'path-to-regexp';
 import { Create } from '../../packages/design/src/FormManager/routes';
-import { PDFDocument } from 'pdf-lib';
 
 test.describe('Fill a form as an applicant', () => {
   const getFormParams = (url: URL) => {
