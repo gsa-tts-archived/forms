@@ -26,7 +26,8 @@ export const createPatternEditStoryMeta = ({
   blueprint,
   decorators,
 }: PatternEditStoryMetaOptions): Meta<typeof FormEdit> => {
-  const form = blueprint ?? createPatternTestForm({singlePattern: pattern as Pattern});
+  const form =
+    blueprint ?? createPatternTestForm({ singlePattern: pattern as Pattern });
   return {
     title: 'Untitled pattern edit story',
     component: FormEdit,

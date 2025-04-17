@@ -86,7 +86,7 @@ const EditComponent = ({ pattern }: { pattern: EmailInputPattern }) => {
           )}
         >
           <span className={`${styles.secondaryColor}`}>
-            {message.patterns.dateOfBirth.hintLabel}
+            {message.patterns.emailInput.hintLabel}
           </span>
           {hint.error ? (
             <span className="usa-error-message" role="alert">
