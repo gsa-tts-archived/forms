@@ -15,7 +15,7 @@ export const formSummaryConfig: PatternConfig<FormSummaryPattern> = {
   iconPath: 'block-icon.svg',
   initial: {
     title: 'Form title',
-    description: 'Form extended description',
+    description: 'Add a description to your form to help set expectations.',
   },
   parseConfigData: obj => safeZodParseFormErrors(configSchema, obj),
   getChildren() {
