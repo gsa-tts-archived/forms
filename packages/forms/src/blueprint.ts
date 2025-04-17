@@ -278,15 +278,14 @@ export const copyPage = (
   }
 
   const newPageId = generatePatternId();
-  const currentDate = new Date();
-  const dateString = currentDate.toLocaleString();
+  const timestamp = new Date().toLocaleString();
   
   const newPage: PagePattern = {
     ...pagePattern,
     id: newPageId,
     data: { 
       ...pagePattern.data,
-      title: `${pagePattern.data.title} Copy - ${dateString}`,
+      title: `${pagePattern.data.title} Copy - ${timestamp}`,
       patterns: []
     }
   };
@@ -300,85 +299,73 @@ export const copyPage = (
   };
 
   const idMap = new Map<PatternId, PatternId>();
-  
-  for (const patternId of pagePattern.data.patterns) {
-    const pattern = bp.patterns[patternId];
-    if (!pattern) continue;
 
-    const copyPatternAndChildren = (
-      currentBp: Blueprint, 
-      patternId: PatternId
-    ): { bp: Blueprint; newId: PatternId } => {
-      const originalPattern = currentBp.patterns[patternId];
-      if (!originalPattern) {
-        throw new Error(`Pattern with id ${patternId} not found`);
-      }
+  const copyPatternAndChildren = (
+    currentBp: Blueprint, 
+    patternId: PatternId
+  ): { bp: Blueprint; newId: PatternId } => {
+    const originalPattern = currentBp.patterns[patternId];
+    if (!originalPattern) {
+      throw new Error(`Pattern with id ${patternId} not found`);
+    }
 
-      if (idMap.has(patternId)) {
-        return { bp: currentBp, newId: idMap.get(patternId) as PatternId };
-      }
+    if (idMap.has(patternId)) {
+      return { bp: currentBp, newId: idMap.get(patternId) as PatternId };
+    }
 
-      const newId = generatePatternId();
-      idMap.set(patternId, newId);
+    const newId = generatePatternId();
+    idMap.set(patternId, newId);
 
-      const newPattern: Pattern = {
-        ...originalPattern,
-        id: newId,
-        data: { ...originalPattern.data }
-      };
-
-      let resultBp = {
-        ...currentBp,
-        patterns: {
-          ...currentBp.patterns,
-          [newId]: newPattern
-        }
-      };
-
-      if (
-        (newPattern.type === 'fieldset' || newPattern.type === 'repeater') &&
-        Array.isArray(originalPattern.data.patterns)
-      ) {
-        const originalChildren = [...originalPattern.data.patterns];
-        const newChildren: PatternId[] = [];
-
-        for (const childId of originalChildren) {
-          const { bp: updatedBp, newId: newChildId } = copyPatternAndChildren(resultBp, childId);
-          resultBp = updatedBp;
-          newChildren.push(newChildId);
-        }
-        resultBp.patterns[newId].data.patterns = newChildren;
-      }
-      return { bp: resultBp, newId };
+    const newPattern: Pattern = {
+      ...originalPattern,
+      id: newId,
+      data: { ...originalPattern.data }
     };
-    const { bp: updatedBpWithPattern } = copyPatternAndChildren(updatedBp, patternId);
-    updatedBp = updatedBpWithPattern;
+
+    let resultBp = {
+      ...currentBp,
+      patterns: {
+        ...currentBp.patterns,
+        [newId]: newPattern
+      }
+    };
+
+    if ((newPattern.type === 'fieldset' || newPattern.type === 'repeater') &&
+      Array.isArray(originalPattern.data.patterns)) {
+      const newChildren: PatternId[] = [];
+
+      for (const childId of originalPattern.data.patterns) {
+        const { bp: updatedBp, newId: newChildId } = copyPatternAndChildren(resultBp, childId);
+        resultBp = updatedBp;
+        newChildren.push(newChildId);
+      }
+      resultBp.patterns[newId].data.patterns = newChildren;
+    }
+    return { bp: resultBp, newId };
+  };
+
+  for (const patternId of pagePattern.data.patterns) {
+    if (bp.patterns[patternId]) {
+      const { bp: newState } = copyPatternAndChildren(updatedBp, patternId);
+      updatedBp = newState;
+    }
   }
+
   newPage.data.patterns = pagePattern.data.patterns.map(id => 
     idMap.get(id) || id
   );
-  updatedBp = {
-    ...updatedBp,
-    patterns: {
-      ...updatedBp.patterns,
-      [newPageId]: newPage
-    }
-  };
+  updatedBp.patterns[newPageId] =  newPage;
+
   const pageSet = updatedBp.patterns[updatedBp.root] as PageSetPattern;
   if (pageSet.type === 'page-set') {
-    updatedBp = {
-      ...updatedBp,
-      patterns: {
-        ...updatedBp.patterns,
-        [pageSet.id]: {
-          ...pageSet,
-          data: {
-            pages: [...pageSet.data.pages, newPageId]
-          }
-        } satisfies PageSetPattern
+    updatedBp.patterns[pageSet.id] = {
+      ...pageSet,
+      data: {
+        pages: [...pageSet.data.pages, newPageId]
       }
-    };
+    } as PageSetPattern;
   }
+
   return { bp: updatedBp, pattern: updatedBp.patterns[newPageId] as PagePattern };
 };
 
