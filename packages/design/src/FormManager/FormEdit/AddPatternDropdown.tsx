@@ -135,6 +135,7 @@ const sidebarPatterns: DropdownPattern[] = [
   ['page', defaultFormConfig.patterns['page'], 'Form structure'],
   ['rich-text', defaultFormConfig.patterns['rich-text'], 'Other'],
   ['attachment', defaultFormConfig.patterns['attachment'], 'Other'],
+  ['date-picker', defaultFormConfig.patterns['date-picker'], 'Other'],
   ['package-download', defaultFormConfig.patterns['package-download'], 'Other'],
 ] as const;
 

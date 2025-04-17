@@ -182,8 +182,8 @@ export type SelectDropdownProps = PatternProps<{
   value?: string;
 }>;
 
-export type DateOfBirthProps = PatternProps<{
-  type: 'date-of-birth';
+export type DateProps = PatternProps<{
+  type: 'date-of-birth' | 'date-picker';
   dayId: string;
   monthId: string;
   yearId: string;
