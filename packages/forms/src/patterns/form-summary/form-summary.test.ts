@@ -84,7 +84,7 @@ describe('FormSummaryPattern tests', () => {
       expect(formSummaryConfig.initial).toBeDefined();
       expect(formSummaryConfig.initial.title).toBe('Form title');
       expect(formSummaryConfig.initial.description).toBe(
-        'Form extended description'
+        'Add a description to your form to help set expectations.'
       );
     });
 
