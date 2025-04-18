@@ -11,6 +11,7 @@ import multipleChoiceIcon from './images/radio-options-icon.svg';
 import templateIcon from './images/template-icon.svg';
 
 import classNames from 'classnames';
+import { enLocale as message } from '@gsa-tts/forms-common';
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const icons: Record<string, string | any> = {
@@ -18,6 +19,7 @@ const icons: Record<string, string | any> = {
   'address-icon.svg': '#home',
   'block-icon.svg': blockIcon,
   'checkbox-icon.svg': checkboxIcon,
+  'checkbox-group-icon.svg': checkboxIcon,
   'date-icon.svg': '#calendar_today',
   'dropdown-icon.svg': '#expand_more',
   'email-icon.svg': '#alternate_email',
@@ -73,7 +75,7 @@ export const AddPatternMenu = () => {
         <ul className="usa-list usa-list--unstyled grid-row tablet:flex-justify-end flex-justify-center">
           <li className="position-relative tablet:grid-col-12 grid-col-5 text-center">
             <SidebarAddPatternMenuItem
-              title="Add element"
+              title={message.controls.addElement.textContent}
               patternSelected={addPattern}
             />
           </li>
@@ -87,6 +89,7 @@ type DropdownPattern = [string, PatternConfig, string];
 const sidebarPatterns: DropdownPattern[] = [
   ['radio-group', defaultFormConfig.patterns['radio-group'], 'Choice'],
   ['checkbox', defaultFormConfig.patterns['checkbox'], 'Choice'],
+  ['checkbox-group', defaultFormConfig.patterns['checkbox-group'], 'Choice'],
   ['select-dropdown', defaultFormConfig.patterns['select-dropdown'], 'Choice'],
   ['input', defaultFormConfig.patterns['input'], 'Freeform answer'],
   ['text-area', defaultFormConfig.patterns['text-area'], 'Freeform answer'],
@@ -130,23 +133,15 @@ const sidebarPatterns: DropdownPattern[] = [
   ['fieldset', defaultFormConfig.patterns['fieldset'], 'Form structure'],
   ['repeater', defaultFormConfig.patterns['repeater'], 'Form structure'],
   ['page', defaultFormConfig.patterns['page'], 'Form structure'],
-  [
-    'form-summary',
-    defaultFormConfig.patterns['form-summary'],
-    'Form structure',
-  ],
   ['rich-text', defaultFormConfig.patterns['rich-text'], 'Other'],
   ['attachment', defaultFormConfig.patterns['attachment'], 'Other'],
+  ['date-picker', defaultFormConfig.patterns['date-picker'], 'Other'],
   ['package-download', defaultFormConfig.patterns['package-download'], 'Other'],
 ] as const;
 
 export const compoundFieldChildPatterns: DropdownPattern[] =
   sidebarPatterns.filter(
-    ([key]) =>
-      key !== 'fieldset' &&
-      key !== 'repeater' &&
-      key !== 'page' &&
-      key !== 'form-summary'
+    ([key]) => key !== 'fieldset' && key !== 'repeater' && key !== 'page'
   );
 
 export const SidebarAddPatternMenuItem = ({
@@ -218,6 +213,24 @@ export const CompoundAddPatternButton = ({
         </button>
       </AddPatternDropdown>
     </div>
+  );
+};
+
+export const AddInformationOrInstructionsButton = ({
+  patternSelected,
+  title,
+}: PatternMenuProps) => {
+  return (
+    <button
+      className={classNames('usa-button usa-button--unstyled')}
+      onClick={() => patternSelected('accordion-row')}
+    >
+      <span className="display-inline-block text-ttop tablet:width-auto text-center">
+        <span className="display-inline-block text-ttop margin-right-1 text-underline">
+          {title}
+        </span>
+      </span>
+    </button>
   );
 };
 

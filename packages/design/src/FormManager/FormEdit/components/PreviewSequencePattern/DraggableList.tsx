@@ -22,7 +22,10 @@ import { useFormManagerStore } from '../../../store.js';
 import styles from '../../formEditStyles.module.css';
 import classNames from 'classnames';
 
-export type DraggableListPresentation = 'compact' | 'default';
+export type DraggableListPresentation =
+  | 'compact'
+  | 'compact-center'
+  | 'default';
 export type DraggableListProps = React.PropsWithChildren<{
   order: UniqueIdentifier[];
   updateOrder: (order: UniqueIdentifier[]) => void;
@@ -131,6 +134,7 @@ const SortableItemOverlay = ({
         <div
           className={classNames('draggable-list-button', {
             'width-5 padding-1': presentation === 'compact',
+            'width-5 padding-1 margin-y-2': presentation == 'compact-center',
             'grid-col-12 width-full padding-2': presentation === 'default',
           })}
           style={{
@@ -150,7 +154,8 @@ const SortableItemOverlay = ({
         </div>
         <div
           className={classNames('grid-col', {
-            'flex-fill': presentation === 'compact',
+            'flex-fill':
+              presentation === 'compact' || presentation == 'compact-center',
             'grid-col-12': presentation === 'default',
           })}
         >
@@ -187,7 +192,8 @@ const SortableItem = ({
         'cursor-pointer',
         {
           'margin-bottom-3': presentation === 'default',
-          'border-top-1px': presentation === 'compact',
+          'border-top-1px':
+            presentation === 'compact' || presentation == 'compact-center',
           'border-base-lighter': presentation === 'compact',
         }
       )}
@@ -204,12 +210,14 @@ const SortableItem = ({
     >
       <div
         className={classNames('grid-row', {
-          'display-flex': presentation === 'compact',
+          'display-flex':
+            presentation === 'compact' || presentation == 'compact-center',
         })}
       >
         <div
           className={classNames({
             'width-5 padding-1': presentation === 'compact',
+            'width-5 padding-1 margin-y-2': presentation == 'compact-center',
             'grid-col-12 width-full padding-2': presentation === 'default',
           })}
           {...listeners}
@@ -232,7 +240,8 @@ const SortableItem = ({
         </div>
         <div
           className={classNames('grid-col', {
-            'flex-fill': presentation === 'compact',
+            'flex-fill':
+              presentation === 'compact' || presentation == 'compact-center',
             'grid-col-12': presentation === 'default',
           })}
         >

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import {
-  createTwoPatternTestForm,
+  createPatternTestForm,
   createTestSession,
   createTestFormManagerContext,
 } from '../../../test-form.js';
@@ -18,7 +18,7 @@ const meta: Meta<typeof CreateNew> = {
       <MemoryRouter initialEntries={['/']}>
         <FormManagerProvider
           context={createTestFormManagerContext()}
-          session={createTestSession({ form: createTwoPatternTestForm() })}
+          session={createTestSession({ form: createPatternTestForm() })}
         >
           <Story {...args} />
         </FormManagerProvider>

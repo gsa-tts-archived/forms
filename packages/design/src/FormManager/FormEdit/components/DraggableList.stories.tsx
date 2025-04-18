@@ -6,7 +6,7 @@ import { FormManagerProvider, useFormManagerStore } from '../../store.js';
 import {
   createTestFormManagerContext,
   createTestSession,
-  createTwoPatternTestForm,
+  createPatternTestForm,
 } from '../../../test-form.js';
 
 import {
@@ -25,7 +25,7 @@ const meta: Meta<typeof DraggableList> = {
         <MemoryRouter initialEntries={['/']}>
           <FormManagerProvider
             context={createTestFormManagerContext()}
-            session={createTestSession({ form: createTwoPatternTestForm() })}
+            session={createTestSession({ form: createPatternTestForm() })}
           >
             <Story {...args} />
           </FormManagerProvider>

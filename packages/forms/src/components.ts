@@ -23,6 +23,7 @@ export type TextInputProps = PatternProps<{
   label: string;
   required: boolean;
   error?: FormError;
+  hint?: string;
 }>;
 
 export type TextAreaProps = PatternProps<{
@@ -33,7 +34,14 @@ export type TextAreaProps = PatternProps<{
   required: boolean;
   error?: FormError;
   hint?: string;
-  maxLength: number;
+}>;
+
+export type AccordionRowProps = PatternProps<{
+  type: 'accordion-row';
+  inputId: string;
+  title: string;
+  text: string;
+  isOpen?: boolean;
 }>;
 
 export type AddressFieldProps = {
@@ -116,6 +124,23 @@ export type CheckboxProps = PatternProps<{
   error?: FormError;
 }>;
 
+export type CheckboxGroupProps = PatternProps<{
+  type: 'checkbox-group';
+  groupId: string;
+  label: string;
+  hint?: string;
+  options: {
+    id: string;
+    name: string;
+    label: string;
+    defaultChecked: boolean;
+    disabled?: boolean;
+    value?: string;
+  }[];
+  required: boolean;
+  error?: FormError;
+}>;
+
 export type PageSetProps = PatternProps<{
   type: 'page-set';
   pages: { title: string; selected: boolean; url: string; visited: boolean }[];
@@ -157,8 +182,8 @@ export type SelectDropdownProps = PatternProps<{
   value?: string;
 }>;
 
-export type DateOfBirthProps = PatternProps<{
-  type: 'date-of-birth';
+export type DateProps = PatternProps<{
+  type: 'date-of-birth' | 'date-picker';
   dayId: string;
   monthId: string;
   yearId: string;

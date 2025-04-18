@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { createTestBrowserFormService } from '@gsa-tts/forms-core/context';
 
-import { createTwoPatternTestForm } from '../../test-form.js';
+import { createPatternTestForm } from '../../test-form.js';
 import FormDelete from './index.js';
 
 const meta: Meta<typeof FormDelete> = {
@@ -20,7 +20,7 @@ const meta: Meta<typeof FormDelete> = {
   args: {
     formId: 'test-form',
     formService: createTestBrowserFormService({
-      'test-form': createTwoPatternTestForm(),
+      'test-form': createPatternTestForm(),
     }),
   },
   tags: ['autodocs'],

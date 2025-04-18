@@ -8,7 +8,7 @@ import { FormManagerProvider } from '../../../FormManager/store.js';
 import {
   createTestFormManagerContext,
   createTestSession,
-  createTwoPatternTestForm,
+  createPatternTestForm,
 } from '../../../test-form.js';
 
 import PageSet from './PageSet.js';
@@ -21,7 +21,7 @@ const meta: Meta<typeof PageSet> = {
       <MemoryRouter initialEntries={['/']}>
         <FormManagerProvider
           context={createTestFormManagerContext()}
-          session={createTestSession({ form: createTwoPatternTestForm() })}
+          session={createTestSession({ form: createPatternTestForm() })}
         >
           <Story {...args} />
         </FormManagerProvider>

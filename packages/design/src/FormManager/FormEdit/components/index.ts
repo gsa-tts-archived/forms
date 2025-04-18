@@ -3,10 +3,12 @@ import {
   type EditComponentForPattern,
 } from '../types.js';
 
+import AccordionRowPatternEdit from './AccordionRowPatternEdit/index.js';
 import AddressPatternEdit from './AddressPatternEdit/index.js';
 import AttachmentPatternEdit from './AttachmentPatternEdit/index.js';
 import CheckboxPatternEdit from './CheckboxPatternEdit/index.js';
-import DateOfBirthPatternEdit from './DateOfBirthPatternEdit/index.js';
+import CheckboxGroupPatternEdit from './CheckboxGroupPatternEdit/index.js';
+import DatePatternEdit from './DatePatternEdit/index.js';
 import EmailInputPatternEdit from './EmailInputPatternEdit/index.js';
 import FieldsetEdit from './FieldsetEdit/index.js';
 import FormSummaryEdit from './FormSummaryEdit.js';
@@ -28,10 +30,13 @@ import SubmissionConfirmationEdit from './SubmissionConfirmationEdit.js';
 import TextAreaPatternEdit from './TextAreaPatternEdit/index.js';
 import SexPatternEdit from './SexPatternEdit/index.js';
 export const defaultPatternEditComponents: EditComponentForPattern = {
+  'accordion-row': AccordionRowPatternEdit as PatternEditComponent,
   address: AddressPatternEdit as PatternEditComponent,
   attachment: AttachmentPatternEdit as PatternEditComponent,
   checkbox: CheckboxPatternEdit as PatternEditComponent,
-  'date-of-birth': DateOfBirthPatternEdit as PatternEditComponent,
+  'checkbox-group': CheckboxGroupPatternEdit as PatternEditComponent,
+  'date-of-birth': DatePatternEdit as PatternEditComponent,
+  'date-picker': DatePatternEdit as PatternEditComponent,
   'email-input': EmailInputPatternEdit as PatternEditComponent,
   fieldset: FieldsetEdit as PatternEditComponent,
   'form-summary': FormSummaryEdit as PatternEditComponent,

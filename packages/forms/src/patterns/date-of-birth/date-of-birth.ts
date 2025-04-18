@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { type DateOfBirthProps } from '../../components.js';
+import { type DateProps } from '../../components.js';
 import { type Pattern, type PatternConfig } from '../../pattern.js';
 import { getFormSessionError, getFormSessionValue } from '../../session.js';
 import {
@@ -106,7 +106,7 @@ export const dateOfBirthConfig: PatternConfig<
         required: pattern.data.required,
         value: sessionValue,
         error: sessionError,
-      } as DateOfBirthProps,
+      } as DateProps,
       children: [],
     };
   },

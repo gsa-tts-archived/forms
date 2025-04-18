@@ -1,6 +1,8 @@
 import classnames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
 
+import { UniqueIdentifier } from '@dnd-kit/core';
+import { DraggableList } from '../PreviewSequencePattern/DraggableList.js';
 import { type RadioGroupProps } from '@gsa-tts/forms-core';
 import { type RadioGroupPattern } from '@gsa-tts/forms-core';
 
@@ -8,8 +10,12 @@ import RadioGroup from '../../../../Form/components/RadioGroup/index.js';
 import { PatternEditComponent } from '../../types.js';
 
 import { PatternEditActions } from '../common/PatternEditActions.js';
+import { PatternOptionActions } from '../common/PatternOptionActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
-import { usePatternEditFormContext } from '../common/hooks.js';
+import {
+  createPatternOptionsWithContext,
+  usePatternEditFormContext,
+} from '../common/hooks.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
@@ -39,9 +45,19 @@ const RadioGroupPatternEdit: PatternEditComponent<RadioGroupProps> = ({
 const EditComponent = ({ pattern }: { pattern: RadioGroupPattern }) => {
   const { fieldId, getFieldState, register } =
     usePatternEditFormContext<RadioGroupPattern>(pattern.id);
-  const [options, setOptions] = useState(pattern.data.options);
+  const { options, setOptions, deleteOption, updateOptionLabel } =
+    createPatternOptionsWithContext(pattern);
   const label = getFieldState('label');
   const hint = getFieldState('hint');
+
+  const optionIds = options.map(option => option.id as UniqueIdentifier);
+
+  const updateOptionOrder = (newOrder: UniqueIdentifier[]) => {
+    const reorderedOptions = newOrder.map(
+      id => options.find(option => option.id === id)!
+    );
+    setOptions(reorderedOptions);
+  };
 
   return (
     <div className="grid-row grid-gap">
@@ -101,52 +117,63 @@ const EditComponent = ({ pattern }: { pattern: RadioGroupPattern }) => {
         </label>
       </div>
       <div className="tablet:grid-col-6 mobile-lg:grid-col-12">
-        {options.map((option, index) => {
-          const optionId = getFieldState(`options.${index}.id`);
-          const optionLabel = getFieldState(`options.${index}.label`);
-          return (
-            <div key={index}>
-              {optionId.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionId.error.message}
-                </span>
-              ) : null}
-              {optionLabel.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionLabel.error.message}
-                </span>
-              ) : null}
-              <div className="display-flex margin-bottom-2">
-                <input
-                  className={classnames('hide', 'usa-input', {
-                    'usa-label--error': label.error,
-                  })}
-                  id={fieldId(`options.${index}.id`)}
-                  {...register(`options.${index}.id`)}
-                  defaultValue={option.id}
-                  aria-label={`Option ${index + 1} id`}
-                />
-                <label
-                  htmlFor={`options-${index}.id`}
-                  className={`usa-radio__label ${styles.optionCircle}`}
-                ></label>
-                <input
-                  className="usa-input bg-primary-lighter"
-                  id={fieldId(`options.${index}.label`)}
-                  {...register(`options.${index}.label`)}
-                  defaultValue={option.label}
-                  aria-label={`Option ${index + 1} label`}
-                />
+        <DraggableList
+          order={optionIds}
+          updateOrder={updateOptionOrder}
+          presentation="compact-center"
+        >
+          {options.map((option, index) => {
+            const optionId = getFieldState(`options.${index}.id`);
+            const optionLabel = getFieldState(`options.${index}.label`);
+            return (
+              <div key={index}>
+                {optionId.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionId.error.message}
+                  </span>
+                ) : null}
+                {optionLabel.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionLabel.error.message}
+                  </span>
+                ) : null}
+                <div className="display-flex margin-bottom-2">
+                  <input
+                    className={classnames('hide', 'usa-input', {
+                      'usa-label--error': label.error,
+                    })}
+                    id={fieldId(`options.${index}.id`)}
+                    {...register(`options.${index}.id`)}
+                    defaultValue={option.id}
+                    aria-label={`Option ${index + 1} id`}
+                  />
+                  <label
+                    htmlFor={`options-${index}.id`}
+                    className={`usa-radio__label ${styles.optionCircle}`}
+                  ></label>
+                  <input
+                    className="usa-input bg-primary-lighter"
+                    id={fieldId(`options.${index}.label`)}
+                    {...register(`options.${index}.label`)}
+                    value={option.label}
+                    onChange={e => updateOptionLabel(index, e.target.value)}
+                    aria-label={`Option ${index + 1} label`}
+                  />
+                  <PatternOptionActions
+                    optionId={option.id}
+                    onDelete={deleteOption}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </DraggableList>
         <button
           className={`usa-link ${styles.addMorePatternButton}`}
           type="button"
           onClick={event => {
             event.preventDefault();
-            const optionId = `option-${options.length + 1}`;
+            const optionId = `option-${crypto.randomUUID()}`;
             setOptions(
               options.concat({
                 id: optionId,

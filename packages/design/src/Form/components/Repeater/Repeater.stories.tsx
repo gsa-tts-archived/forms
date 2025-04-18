@@ -4,7 +4,7 @@ import Repeater from './index.js';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defaultPatternComponents } from '../index.js';
 import type {
-  DateOfBirthProps,
+  DateProps,
   EmailInputProps,
   RepeaterProps,
 } from '@gsa-tts/forms-core';
@@ -28,7 +28,7 @@ const mockChildComponents = (index: number) => [
       monthId: `3fdb2cb6-5d65-4de1-b773-3fb8636f5d09.${index}.a6c217f0-fe84-44ef-b606-69142ecb3365.month`,
       yearId: `3fdb2cb6-5d65-4de1-b773-3fb8636f5d09.${index}.a6c217f0-fe84-44ef-b606-69142ecb3365.year`,
       required: false,
-    } as DateOfBirthProps,
+    } as DateProps,
     children: [],
   },
   {

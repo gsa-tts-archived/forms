@@ -15,9 +15,9 @@ const pattern: SelectDropdownPattern = {
     label: message.patterns.selectDropdown.displayName,
     required: false,
     options: [
-      { value: 'value1', label: 'Option-1' },
-      { value: 'value2', label: 'Option-2' },
-      { value: 'value3', label: 'Option-3' },
+      { value: 'value1', label: 'Option-1', id: 'option-1' },
+      { value: 'value2', label: 'Option-2', id: 'option-2' },
+      { value: 'value3', label: 'Option-3', id: 'option-3' },
     ],
   },
 };
@@ -79,6 +79,35 @@ export const AddField: StoryObj<typeof FormEdit> = {
     await expect(
       await canvas.findByLabelText('Option 3 label')
     ).toBeInTheDocument();
+  },
+};
+
+export const DeleteField: StoryObj<typeof FormEdit> = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(
+      canvas.getByText(message.patterns.selectDropdown.displayName)
+    );
+
+    await expect(canvas.getByLabelText('Option 2 label')).toBeInTheDocument();
+
+    const option2Element = canvas.getByLabelText('Option 2 label');
+    const option2Row = option2Element.closest('div');
+    const deleteButton = within(option2Row as HTMLElement).getByRole('button', {
+      name: /delete/i,
+    });
+
+    const originalConfirm = window.confirm;
+    window.confirm = () => true;
+
+    await userEvent.click(deleteButton);
+
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    window.confirm = originalConfirm;
+
+    await expect(canvas.getByLabelText('Option 1 label')).toBeInTheDocument();
+    await expect(canvas.getByDisplayValue('Option-3')).toBeInTheDocument();
   },
 };
 

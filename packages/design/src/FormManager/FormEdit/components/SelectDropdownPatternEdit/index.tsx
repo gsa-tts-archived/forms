@@ -1,5 +1,8 @@
 import classnames from 'classnames';
-import React, { useState } from 'react';
+import React from 'react';
+
+import { UniqueIdentifier } from '@dnd-kit/core';
+import { DraggableList } from '../PreviewSequencePattern/DraggableList.js';
 
 import { type SelectDropdownProps } from '@gsa-tts/forms-core';
 import { type SelectDropdownPattern } from '@gsa-tts/forms-core';
@@ -8,8 +11,12 @@ import SelectDropdown from '../../../../Form/components/SelectDropdown/index.js'
 import { PatternEditComponent } from '../../types.js';
 
 import { PatternEditActions } from '../common/PatternEditActions.js';
+import { PatternOptionActions } from '../common/PatternOptionActions.js';
 import { PatternEditForm } from '../common/PatternEditForm.js';
-import { usePatternEditFormContext } from '../common/hooks.js';
+import {
+  usePatternEditFormContext,
+  createPatternOptionsWithContext,
+} from '../common/hooks.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
@@ -40,9 +47,19 @@ const SelectDropdownPatternEdit: PatternEditComponent<SelectDropdownProps> = ({
 const EditComponent = ({ pattern }: { pattern: SelectDropdownPattern }) => {
   const { fieldId, getFieldState, register } =
     usePatternEditFormContext<SelectDropdownPattern>(pattern.id);
-  const [options, setOptions] = useState(pattern.data.options);
+  const { options, setOptions, deleteOption, updateOptionLabel } =
+    createPatternOptionsWithContext(pattern);
   const label = getFieldState('label');
   const hint = getFieldState('hint');
+
+  const optionIds = options.map(option => option.id as UniqueIdentifier);
+
+  const updateOptionOrder = (newOrder: UniqueIdentifier[]) => {
+    const reorderedOptions = newOrder.map(
+      id => options.find(option => option.id === id)!
+    );
+    setOptions(reorderedOptions);
+  };
 
   return (
     <div className="grid-row grid-gap">
@@ -100,55 +117,71 @@ const EditComponent = ({ pattern }: { pattern: SelectDropdownPattern }) => {
         </label>
       </div>
       <div className="tablet:grid-col-6 mobile-lg:grid-col-12">
-        {options.map((option, index) => {
-          const optionValue = getFieldState(`options.${index}.value`);
-          const optionLabel = getFieldState(`options.${index}.label`);
-          return (
-            <div key={index}>
-              {optionValue.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionValue.error.message}
-                </span>
-              ) : null}
-              {optionLabel.error ? (
-                <span className="usa-error-message" role="alert">
-                  {optionLabel.error.message}
-                </span>
-              ) : null}
-              <div className="display-flex margin-bottom-2">
-                <input
-                  className={classnames('hide', 'usa-input', {
-                    'usa-label--error': label.error,
-                  })}
-                  id={fieldId(`options.${index}.value`)}
-                  {...register(`options.${index}.value`)}
-                  defaultValue={option.value}
-                  aria-label={`Option ${index + 1} value`}
-                />
-                <label
-                  htmlFor={`options-${index}.id`}
-                  className={`usa-radio__label ${styles.optionCircle}`}
-                ></label>
-                <input
-                  className="usa-input bg-primary-lighter"
-                  id={fieldId(`options.${index}.label`)}
-                  {...register(`options.${index}.label`)}
-                  defaultValue={option.label}
-                  aria-label={`Option ${index + 1} label`}
-                />
+        <DraggableList
+          order={optionIds}
+          updateOrder={updateOptionOrder}
+          presentation="compact-center"
+        >
+          {options.map((option, index) => {
+            const optionValue = getFieldState(`options.${index}.value`);
+            const optionLabel = getFieldState(`options.${index}.label`);
+            return (
+              <div key={index}>
+                {optionValue.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionValue.error.message}
+                  </span>
+                ) : null}
+                {optionLabel.error ? (
+                  <span className="usa-error-message" role="alert">
+                    {optionLabel.error.message}
+                  </span>
+                ) : null}
+                <div className="display-flex margin-bottom-2">
+                  <input
+                    className={classnames('hide', 'usa-input', {
+                      'usa-label--error': label.error,
+                    })}
+                    id={fieldId(`options.${index}.value`)}
+                    {...register(`options.${index}.value`)}
+                    defaultValue={option.value}
+                    aria-label={`Option ${index + 1} value`}
+                  />
+                  <label
+                    htmlFor={`options-${index}.id`}
+                    className={`usa-radio__label ${styles.optionCircle}`}
+                  ></label>
+                  <input
+                    className="usa-input bg-primary-lighter"
+                    id={fieldId(`options.${index}.label`)}
+                    {...register(`options.${index}.label`)}
+                    value={option.label}
+                    onChange={e => updateOptionLabel(index, e.target.value)}
+                    aria-label={`Option ${index + 1} label`}
+                  />
+                  <PatternOptionActions
+                    optionId={option.id}
+                    onDelete={deleteOption}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </DraggableList>
         <button
-          className="usa-button usa-button--outline margin-top-1"
+          className={`usa-link ${styles.addMorePatternButton} margin-top-1`}
           type="button"
           onClick={event => {
             event.preventDefault();
             const optionLabel = `Option ${options.length + 1}`;
             const optionValue = `value-${options.length + 1}`;
+            const optionId = `option-${crypto.randomUUID()}`;
             setOptions(
-              options.concat({ value: optionValue, label: optionLabel })
+              options.concat({
+                value: optionValue,
+                label: optionLabel,
+                id: optionId,
+              })
             );
           }}
         >
