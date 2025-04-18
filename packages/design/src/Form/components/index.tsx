@@ -5,7 +5,7 @@ import Attachment from './Attachment/index.js';
 import Address from './Address/index.js';
 import Checkbox from './Checkbox/index.js';
 import CheckboxGroup from './CheckboxGroup/index.js';
-import DateOfBirth from './DateOfBirth/index.js';
+import Date from './Date/index.js';
 import EmailInput from './EmailInput/index.js';
 import Fieldset from './Fieldset/index.js';
 import FormSummary from './FormSummary/index.js';
@@ -33,7 +33,8 @@ export const defaultPatternComponents: ComponentForPattern = {
   address: Address as PatternComponent,
   checkbox: Checkbox as PatternComponent,
   'checkbox-group': CheckboxGroup as PatternComponent,
-  'date-of-birth': DateOfBirth as PatternComponent,
+  'date-of-birth': Date as PatternComponent,
+  'date-picker': Date as PatternComponent,
   'email-input': EmailInput as PatternComponent,
   fieldset: Fieldset as PatternComponent,
   'form-summary': FormSummary as PatternComponent,

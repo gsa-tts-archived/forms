@@ -14,13 +14,13 @@ const configSchema = z.object({
   hint: z.string().optional(),
 });
 
-export type DateOfBirthPattern = Pattern<z.infer<typeof configSchema>>;
+export type DatePickerPattern = Pattern<z.infer<typeof configSchema>>;
 
-export type DateOfBirthPatternOutput = z.infer<
-  ReturnType<typeof createDOBSchema>
+export type DatePickerPatternOutput = z.infer<
+  ReturnType<typeof createDatePickerSchema>
 >;
 
-export const createDOBSchema = (data: DateOfBirthPattern['data']) => {
+export const createDatePickerSchema = (data: DatePickerPattern['data']) => {
   const daySchema = z
     .string()
     .regex(/^\d{1,2}$/, 'Invalid day format')
@@ -67,20 +67,23 @@ export const createDOBSchema = (data: DateOfBirthPattern['data']) => {
   });
 };
 
-export const dateOfBirthConfig: PatternConfig<
-  DateOfBirthPattern,
-  DateOfBirthPatternOutput
+export const datePickerConfig: PatternConfig<
+  DatePickerPattern,
+  DatePickerPatternOutput
 > = {
-  displayName: 'Date of birth',
+  displayName: 'Date picker',
   iconPath: 'date-icon.svg',
   initial: {
-    label: 'Date of birth',
+    label: 'Date picker',
     required: false,
     hint: 'For example: January 19 2000',
   },
 
   parseUserInput: (pattern, inputValue) => {
-    return safeZodParseToFormError(createDOBSchema(pattern.data), inputValue);
+    return safeZodParseToFormError(
+      createDatePickerSchema(pattern.data),
+      inputValue
+    );
   },
 
   parseConfigData: obj => {
@@ -97,7 +100,7 @@ export const dateOfBirthConfig: PatternConfig<
     return {
       props: {
         _patternId: pattern.id,
-        type: 'date-of-birth',
+        type: 'date-picker',
         label: pattern.data.label,
         hint: pattern.data.hint,
         dayId: `${pattern.id}.day`,

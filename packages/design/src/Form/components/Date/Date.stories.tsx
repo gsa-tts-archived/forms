@@ -2,11 +2,11 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { type Meta, type StoryObj } from '@storybook/react';
 
-import { DateOfBirthPattern } from './DateOfBirth.js';
+import { DatePattern } from './Date.js';
 
-const meta: Meta<typeof DateOfBirthPattern> = {
+const meta: Meta<typeof DatePattern> = {
   title: 'patterns/DateOfBirthPattern',
-  component: DateOfBirthPattern,
+  component: DatePattern,
   decorators: [
     (Story, args) => {
       const FormDecorator = () => {
@@ -33,7 +33,7 @@ const meta: Meta<typeof DateOfBirthPattern> = {
 
 export default meta;
 
-export const Default: StoryObj<typeof DateOfBirthPattern> = {
+export const Default: StoryObj<typeof DatePattern> = {
   args: {
     _patternId: '',
     type: 'date-of-birth',
@@ -46,7 +46,7 @@ export const Default: StoryObj<typeof DateOfBirthPattern> = {
   },
 };
 
-export const WithoutHint: StoryObj<typeof DateOfBirthPattern> = {
+export const WithoutHint: StoryObj<typeof DatePattern> = {
   args: {
     _patternId: '',
     type: 'date-of-birth',
@@ -59,7 +59,7 @@ export const WithoutHint: StoryObj<typeof DateOfBirthPattern> = {
   },
 };
 
-export const WithError: StoryObj<typeof DateOfBirthPattern> = {
+export const WithError: StoryObj<typeof DatePattern> = {
   args: {
     _patternId: '',
     type: 'date-of-birth',
@@ -76,7 +76,7 @@ export const WithError: StoryObj<typeof DateOfBirthPattern> = {
   },
 };
 
-export const Required: StoryObj<typeof DateOfBirthPattern> = {
+export const Required: StoryObj<typeof DatePattern> = {
   args: {
     _patternId: '',
     type: 'date-of-birth',

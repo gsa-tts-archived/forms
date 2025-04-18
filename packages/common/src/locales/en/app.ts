@@ -94,9 +94,9 @@ export const en = {
       hint: '',
       errorTextMustContainChar: 'String must contain at least 1 character(s)',
     },
-    dateOfBirth: {
+    date: {
       ...defaults,
-      displayName: 'Date of birth',
+      displayName: 'Date',
       fieldLabel: 'Question text',
       hintLabel: 'Hint text (optional)',
       hint: 'For example: January 19 2000',

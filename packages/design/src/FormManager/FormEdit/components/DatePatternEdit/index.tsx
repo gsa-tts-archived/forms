@@ -1,10 +1,11 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import { type DateOfBirthProps } from '@gsa-tts/forms-core';
+import { type DateProps } from '@gsa-tts/forms-core';
 import { type DateOfBirthPattern } from '@gsa-tts/forms-core';
+import { type DatePickerPattern } from '@gsa-tts/forms-core';
 
-import DateOfBirth from '../../../../Form/components/DateOfBirth/index.js';
+import Date from '../../../../Form/components/Date/index.js';
 import { PatternEditComponent } from '../../types.js';
 
 import { PatternEditActions } from '../common/PatternEditActions.js';
@@ -13,7 +14,7 @@ import { usePatternEditFormContext } from '../common/hooks.js';
 import { enLocale as message } from '@gsa-tts/forms-common';
 import styles from '../../formEditStyles.module.css';
 
-const DateOfBirthPatternEdit: PatternEditComponent<DateOfBirthProps> = ({
+const DatePatternEdit: PatternEditComponent<DateProps> = ({
   context,
   focus,
   previewProps,
@@ -29,16 +30,21 @@ const DateOfBirthPatternEdit: PatternEditComponent<DateOfBirthProps> = ({
         <div
           className={`${styles.dateOfBirthPattern} padding-left-3 padding-bottom-3 padding-right-3`}
         >
-          <DateOfBirth context={context} {...previewProps} />
+          <Date context={context} {...previewProps} />
         </div>
       )}
     </>
   );
 };
 
-const EditComponent = ({ pattern }: { pattern: DateOfBirthPattern }) => {
-  const { fieldId, getFieldState, register } =
-    usePatternEditFormContext<DateOfBirthPattern>(pattern.id);
+const EditComponent = ({
+  pattern,
+}: {
+  pattern: DateOfBirthPattern | DatePickerPattern;
+}) => {
+  const { fieldId, getFieldState, register } = usePatternEditFormContext<
+    DateOfBirthPattern | DatePickerPattern
+  >(pattern.id);
   const label = getFieldState('label');
   const hint = getFieldState('hint');
 
@@ -54,7 +60,7 @@ const EditComponent = ({ pattern }: { pattern: DateOfBirthPattern }) => {
             `${styles.patternChoiceFieldWrapper}`
           )}
         >
-          {message.patterns.dateOfBirth.fieldLabel}
+          {message.patterns.date.fieldLabel}
           {label.error ? (
             <span className="usa-error-message" role="alert">
               {label.error.message}
@@ -84,7 +90,7 @@ const EditComponent = ({ pattern }: { pattern: DateOfBirthPattern }) => {
           )}
         >
           <span className={`${styles.secondaryColor}`}>
-            {message.patterns.dateOfBirth.hintLabel}
+            {message.patterns.date.hintLabel}
           </span>
           {hint.error ? (
             <span className="usa-error-message" role="alert">
@@ -128,4 +134,4 @@ const EditComponent = ({ pattern }: { pattern: DateOfBirthPattern }) => {
   );
 };
 
-export default DateOfBirthPatternEdit;
+export default DatePatternEdit;
