@@ -132,7 +132,7 @@ export const createFormEditSlice =
       const newPage = builder.copyPage(pageId);
 
       set({
-        session: mergeSession(state.session, {form: builder.form}),
+        session: mergeSession(state.session, { form: builder.form }),
         focus: { pattern: newPage },
       });
       state.addNotification('success', 'Page copied successfully.');

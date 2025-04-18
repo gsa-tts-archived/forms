@@ -577,13 +577,17 @@ describe('form builder', () => {
 
     expect(newPage.type).toEqual('page');
     expect(newPage.id).not.toEqual(sourcePage.id);
-    expect(newPage.data.title).toMatch(/Page 1 Copy - \d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{2}:\d{2} [AP]M/);
+    expect(newPage.data.title).toMatch(
+      /Page 1 Copy - \d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{2}:\d{2} [AP]M/
+    );
 
     const pageSet = builder.form.patterns[builder.form.root] as PageSetPattern;
     expect(pageSet.data.pages.length).toEqual(3);
     expect(pageSet.data.pages).toContain(newPage.id);
 
-    expect(newPage.data.patterns.length).toEqual(sourcePage.data.patterns.length);
+    expect(newPage.data.patterns.length).toEqual(
+      sourcePage.data.patterns.length
+    );
 
     expect(newPage.data.patterns).not.toEqual(sourcePage.data.patterns);
 
@@ -592,19 +596,21 @@ describe('form builder', () => {
       const newPatternId = newPage.data.patterns[i];
       const originalPattern = initial.patterns[originalPatternId];
       const newPattern = builder.form.patterns[newPatternId];
-      
+
       expect(newPattern.type).toEqual(originalPattern.type);
-      
+
       expect(newPattern.id).not.toEqual(originalPattern.id);
-      
+
       if (newPattern.type === 'input') {
-        expect((newPattern as InputPattern).data.label).toMatch(/Pattern \d{1}/);
+        expect((newPattern as InputPattern).data.label).toMatch(
+          /Pattern \d{1}/
+        );
         expect((newPattern as InputPattern).data.required).toEqual(
           (originalPattern as InputPattern).data.required
         );
       }
     }
-    
+
     Object.keys(initial.patterns).forEach(patternId => {
       expect(builder.form.patterns[patternId]).toBeDefined();
     });

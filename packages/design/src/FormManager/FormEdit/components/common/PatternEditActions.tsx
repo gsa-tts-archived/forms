@@ -97,8 +97,16 @@ export const PatternEditActions = ({ children }: PatternEditActionsProps) => {
           >
             <button
               type="button"
-              aria-label={isPagePattern ? "Create a copy of this page" : "Create a copy of this pattern"}
-              title={isPagePattern ? "Create a copy of this page" : "Create a copy of this pattern"}
+              aria-label={
+                isPagePattern
+                  ? 'Create a copy of this page'
+                  : 'Create a copy of this pattern'
+              }
+              title={
+                isPagePattern
+                  ? 'Create a copy of this page'
+                  : 'Create a copy of this pattern'
+              }
               className="usa-button--outline usa-button--unstyled"
               onClick={event => {
                 event.preventDefault();

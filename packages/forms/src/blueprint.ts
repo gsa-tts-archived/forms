@@ -266,7 +266,7 @@ export const movePatternBetweenPages = (
 /**
  * Copies a page from a blueprint by creating a duplicate with a new ID.
  * This also copies all patterns contained within the page and updates their references.
- * 
+ *
  */
 export const copyPage = (
   bp: Blueprint,
@@ -279,29 +279,29 @@ export const copyPage = (
 
   const newPageId = generatePatternId();
   const timestamp = new Date().toLocaleString();
-  
+
   const newPage: PagePattern = {
     ...pagePattern,
     id: newPageId,
-    data: { 
+    data: {
       ...pagePattern.data,
       title: `${pagePattern.data.title} Copy - ${timestamp}`,
-      patterns: []
-    }
+      patterns: [],
+    },
   };
 
   let updatedBp: Blueprint = {
     ...bp,
     patterns: {
       ...bp.patterns,
-      [newPageId]: newPage
-    }
+      [newPageId]: newPage,
+    },
   };
 
   const idMap = new Map<PatternId, PatternId>();
 
   const copyPatternAndChildren = (
-    currentBp: Blueprint, 
+    currentBp: Blueprint,
     patternId: PatternId
   ): { bp: Blueprint; newId: PatternId } => {
     const originalPattern = currentBp.patterns[patternId];
@@ -319,23 +319,28 @@ export const copyPage = (
     const newPattern: Pattern = {
       ...originalPattern,
       id: newId,
-      data: { ...originalPattern.data }
+      data: { ...originalPattern.data },
     };
 
     let resultBp = {
       ...currentBp,
       patterns: {
         ...currentBp.patterns,
-        [newId]: newPattern
-      }
+        [newId]: newPattern,
+      },
     };
 
-    if ((newPattern.type === 'fieldset' || newPattern.type === 'repeater') &&
-      Array.isArray(originalPattern.data.patterns)) {
+    if (
+      (newPattern.type === 'fieldset' || newPattern.type === 'repeater') &&
+      Array.isArray(originalPattern.data.patterns)
+    ) {
       const newChildren: PatternId[] = [];
 
       for (const childId of originalPattern.data.patterns) {
-        const { bp: updatedBp, newId: newChildId } = copyPatternAndChildren(resultBp, childId);
+        const { bp: updatedBp, newId: newChildId } = copyPatternAndChildren(
+          resultBp,
+          childId
+        );
         resultBp = updatedBp;
         newChildren.push(newChildId);
       }
@@ -351,22 +356,25 @@ export const copyPage = (
     }
   }
 
-  newPage.data.patterns = pagePattern.data.patterns.map(id => 
-    idMap.get(id) || id
+  newPage.data.patterns = pagePattern.data.patterns.map(
+    id => idMap.get(id) || id
   );
-  updatedBp.patterns[newPageId] =  newPage;
+  updatedBp.patterns[newPageId] = newPage;
 
   const pageSet = updatedBp.patterns[updatedBp.root] as PageSetPattern;
   if (pageSet.type === 'page-set') {
     updatedBp.patterns[pageSet.id] = {
       ...pageSet,
       data: {
-        pages: [...pageSet.data.pages, newPageId]
-      }
+        pages: [...pageSet.data.pages, newPageId],
+      },
     } as PageSetPattern;
   }
 
-  return { bp: updatedBp, pattern: updatedBp.patterns[newPageId] as PagePattern };
+  return {
+    bp: updatedBp,
+    pattern: updatedBp.patterns[newPageId] as PagePattern,
+  };
 };
 
 /**
