@@ -11,7 +11,7 @@ export type PageMenuProps = {
   }[];
 };
 
-export const PageMenu = ({ pages }: PageMenuProps) => {
+const PageMenu = ({ pages }: PageMenuProps) => {
   const [updatedPages, setUpdatedPages] = React.useState(pages);
 
   const handlePageVisit = (index: number) => {
@@ -63,3 +63,5 @@ export const PageMenu = ({ pages }: PageMenuProps) => {
     </div>
   );
 };
+
+export default PageMenu;
