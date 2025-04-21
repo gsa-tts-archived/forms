@@ -7,16 +7,22 @@ export type LoginGovUrl =
   | 'https://idp.int.identitysandbox.gov'
   | 'https://secure.login.gov';
 
+export type LoginGovIdentityAssuranceLevel = 1 | 2;
+
 const getTokenEndpoint = (url: LoginGovUrl) =>
   `${url}/api/openid_connect/token`;
-const getAuthorizeEndpoint = (url: LoginGovUrl) =>
-  `${url}/openid_connect/authorize?acr_values=http://idmanagement.gov/ns/assurance/ial/1`;
+const getAuthorizeEndpoint = (
+  url: LoginGovUrl,
+  ial: LoginGovIdentityAssuranceLevel
+) =>
+  `${url}/openid_connect/authorize?acr_values=http://idmanagement.gov/ns/assurance/ial/${ial}`;
 
 export type LoginGovOptions = {
   loginGovUrl: LoginGovUrl;
   clientId: string;
   //clientSecret: string;
   redirectURI?: string;
+  ial: LoginGovIdentityAssuranceLevel;
 };
 
 /**
@@ -31,7 +37,7 @@ export class LoginGov implements OAuth2ProviderWithPKCE {
   constructor(opts: LoginGovOptions) {
     this.client = new OAuth2Client(
       opts.clientId,
-      getAuthorizeEndpoint(opts.loginGovUrl),
+      getAuthorizeEndpoint(opts.loginGovUrl, opts.ial),
       getTokenEndpoint(opts.loginGovUrl),
       {
         redirectURI: opts.redirectURI,
@@ -54,7 +60,7 @@ export class LoginGov implements OAuth2ProviderWithPKCE {
       codeVerifier,
       codeChallengeMethod: 'S256',
       // User attributes (scopes): https://developers.login.gov/attributes/
-      scopes: [...scopes, 'openid', 'email'],
+      scopes: [...scopes, 'openid', 'email', 'ial'],
     });
     if (options?.nonce) {
       url.searchParams.set('nonce', options?.nonce);

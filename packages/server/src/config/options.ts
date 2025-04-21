@@ -27,6 +27,7 @@ export const createDevServerOptions = async (): Promise<ServerOptions> => {
         'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:tts-10x-atj-dev-server-doj',
       //clientSecret: import.meta.env.SECRET_LOGIN_GOV_PRIVATE_KEY,
       redirectURI: 'http://localhost:4322/signin/callback',
+      ial: 1,
     },
     isUserAuthorized: async (_email: string) => {
       return true;
@@ -48,6 +49,7 @@ export const createTestServerOptions = async (): Promise<ServerOptions> => {
         'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:tts-10x-atj-dev-server-doj',
       //clientSecret: import.meta.env.SECRET_LOGIN_GOV_PRIVATE_KEY,
       redirectURI: 'http://localhost:4322/signin/callback',
+      ial: 1,
     },
     isUserAuthorized: async (_email: string) => {
       return true;

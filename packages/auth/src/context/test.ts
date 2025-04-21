@@ -35,6 +35,7 @@ export const createTestAuthContext = async (opts?: Partial<Options>) => {
         'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:tts-10x-atj-dev-server-doj',
       //clientSecret: 'super-secret',
       redirectURI: 'http://www.10x.gov/a2j/signin/callback',
+      ial: 1,
     }),
     options.getCookie,
     options.setCookie,

@@ -10,6 +10,7 @@ export const createCustomServer = async (db: DatabaseContext): Promise<any> => {
       clientId:
         'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:tts-10x-atj-dev-server-doj',
       //clientSecret: '', // secrets.loginGovClientSecret,
+      ial: 2
     },
     isUserAuthorized: async (email: string) => {
       return [
