@@ -15,7 +15,7 @@ describe('getProviderRedirect database gateway', () => {
         client_id:
           'urn:gov:gsa:openidconnect.profiles:sp:sso:gsa:tts-10x-atj-dev-server-doj',
         state: expect.any(String),
-        scope: 'openid email',
+        scope: 'openid email ial',
         redirect_uri: 'http://www.10x.gov/a2j/signin/callback',
         code_challenge: expect.any(String),
         code_challenge_method: 'S256',
