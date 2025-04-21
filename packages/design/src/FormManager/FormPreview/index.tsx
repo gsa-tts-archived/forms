@@ -16,10 +16,12 @@ export const FormPreview = () => {
 
   useEffect(() => {
     if (routeParams.page !== session.route?.params.page) {
-      const newSession = mergeSession(session, { route: session.route });
+      const newSession = mergeSession(session, {
+        route: { ...session.route, params: { ...routeParams } },
+      });
       setSession(newSession);
     }
-  }, [routeParams]);
+  }, [routeParams.page]);
 
   return <Form isPreview={true} context={context} session={session} />;
 };

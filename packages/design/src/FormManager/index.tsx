@@ -124,6 +124,7 @@ export default function FormManager(props: FormManagerProps) {
           path={AppRoutes.Preview.path}
           Component={() => {
             const { formId } = useParams();
+            const [searchParams] = useSearchParams();
             if (formId === undefined) {
               return <div>formId is undefined</div>;
             }
@@ -135,7 +136,11 @@ export default function FormManager(props: FormManagerProps) {
               <FormManagerProvider
                 context={context}
                 formId={formId}
-                session={createFormSession(form)}
+                session={createFormSession(form, {
+                  params: Object.fromEntries(searchParams),
+                  url: AppRoutes.Preview.getUrl(formId),
+                  options: { isFormBuilder: false },
+                })}
               >
                 <FormManagerLayout
                   step={NavPage.preview}
