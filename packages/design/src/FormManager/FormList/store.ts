@@ -1,7 +1,7 @@
 import { type StateCreator } from 'zustand';
 
 import { BlueprintBuilder, uint8ArrayToBase64 } from '@gsa-tts/forms-core';
-import { type FormManagerContext } from '../../FormManager/index.js';
+import { type FormManagerContext } from '../types.js';
 import { type Result, failure } from '@gsa-tts/forms-common';
 
 type StoreContext = {

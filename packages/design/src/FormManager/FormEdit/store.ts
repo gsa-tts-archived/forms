@@ -10,7 +10,7 @@ import {
   getSessionPage,
   mergeSession,
 } from '@gsa-tts/forms-core';
-import { type FormManagerContext } from '../index.js';
+import { type FormManagerContext } from '../types.js';
 import { type PatternFocus } from './types.js';
 import {
   type NotificationSlice,
