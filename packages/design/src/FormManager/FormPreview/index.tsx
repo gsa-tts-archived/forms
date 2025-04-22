@@ -17,7 +17,11 @@ export const FormPreview = () => {
   useEffect(() => {
     if (routeParams.page !== session.route?.params.page) {
       const newSession = mergeSession(session, {
-        route: { ...session.route, params: { ...routeParams } },
+        route: {
+          ...session.route,
+          params: { ...routeParams },
+          url: session.route?.url || '',
+        },
       });
       setSession(newSession);
     }
