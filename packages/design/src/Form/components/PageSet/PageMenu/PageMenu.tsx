@@ -16,9 +16,20 @@ export const PageMenu = ({ pages }: PageMenuProps) => {
 
   const handlePageVisit = (index: number) => {
     setUpdatedPages(prevPages =>
-      prevPages.map((page, i) =>
-        i === index || page.selected ? { ...page, visited: true } : page
-      )
+      prevPages.map((page, i) => {
+        if (i === index) {
+          return {
+            ...page,
+            selected: true,
+            visited: true,
+          };
+        } else {
+          return {
+            ...page,
+            selected: false,
+          };
+        }
+      })
     );
   };
 
