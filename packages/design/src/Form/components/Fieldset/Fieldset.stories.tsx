@@ -5,7 +5,7 @@ import Fieldset from './index.js';
 import { FormProvider, useForm } from 'react-hook-form';
 import { defaultPatternComponents } from '../index.js';
 import type {
-  DateOfBirthProps,
+  DateProps,
   EmailInputProps,
   FieldsetProps,
 } from '@gsa-tts/forms-core';
@@ -35,7 +35,7 @@ const mockChildComponents = (index: number, hasError: boolean) => [
             message: 'Invalid date of birth',
           }
         : undefined,
-    } as DateOfBirthProps,
+    } as DateProps,
     children: [],
   },
   {

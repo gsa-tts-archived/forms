@@ -11,7 +11,7 @@ const pattern: DateOfBirthPattern = {
   id: 'date-of-birth-1',
   type: 'date-of-birth',
   data: {
-    label: message.patterns.dateOfBirth.displayName,
+    label: message.patterns.date.displayName,
     required: false,
     hint: undefined,
   },
@@ -32,19 +32,13 @@ export const Basic: StoryObj<typeof FormEdit> = {
     const updatedLabel = 'Date of birth update';
     const updatedHint = 'Updated hint for Date of birth';
 
-    await userEvent.click(
-      canvas.getByText(message.patterns.dateOfBirth.displayName)
-    );
+    await userEvent.click(canvas.getByText(message.patterns.date.displayName));
 
-    const labelInput = canvas.getByLabelText(
-      message.patterns.dateOfBirth.fieldLabel
-    );
+    const labelInput = canvas.getByLabelText(message.patterns.date.fieldLabel);
     await userEvent.clear(labelInput);
     await userEvent.type(labelInput, updatedLabel);
 
-    const hintInput = canvas.getByLabelText(
-      message.patterns.dateOfBirth.hintLabel
-    );
+    const hintInput = canvas.getByLabelText(message.patterns.date.hintLabel);
     await userEvent.clear(hintInput);
     await userEvent.type(hintInput, updatedHint);
 
@@ -61,13 +55,9 @@ export const WithoutHint: StoryObj<typeof FormEdit> = {
     const canvas = within(canvasElement);
     const updatedLabel = 'Date of birth update';
 
-    await userEvent.click(
-      canvas.getByText(message.patterns.dateOfBirth.displayName)
-    );
+    await userEvent.click(canvas.getByText(message.patterns.date.displayName));
 
-    const labelInput = canvas.getByLabelText(
-      message.patterns.dateOfBirth.fieldLabel
-    );
+    const labelInput = canvas.getByLabelText(message.patterns.date.fieldLabel);
     await userEvent.clear(labelInput);
     await userEvent.type(labelInput, updatedLabel);
 
@@ -76,7 +66,7 @@ export const WithoutHint: StoryObj<typeof FormEdit> = {
 
     await expect(await canvas.findByText(updatedLabel)).toBeInTheDocument();
     await expect(
-      await canvas.queryByLabelText(message.patterns.dateOfBirth.hintLabel)
+      await canvas.queryByLabelText(message.patterns.date.hintLabel)
     ).toBeNull();
   },
 };
@@ -85,20 +75,14 @@ export const Error: StoryObj<typeof FormEdit> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(
-      canvas.getByText(message.patterns.dateOfBirth.displayName)
-    );
+    await userEvent.click(canvas.getByText(message.patterns.date.displayName));
 
-    const labelInput = canvas.getByLabelText(
-      message.patterns.dateOfBirth.fieldLabel
-    );
+    const labelInput = canvas.getByLabelText(message.patterns.date.fieldLabel);
     await userEvent.clear(labelInput);
     labelInput.blur();
 
     await expect(
-      await canvas.findByText(
-        message.patterns.dateOfBirth.errorTextMustContainChar
-      )
+      await canvas.findByText(message.patterns.date.errorTextMustContainChar)
     ).toBeInTheDocument();
   },
 };
