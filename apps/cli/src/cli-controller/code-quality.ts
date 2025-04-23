@@ -1,6 +1,12 @@
 import { Command } from 'commander';
+import { exec } from 'child_process';
+import { writeFile } from 'fs/promises';
 import madge from 'madge';
 import { type Context } from './types.js';
+import { promisify } from 'util';
+
+// Promisify exec for async/await usage
+const execAsync = promisify(exec);
 
 export const addCodeQualityCommands = (ctx: Context, cli: Command) => {
   const cmd = cli
@@ -65,6 +71,34 @@ export const addCodeQualityCommands = (ctx: Context, cli: Command) => {
         }
       } catch (err) {
         console.error('Error generating dependency tree:', err);
+        process.exit(1);
+      }
+    });
+
+  cmd
+    .command('log')
+    .description('Generate git log for the last 6 months and save to a file')
+    .option('--output <file>', 'Output file path', 'git-logfile.log')
+    .option('--timeframe <period>', 'Timeframe', '6 months ago')
+    .action(async (options) => {
+      const { output, timeframe } = options;
+      const gitCommand = `git log --all --numstat --date=short --pretty=format:'--%h--%ad--%aN' --no-renames --after="${timeframe}"`;
+
+      console.log(`Executing: ${gitCommand}`);
+      console.log(`Saving output to: ${output}`);
+
+      try {
+        const { stdout, stderr } = await execAsync(gitCommand);
+
+        if (stderr) {
+          console.error(`Git command error: ${stderr}`);
+        }
+
+        await writeFile(output, stdout);
+
+        console.log(`Git log successfully saved to ${output}`);
+      } catch (err: any) {
+        console.error(`Error executing git command or writing file: ${err.message}`);
         process.exit(1);
       }
     });
