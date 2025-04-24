@@ -119,8 +119,9 @@ export default function FormManager(props: FormManagerProps) {
               >
                 <FormManagerLayout
                   step={NavPage.preview}
-                  preview={AppRoutes.Preview.getUrl(formId)}
                   back={AppRoutes.Create.getUrl(formId)}
+                  previewPath={AppRoutes.Preview.getUrl(formId)}
+                  currentPath={AppRoutes.Preview.getUrl(formId)}
                 >
                   <FormPreview />
                 </FormManagerLayout>
@@ -155,7 +156,8 @@ export default function FormManager(props: FormManagerProps) {
                   step={NavPage.edit}
                   back={AppRoutes.GuidedFormCreation.getUrl()}
                   next={AppRoutes.Configure.getUrl(formId)}
-                  preview={AppRoutes.Preview.getUrl(formId)}
+                  previewPath={AppRoutes.Preview.getUrl(formId)}
+                  currentPath={AppRoutes.Create.getUrl(formId)}
                 >
                   <FormEdit />
                 </FormManagerLayout>
@@ -184,7 +186,8 @@ export default function FormManager(props: FormManagerProps) {
                   step={NavPage.settings}
                   back={AppRoutes.Create.getUrl(formId)}
                   next={AppRoutes.Publish.getUrl(formId)}
-                  preview={AppRoutes.Preview.getUrl(formId)}
+                  previewPath={AppRoutes.Preview.getUrl(formId)}
+                  currentPath={AppRoutes.Configure.getUrl(formId)}
                 >
                   <div className={`${styles.progressPage} grid-container`}>
                     <div className="grid-row">
@@ -280,7 +283,8 @@ export default function FormManager(props: FormManagerProps) {
                   step={NavPage.publish}
                   back={AppRoutes.Configure.getUrl(formId)}
                   close={AppRoutes.MyForms.getUrl()}
-                  preview={AppRoutes.Preview.getUrl(formId)}
+                  previewPath={AppRoutes.Preview.getUrl(formId)}
+                  currentPath={AppRoutes.Publish.getUrl(formId)}
                 >
                   <div className={`${styles.progressPage} grid-container`}>
                     <div className="grid-row">
