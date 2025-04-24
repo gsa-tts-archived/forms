@@ -34,8 +34,6 @@ export const getDocumentFieldData = async (
     const pdfDoc = await PDFDocument.load(pdfBytes);
     const widgets = await getWidgets(pdfDoc);
 
-    console.log('Total widgets found:', widgets.length);
-
     const validWidgets = widgets.filter(widget => {
       const ref = pdfDoc.context.getObjectRef(widget);
       console.log('Widget properties:', {
