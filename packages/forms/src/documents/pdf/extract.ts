@@ -30,32 +30,43 @@ export const getWidgets = async (pdfDoc: PDFDocument): Promise<PDFDict[]> => {
 export const getDocumentFieldData = async (
   pdfBytes: Uint8Array
 ): Promise<DocumentFieldMap> => {
-  const pdfDoc = await PDFDocument.load(pdfBytes);
-  const widgets = await getWidgets(pdfDoc);
+  try {
+    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const widgets = await getWidgets(pdfDoc);
 
-  const validWidgets = widgets.filter(widget => {
-    const ref = pdfDoc.context.getObjectRef(widget);
-    return ref !== undefined;
-  });
+    const validWidgets = widgets.filter(widget => {
+      const ref = pdfDoc.context.getObjectRef(widget);
+      console.log('Widget properties:', {
+        Type: widget.get(PDFName.of('Type'))?.toString(),
+        Subtype: widget.get(PDFName.of('Subtype'))?.toString(),
+        FieldType: widget.get(PDFName.of('FT'))?.toString(),
+        FieldName: widget.get(PDFName.of('T'))?.toString(),
+      });
+      return ref !== undefined;
+    });
 
-  if (validWidgets.length > 0) {
-    pdfDoc.catalog.set(
-      PDFName.of('AcroForm'),
-      pdfDoc.context.obj({
-        Fields: validWidgets.map(widget => pdfDoc.context.getObjectRef(widget)),
+    if (validWidgets.length > 0) {
+      pdfDoc.catalog.set(
+        PDFName.of('AcroForm'),
+        pdfDoc.context.obj({
+          Fields: validWidgets.map(widget => pdfDoc.context.getObjectRef(widget)),
+        })
+      );
+    }
+
+    const form = pdfDoc.getForm();
+    const fields = form.getFields();
+
+    return Object.fromEntries(
+      fields.map(field => {
+        return [stringToBase64(field.getName()), getFieldValue(field)];
       })
     );
-  }
-
-  const form = pdfDoc.getForm();
-  const fields = form.getFields();
-
-  return Object.fromEntries(
-    fields.map(field => {
-      return [stringToBase64(field.getName()), getFieldValue(field)];
-    })
-  );
-};
+  }  catch (error) {
+    console.error('Error in getDocumentFieldData: ', error);
+    return {};
+  };
+}
 
 const getFieldValue = (field: PDFField): DocumentFieldValue => {
   if (field instanceof PDFTextField) {
