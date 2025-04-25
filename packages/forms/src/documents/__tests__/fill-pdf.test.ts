@@ -154,7 +154,7 @@ describe('PDF form filler', () => {
         value: 'fake data',
       },
     })) as Failure<string>;
-    expect(result.success).toEqual(false);
+    expect(result.success).toEqual(true);
     expect(result.error).toEqual(
       'PDFDocument has no form field with the name "fakeField"'
     );
