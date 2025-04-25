@@ -30,37 +30,31 @@ export const getWidgets = async (pdfDoc: PDFDocument): Promise<PDFDict[]> => {
 export const getDocumentFieldData = async (
   pdfBytes: Uint8Array
 ): Promise<DocumentFieldMap> => {
-  try {
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    const widgets = await getWidgets(pdfDoc);
+  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const widgets = await getWidgets(pdfDoc);
 
-    const validWidgets = widgets.filter(widget => {
-      const ref = pdfDoc.context.getObjectRef(widget);
-      return ref !== undefined;
-    });
+  const validWidgets = widgets.filter(widget => {
+    const ref = pdfDoc.context.getObjectRef(widget);
+    return ref !== undefined;
+  });
 
-    if (validWidgets.length > 0) {
-      console.log('valid widgets: ', validWidgets);
-      pdfDoc.catalog.set(
-        PDFName.of('AcroForm'),
-        pdfDoc.context.obj({
-          Fields: widgets.map(widget => pdfDoc.context.getObjectRef(widget)), // array of widget refs
-        })
-      );
-    }
-
-    const form = pdfDoc.getForm();
-    const fields = form.getFields();
-
-    return Object.fromEntries(
-      fields.map(field => {
-        return [stringToBase64(field.getName()), getFieldValue(field)];
+  if (validWidgets.length > 0) {
+    pdfDoc.catalog.set(
+      PDFName.of('AcroForm'),
+      pdfDoc.context.obj({
+        Fields: validWidgets.map(widget => pdfDoc.context.getObjectRef(widget)),
       })
     );
-  } catch (error) {
-    console.error('Error in getDocumentFieldData: ', error);
-    return {};
   }
+
+  const form = pdfDoc.getForm();
+  const fields = form.getFields();
+
+  return Object.fromEntries(
+    fields.map(field => {
+      return [stringToBase64(field.getName()), getFieldValue(field)];
+    })
+  );
 };
 
 const getFieldValue = (field: PDFField): DocumentFieldValue => {
