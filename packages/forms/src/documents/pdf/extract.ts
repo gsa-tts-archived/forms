@@ -36,12 +36,6 @@ export const getDocumentFieldData = async (
 
     const validWidgets = widgets.filter(widget => {
       const ref = pdfDoc.context.getObjectRef(widget);
-      console.log('Widget properties:', {
-        Type: widget.get(PDFName.of('Type'))?.toString(),
-        Subtype: widget.get(PDFName.of('Subtype'))?.toString(),
-        FieldType: widget.get(PDFName.of('FT'))?.toString(),
-        FieldName: widget.get(PDFName.of('T'))?.toString(),
-      });
       return ref !== undefined;
     });
 
