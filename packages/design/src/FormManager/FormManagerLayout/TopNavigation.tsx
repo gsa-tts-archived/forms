@@ -39,6 +39,8 @@ export const TopNavigation = ({
   const isPreview = previewPath === currentPath;
   const uswdsRoot = useFormManagerStore(state => state.context.uswdsRoot);
   const lastSaved = useFormManagerStore(state => state.saveStatus.lastSaved);
+  const capitalize = (value: string) =>
+    value.charAt(0).toUpperCase() + value.slice(1);
 
   const renderStepIndicator = (isPreview: boolean) => (
     <ol className="usa-step-indicator__segments desktop:grid-col-6 tablet:grid-col-5">
@@ -53,7 +55,7 @@ export const TopNavigation = ({
             aria-current={page === curPage ? 'true' : undefined}
           >
             <span className="usa-step-indicator__segment-label">
-              {NavPage[page]} {srHint(page, curPage)}
+              {capitalize(NavPage[page])} {srHint(page, curPage)}
             </span>
           </li>
         ))
