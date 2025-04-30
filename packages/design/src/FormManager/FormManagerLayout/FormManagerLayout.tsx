@@ -14,7 +14,8 @@ type FormManagerLayoutProps = {
   back?: string;
   close?: string;
   next?: string;
-  preview?: string;
+  previewPath?: string;
+  currentPath?: string;
 };
 
 export const FormManagerLayout = ({
@@ -23,7 +24,8 @@ export const FormManagerLayout = ({
   back,
   close,
   next,
-  preview,
+  previewPath,
+  currentPath,
 }: FormManagerLayoutProps) => {
   const location = useLocation();
   const { addNotification } = useFormManagerStore();
@@ -37,7 +39,14 @@ export const FormManagerLayout = ({
   return (
     <>
       <Notifications />
-      {step && <TopNavigation curPage={step} preview={preview} />}
+      {step && (
+        <TopNavigation
+          curPage={step}
+          previewPath={previewPath}
+          currentPath={currentPath}
+          back={back}
+        />
+      )}
       <section className={`${styles.editPage} position-relative`}>
         <div className="grid-row flex-justify-center">
           <div className="grid-col-12">
