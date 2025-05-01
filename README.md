@@ -1,6 +1,6 @@
 # 10x Forms Platform
 
-> **Notice**
+> **Notice:**
 > As of early May 2025, Forms Platform development is paused pending administrative prioritization.
 
 Forms Platform is the product of extensive research and development completed by [10x](https://10x.gsa.gov/), a federal venture studio housed within the [General Services Administration](https://www.gsa.gov/)'s [Technology Transformation Services](https://tts.gsa.gov/).
