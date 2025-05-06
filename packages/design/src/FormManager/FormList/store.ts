@@ -49,7 +49,6 @@ export const createFormListSlice =
         title: fileDetails.name,
         description: '',
       });
-      await builder.addDocument(fileDetails);
       const result = await context.formService.initializeForm({
         summary: {
           title: fileDetails.name,
