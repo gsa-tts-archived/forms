@@ -2,10 +2,10 @@ import React from 'react';
 
 import { type PageSetProps } from '@gsa-tts/forms-core';
 
-import { type PatternComponent } from '../../index.js';
+import { type PatternComponent } from '../../types.js';
 import ActionBar from '../../../Form/ActionBar/index.js';
 
-import { PageMenu } from './PageMenu/index.js';
+import PageMenu from './PageMenu/PageMenu.js';
 import { renderPromptComponents } from '../../form-common.js';
 import classNames from 'classnames';
 
